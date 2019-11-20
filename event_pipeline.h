@@ -1,3 +1,10 @@
+/* Class representing event pipeline
+ * CREATED BY: Lathan Thangavadivel
+ * LAST EDITED BY: Abarna Srikantharajah
+ * LAST EDITED: 20/11/2019
+ * TODO:
+ */
+
 #ifndef EVENT_PIPELINE_H
 #define EVENT_PIPELINE_H
 
@@ -5,8 +12,10 @@
 #include <queue>
 
 
-class event_pipeline{
+class Event_Pipeline{
     private:
             std::queue<event,vector<event>,CompareTime>;
             struct
 }
+
+#endif /* EVENT_PIPELINE_H */
