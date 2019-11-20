@@ -16,7 +16,7 @@ Event::Event(string eventName, string details, time_t time){
 }
 
 void Event::set_eventName(string newEventName){
-    name = newEventName;
+    eventName = newEventName;
 }
 
 void Event::set_details(string newDetails){
