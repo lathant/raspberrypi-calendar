@@ -8,14 +8,21 @@
 #ifndef EVENT_PIPELINE_H
 #define EVENT_PIPELINE_H
 
-#include "Event.h"
+#include "event.h"
 #include <queue>
 
 
 class Event_Pipeline{
     private:
-            std::queue<event,vector<event>,CompareTime>;
-            struct
-}
+        std::queue<event,vector<event>,CompareTime>;
+                
+    public:
+        Event_Pipeline();
+        std::string get_queue(){return eventqueue;}
+        static queue<Event,vector<Event>,CompareTime> eventQueue;
+        std::bool CompareTime(std::Event const &event1, std::Event const &event2);
+        void enqueue(std::Event event);
+        std::Event Event_Pipeline::dequeue();
+};
 
 #endif /* EVENT_PIPELINE_H */
