@@ -12,7 +12,7 @@ using namespace std;
 //implement to store value for factory opperation method
 Event_Factory::Event_Factory(){};
 
-Event* Event_Factory::create_event(string eventName) {
-    Event* event = new Event(string eventName);
+Event* Event_Factory::create_event(string eventName, string details, time_t time) {
+    Event* event = new Event(string eventName, string details, time_t time);
     return event;
 }
