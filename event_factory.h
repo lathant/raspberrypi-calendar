@@ -14,7 +14,7 @@
 class Event_Factory {
 public:
     Event_Factory();
-    Event* create_event(std::string eventName);
+    Event* create_event(std::string eventName, std::string details, std::time_t time);
 };
 
 #endif /* EVENT_FACTORY_H */
