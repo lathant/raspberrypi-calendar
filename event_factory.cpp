@@ -9,7 +9,7 @@
 
 using namespace std;
 
-//implement to store value for factory opperation method
+//implement factory method
 Event_Factory::Event_Factory(){};
 
 Event* Event_Factory::create_event(string eventName, string details, time_t time) {
