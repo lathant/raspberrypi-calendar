@@ -14,7 +14,7 @@
 
 class Event_Pipeline{
     private:
-        std::queue<event,vector<event>,CompareTime>;
+        std::queue<event,vector<event>,CompareTime> eventQueue;
                 
     public:
         Event_Pipeline();
