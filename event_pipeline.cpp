@@ -12,19 +12,17 @@ using namespace std;
 
 Event_Pipeline::Event_Pipeline(){}
 
-bool CompareTime (Event const & event1, Event const & event2) {
-        double diff = std::difftime(std::event1.get_time(),std::event2..get_time());
+bool CompareTime (Event const &event1, Event const &event2) {
+        double diff = difftime(event1.get_time(),event2.get_time());
         return diff < 0;
     }
-
-static queue<Event,vector<Event>,CompareTime>;
     
-void Event_Pipeline::enqueue(std::Event){
-        queue.push(Event);
+void Event_Pipeline::enqueue(Event event){
+        queue.push(event);
     }
     
 Event Event_Pipeline::dequeue(){
-        return queue.pop()
+        return queue.pop();
     }
 
 };
