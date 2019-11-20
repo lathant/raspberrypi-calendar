@@ -1,9 +1,9 @@
 /* Class representing events
-* CREATED BY: Abarna Srikantharajah
-* LAST EDITED BY: Abarna Srikantharajah
-* LAST EDITED: 19/11/2019
-* TODO:
-*/
+ * CREATED BY: Abarna Srikantharajah
+ * LAST EDITED BY: Abarna Srikantharajah
+ * LAST EDITED: 19/11/2019
+ * TODO:
+ */
 
 #ifndef EVENT_H
 #define EVENT_H
