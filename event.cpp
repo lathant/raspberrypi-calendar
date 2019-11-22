@@ -9,10 +9,13 @@
 
 using namespace std;
 
-Event::Event(string eventName, string details, time_t time){
-    eventName = eventName;
-    details = details;
-    time = time;
+Event::Event(string in_eventName, string in_details, time_t in_time,string in_access_t, string in_owner_id, string in_repeatType){
+    eventName = in_eventName;
+    details = in_details;
+    time = in_time;
+    access_t = in_access_t;
+    owner_id = in_owner_id;
+    repeatType = in_repeatType;
 }
 
 void Event::set_eventName(string newEventName){
@@ -25,4 +28,16 @@ void Event::set_details(string newDetails){
 
 void Event::set_time(time_t newTime){
     time = newTime;
+}
+
+void Event::set_access_t (string newAccess){
+    access_t = newAccess;
+}
+
+void Event::set_owner_id(string newOwner){
+    owner_id = newOwner;
+}
+
+void Event::set_repeat_type(string newRepeatType){
+    repeatType = newRepeatType;
 }
