@@ -8,10 +8,11 @@
 
 using namespace std;
 
-Event::Event(string in_eventName, string in_details, time in_time,string in_access_t, string in_owner_id, string in_repeatType){
+Event::Event(string in_eventName, string in_details, time_t in_start_time,time_t in_end_time,string in_access_t, string in_owner_id, string in_repeatType){
     eventName = in_eventName;
     details = in_details;
-    time = in_time;
+    start_time = in_start_time;
+    end_time = in_end_time;
     access_t = in_access_t;
     owner_id = in_owner_id;
     repeatType = in_repeatType;
@@ -29,7 +30,7 @@ void Event::set_start_time(time_t newStartTime){
     start_time = newStartTime;
 }
 
-void Event::set_start_time(time_t newEndTime){
+void Event::set_end_time(time_t newEndTime){
     end_time = newEndTime;
 }
 
