@@ -4,12 +4,11 @@
  * LAST EDITED: 19/11/2019
  * TODO:
  */
-
 #include "event.h"
 
 using namespace std;
 
-Event::Event(string in_eventName, string in_details, time_t in_time,string in_access_t, string in_owner_id, string in_repeatType){
+Event::Event(string in_eventName, string in_details, time in_time,string in_access_t, string in_owner_id, string in_repeatType){
     eventName = in_eventName;
     details = in_details;
     time = in_time;
@@ -26,8 +25,12 @@ void Event::set_details(string newDetails){
     details = newDetails;
 }
 
-void Event::set_time(time_t newTime){
-    time = newTime;
+void Event::set_start_time(time_t newStartTime){
+    start_time = newStartTime;
+}
+
+void Event::set_start_time(time_t newEndTime){
+    end_time = newEndTime;
 }
 
 void Event::set_access_t (string newAccess){
