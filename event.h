@@ -22,7 +22,7 @@ private:
     
     
 public:
-    Event(std::string eventName, std::string details, std::time_t time);
+    Event(std::string in_eventName, std::string in_details, std::time_t in_time,std::string in_access_t, std::string in_owner_id, std::string in_repeatType);
     std::string get_eventName(){return eventName;}
     std::string get_details(){return details;}
     std::time_t get_time(){return time;}
@@ -31,7 +31,7 @@ public:
     std::string get_repeat_type(){return repeat_type;}
     void set_eventName(std::string newEventName);
     void set_details(std::string newDetails);
-    void set_time(std::time_t newTime);
+    void set_time(std::string newTime);
     void set_access_t(std::string newAccess);
     void set_owner_id(std::string newOwner);
     void set_repeat_type(std::string newRepeat);
