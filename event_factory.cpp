@@ -12,7 +12,7 @@ using namespace std;
 //implement factory method
 Event_Factory::Event_Factory(){};
 
-Event* Event_Factory::create_event(string eventName, string details, time_t time,string access_t, string owner_id, string repeatType) {
-    Event* event = new Event(string eventName, string details, time_t time,string access_t, string owner_id, string repeatType);
+Event* Event_Factory::create_event(string eventName, string details, time_t start_time,time_t end_time,string access_t, string owner_id, string repeatType) {
+    Event* event = new Event(string eventName, string details, time_t start_time,time_t end_time,string access_t, string owner_id, string repeatType);
     return event;
 }
