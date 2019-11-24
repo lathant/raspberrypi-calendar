@@ -1,7 +1,7 @@
 /* Class for the timetable manager
  * CREATED BY: Vladimir Zhurov
  * LAST EDITED BY: David Truong 
- * LAST EDITED: 14/11/2019
+ * LAST EDITED: 23/11/2019
  * TODO: IMPLEMENT *WIP* need to adjust for other already made cpp and headers since I had made my own
  */
 
@@ -105,8 +105,11 @@ int Timetable_Manager::append_date(Timetable table, std::string event_info){ // 
 		// then see if the info is in table 
 			// if yes then do not add_member
 		// append the data for the table 
+	
 	if (table != NULL){
+	    if ( = 0){ // if in table TBD
 		table.add_date(event_info); // need to find way to sort through the data in a timetable 
+	    }
 	}
 }
 
@@ -120,6 +123,14 @@ int add_member(Timetable* table, std::string owner_id, std::string member_id){
 		// return error 
 	// return error 
 	
+	if (table = NULL){
+	    return 0; // doesnt exist
+	}
+	if (table.is_member(member_id) = 0){
+	   add_member(member_id);
+	   return 1;
+	}
+	return 0;
 }
 
 //Remove a user from the members of the table if the owner_id matches and if they are already present
@@ -131,7 +142,14 @@ int remove_member(Timetable* table, std::string owner_id, std::string member_id)
 			// remove the user with table method 
 		// return error 
 	// return error 
-	
+	if (table = NULL){
+	    return 0; // doesnt exist
+	}
+	if (table.is_member(member_id) = 0){
+	   remove_member(member_id);
+	   return 1;
+	}
+	return 0;
 }
 
 //Get all tables where owner_id matches
@@ -141,6 +159,8 @@ std::set<Timetable> Timetable_Manager::get_personal_tables(std::string owner_id)
 			// if match add to list 
 		// else error 
 	// return the list 
+	
+	
 }
 
 //Get all tables where owner_id is part of members but not equal to the table's owner_id
