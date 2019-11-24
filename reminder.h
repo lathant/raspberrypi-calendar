@@ -9,10 +9,10 @@ class Reminder {
             std::string destination
             std::time_t remind_time
     public:
-            std::Event get_event(){return event;}
+            std::string get_event(){return event;}
             std::string get_destination(){return destination;}
             std::time_t get_remind_time(){return remind_time;}
-            void set_event(std::Event newEvent);
+            void set_event(std::string newEvent);
             void set_destination(std::string newDestination);
             void set_remind_time(std::time_t newTime);
 };
