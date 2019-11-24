@@ -5,7 +5,7 @@
 
 class Reminder {
     private:
-            std::Event event;
+            std::string event;
             std::string destination
             std::time_t remind_time
     public:
