@@ -67,6 +67,7 @@ void console_control(string pid){
     ifstream in_stream;
 
     string command;
+    vector<string> parts;
     bool control = true;
 
     usleep(10000);
@@ -81,7 +82,30 @@ void console_control(string pid){
        	    // read in each line for commands
             while(getline(in_stream, command)){
                 out_stream.open(b_file.c_str());
-                if(expect_i) // expect that first input is related to logging in or create
+                /*
+                stringstream ss (command);
+                while(getline(ss, command, ',')){
+                    parts.push_back(command);
+                }
+                if(parts.at(0).compare("EXIT") == 0)
+                    control = false;
+                else if(parts.at(0).compare("LOGIN") == 0){
+                    if(user_manager->check_user(parts.at(1), parts.at(2))){
+                        user = user_manager->get_user(parts.at(1));
+                        username = parts.at(1)
+                        out_stream << "LOG IN SUCCESS\n["+username+"]: ";
+                    }
+                    else{
+                        out_stream << "LOG IN FAILURE\nCreate or LogIn: ";
+                    }
+                }
+                else
+                    out_stream << "INVALID COMMAND TYPE";
+                parts.clear();
+                */
+                if(command.compare("EXIT") == 0)
+                    control = false;
+                else if(expect_i) // expect that first input is related to logging in or create
                 {
                     //can be reformated to remove unneeded lines
                     if(command.compare("Create") == 0) // temporarly treated as the same as log in
@@ -135,8 +159,8 @@ void console_control(string pid){
                         }
                     }
                 }
-                else if(command.compare("EXIT") == 0)
-                    control = false;
+                else if (command.compare("") == 0)
+                    out_stream <<
                 else if (command.compare("potato") == 0)
                     out_stream << potato_output(username);
                 else if(command.compare("-help") == 0)

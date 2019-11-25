@@ -23,6 +23,8 @@ class Timetable_Manager {
         int delete_timetable(std::string name, std::string owner_id);
         int delete_timetable(Timetable* table, std::string owner_id);
         int append_date(Timetable table, std::string event_info);
+        int add_member(Timetable* table, std::string owner_id, std::string member_id);
+        int remove_member(Timetable* table, std::string owner_id, std::string member_id);
         std::set<Timetable> get_personal_tables(std::string owner_id);
         std::set<Timetable> get_shared_tables(std::string owner_id);
         std::set<Timetable> get_public_tables();
