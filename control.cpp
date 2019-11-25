@@ -197,6 +197,90 @@ string timetable_delete(vector<string> parts){
 }
 
 /**
+ * @brief compare two timetable
+ *
+ * Call the compare_timetables() function and return the string rep of the comparison table
+ * @Author  Vladimir Zhurov
+ * @dates   25/11/2019
+ * @param   parts           A vector of string containing <COMPARE TIMETABLE,table_name1,table_name2>
+ * @return  create_text     An output string rep of the comparison table
+ */
+string timetable_compare(vector<string> parts){
+    Timetable* cTable = timetable_manager->compare_timetables(parts.at(1), parts.at(2));
+    if(*cTable == NULL)
+        return "COMPARE TIMETABLE|FAILURE"
+    string text_output = "COMPARE TIMETABLE|SUCCESS|"
+    text_output += timetable_manager->timetable_to_txt(*cTable);
+    delete *cTable;
+    return text_output;
+}
+
+/**
+ * @brief create an event for a given user
+ *
+ *
+ * @Author  Vladimir Zhurov
+ * @dates   25/11/2019
+ * @param   parts           A vector of string containing <CREATE EVENT,table_name1,table_name2>
+ * @return  create_text     An output string that says if create event was success or failure
+ */
+string event_create(vector<string> parts){
+    (string eventName, string details, time_t start_time,time_t end_time,string access_t, string owner_id, string repeatType)
+}
+
+/**
+ * @brief get a or multiple events
+ *
+ *
+ * @Author  Vladimir Zhurov
+ * @dates   25/11/2019
+ * @param   parts           A vector of string containing <CREATE EVENT,table_name1,table_name2>
+ * @return  create_text     An output string that says if create event was success or failure
+ */
+string event_get(vector<string> parts){
+
+}
+
+/**
+ * @brief adds an event to a timetable
+ *
+ *
+ * @Author  Vladimir Zhurov
+ * @dates   25/11/2019
+ * @param   parts           A vector of string containing <CREATE EVENT,table_name1,table_name2>
+ * @return  create_text     An output string that says if create event was success or failure
+ */
+string event_add(vector<string> parts){
+
+}
+
+/**
+ * @brief remove an event from a timetable
+ *
+ *
+ * @Author  Vladimir Zhurov
+ * @dates   25/11/2019
+ * @param   parts           A vector of string containing <CREATE EVENT,table_name1,table_name2>
+ * @return  create_text     An output string that says if create event was success or failure
+ */
+string event_remove(vector<string> parts){
+
+}
+
+/**
+ * @brief delete an event
+ *
+ *
+ * @Author  Vladimir Zhurov
+ * @dates   25/11/2019
+ * @param   parts           A vector of string containing <CREATE EVENT,table_name1,table_name2>
+ * @return  create_text     An output string that says if create event was success or failure
+ */
+string event_delete(vector<string> parts){
+
+}
+
+/**
  * @brief POTATO
  *
  * Sends a string containing the current potato number
@@ -248,23 +332,21 @@ void console_control(string pid){
                     out_stream << timeable_create(parts);
                 else if(parts.at(0).compare("GET TIMETABLE") == 0) // GET TIMETABLE|get_type|username
                     out_stream << timetable_get(parts);
-                else if(parts.at(0).compare("DELETE TIMETABLE") == 0)
+                else if(parts.at(0).compare("DELETE TIMETABLE") == 0) // DELETE TIMETABLE|table_name|username
                     out_stream << timetable_delete(parts);
-                else if (parts.at(0).compare("COMPARE TIMETABLES") == 0)
+                else if (parts.at(0).compare("COMPARE TIMETABLES") == 0) // COMPARE TIMETABLE|table_name1|table_name2
                     out_stream << timetable_compare(parts);
-                else if(parts.at(0).compare("CREATE EVENT") == 0)
+                else if(parts.at(0).compare("CREATE EVENT") == 0) //
                     out_stream << event_create(parts);
-                else if(parts.at(0).compare("GET EVENTS") == 0)
+                else if(parts.at(0).compare("GET EVENT") == 0) //
                     out_stream << event_get(parts);
-                else if(parts.at(0).compare("GET EVENT#") == 0)
-                    out_stream << event_get(parts);
-                else if(parts.at(0).compare("ADD EVENT") == 0)
+                else if(parts.at(0).compare("ADD EVENT") == 0) //
                     out_stream << event_add(parts);
-                else if(parts.at(0).compare("DELETE EVENT") == 0)
-                    out_stream << event_delete(parts);
-                else if(parts.at(0).compare("REMOVE EVENT") == 0)
+                else if(parts.at(0).compare("REMOVE EVENT") == 0) //
                     out_stream << event_remove(parts);
-                else if(parts.at(0).compare("POTATO") == 0)
+                else if(parts.at(0).compare("DELETE EVENT") == 0) //
+                    out_stream << event_delete(parts);
+                else if(parts.at(0).compare("POTATO") == 0) // POTATO
                     out_stream << potato_output();
                 else
                     out_stream << "INVALID COMMAND TYPE";
