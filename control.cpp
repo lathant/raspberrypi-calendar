@@ -24,6 +24,7 @@
 
 #include "user_manager.h"
 #include "timetable_manager.h"
+#include "event_manager.h"
 
 using namespace std;
 
@@ -32,9 +33,9 @@ static string GET_FILE = "getF.txt";
 int potatoNum = 1;
 
 User_Manager* user_manager;
-Timetable_Manager* time_table_manager;
+Timetable_Manager* timetable_manager;
+Event_Manager* event_manager;
 /*
-private Event_Manager event_manager;
 private Clock clock;
 private Observer_1 observer_1; #rename to descirbe observer when implemented
 */
@@ -65,12 +66,27 @@ string user_delete(vector<string> parts){
     User* user = user_manager->get_user(parts.at(1));
     if(user == NULL)
         return "DELETE USER|FAILURE";
-    //Delete all timetables that user is only member of and or owns
+    //Delete all timetables that user owns
+    set<Timetable> owns = timetable_manager->get_personal_tables("username");
+    for(set<Timetable>::iterator it = owns.begin(); it != owns.end(); it++){
+        timetable_manager->delete_timetable(*it, "username");
+        delete *it;
+    }
+
+    //Remove user from any timetable that hey are members of
+    set<Timetable> uses = timetable_manager->get_shared_tables("username");
+    for(set<Timetable>::iterator it = uses.begin(); it != uses.end(); it++){
+        timetable_manager->remove_member(*it, "username");
+        delete *it;
+    }
+
     //Delete all events that user created and remove from any that is attached to
     delete user;
     user_manager->delete_user(parts.at(1));
     return "DELETE USER|SUCCESS";
 }
+
+
 
 string potato_output(){
     string potato_text = "POTATO|"+to_string(potatoNum);
@@ -114,24 +130,26 @@ void console_control(string pid){
                     out_stream << user_delete(parts);
                 else if(parts.at(0).compare("CREATE TIMETABLE") == 0) // CREATE TIMETABLE|
                     out_stream << timeable_create(parts);
-                else if (parts.at(0).compare("GET TIMETABLES") == 0)
-                    out_stream <<;
-                else if (parts.at(0).compare("GET TIMETABLE#") == 0)
-                    out_stream <<;
-                else if (parts.at(0).compare("DELETE TIMETABLE#") == 0)
-                    out_stream <<;
-                else if (parts.at(0).compare("CREATE EVENT") == 0)
-                    out_stream <<;
-                else if (parts.at(0).compare("GET EVENTS") == 0)
-                    out_stream <<;
-                else if (parts.at(0).compare("GET EVENT#") == 0)
-                    out_stream <<;
-                else if (parts.at(0).compare("ADD EVENT") == 0)
-                    out_stream <<;
-                else if (parts.at(0).compare("REMOVE EVENT") == 0)
-                    out_stream <<;
+                else if(parts.at(0).compare("GET TIMETABLES") == 0)
+                    out_stream << timetable_get(parts);
+                else if(parts.at(0).compare("GET TIMETABLE#") == 0)
+                    out_stream << timetable_get(parts);
+                else if(parts.at(0).compare("DELETE TIMETABLE#") == 0)
+                    out_stream << timetable_delete(parts);
                 else if (parts.at(0).compare("COMPARE TIMETABLES") == 0)
-                    out_stream <<;
+                    out_stream << timetable_compare(parts);
+                else if(parts.at(0).compare("CREATE EVENT") == 0)
+                    out_stream << event_create(parts);
+                else if(parts.at(0).compare("GET EVENTS") == 0)
+                    out_stream << event_get(parts);
+                else if(parts.at(0).compare("GET EVENT#") == 0)
+                    out_stream << event_get(parts);
+                else if(parts.at(0).compare("ADD EVENT") == 0)
+                    out_stream << event_add(parts);
+                else if(parts.at(0).compare("DELETE EVENT") == 0)
+                    out_stream << event_delete(parts);
+                else if(parts.at(0).compare("REMOVE EVENT") == 0)
+                    out_stream << event_remove(parts);
                 else if(parts.at(0).compare("POTATO") == 0)
                     out_stream << potato_output();
                 else
@@ -169,8 +187,14 @@ void init_Time_Table_Manager(){
 }
 
 
-void init_Event_Manager(){if (TESTING)
-    cout << "Event Manager intialized" << endl;}
+void init_Event_Manager(){
+    if (TESTING)
+        cout << "Event Manager intialized" << endl;
+    event_manager = Event_Manager::get_instance();
+    if(TESTING){
+        //implement rigerous tests
+    }
+}
 void init_Clock(){if (TESTING)
     cout << "Clock intialized" << endl;}
 void init_Observers(){if (TESTING)
