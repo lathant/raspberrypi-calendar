@@ -6,9 +6,16 @@
 class Reminder {
     private:
             std::string event;
-            std::string destination
-            std::time_t remind_time
+            std::string destination;
+            std::time_t remind_time;
     public:
+            Reminder(){};
+            Reminder(std::string in_event, std::string in_destination, std::time_t in_remind_time){
+                event = in_event;
+                destination = in_destination;
+                remind_time = in_remind_time;
+            }
+
             std::string get_event(){return event;}
             std::string get_destination(){return destination;}
             std::time_t get_remind_time(){return remind_time;}
