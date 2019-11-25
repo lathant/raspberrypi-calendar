@@ -40,6 +40,15 @@ private Clock clock;
 private Observer_1 observer_1; #rename to descirbe observer when implemented
 */
 
+/**
+ * @breaf Log in a user
+ *
+ * Check to see if a user log in information is correct and respond back with a string of either success or failure
+ * @author  Vladimir Zhurov
+ * @dates   25/11/2019
+ * @param   parts           A vector of strings containing <LOGIN,username,password>
+ * @return  login_text      An output string that says if login success or failure
+ */
 string user_login(vector<string> parts){
     if(user_manager->check_user(parts.at(1), parts.at(2))){
         string login_text = "LOGIN|SUCCESS|"+parts.at(1)+"|"+parts.at(2);
