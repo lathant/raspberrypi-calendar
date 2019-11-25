@@ -130,9 +130,80 @@ string timeable_create(vector<string> parts){
     if(success == 0)
         return "CREATE TIMETABLE|FAILURE";
     return "CREATE TIMETABLE|SUCCESS";
-
 }
 
+/**
+ * @brief Get a or multiple timetables for a given user
+ *
+ * if get_type = 0 get all personal timetables
+ * if get_type = 1 get all shared timetables
+ * if get_type = 2 get all public timetables
+ * if get_type = 3 get both personal and shared
+ * if get_type = 4 get both shared and public
+ * if get_type = 5 get all timetables avalible to given user
+ * @Author  Vladimir Zhurov
+ * @dates   25/11/2019
+ * @param   parts           A vector of string containing <GET TIMETABLE,get_type,username>
+ * @return  create_text     An output string that says if get timetable was success or failure and the timetables in string form
+ */
+string timetable_get(vector<string> parts){
+    int get_type = stoi(parts.at(1));
+    set<Timetable> storage
+    string text_output= "GET TIMETABLE";
+    if(get_type == 0 || get_type == 3 || get_type == 5){
+        storage = timetable_manager->get_personal_tables(parts.at(2));
+        text_output += "|PERSONAL"
+        for(set<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
+            text_output += "|"
+            text_output += timetable_manager->timetable_to_txt(*it);
+            delete *it;
+        }
+    }
+    if(get_type == 1 || get_type == 3 || get_type == 5){
+        storage = timetable_manager->get_shared_tables(parts.at(2));
+        text_output += "|SHARED"
+        for(set<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
+            text_output += "|"
+            text_output += timetable_manager->timetable_to_txt(*it);
+            delete *it;
+        }
+    }
+    if(get_type == 2 || get_type == 4 || get_type == 5){
+        storage = timetable_manager->get_public_tables();
+        text_output += "|PUBLIC"
+        for(set<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
+            text_output += "|"
+            text_output += timetable_manager->timetable_to_txt(*it);
+            delete *it;
+        }
+    }
+    return text_output;
+}
+
+/**
+ * @brief delete a timetable for a given user
+ *
+ * Assume user is real and delete a given timetable
+ * @Author  Vladimir Zhurov
+ * @dates   25/11/2019
+ * @param   parts           A vector of string containing <DELETE TIMETABLE,table_name,username>
+ * @return  create_text     An output string that says if delete timetable was success or failure
+ */
+string timetable_delete(vector<string> parts){
+    int success = timetable_manager->delete_timetable(parts.at(1), parts.at(2));
+    if(success == 0)
+        return "DELETE TIMETABLE|FAILURE";
+    return "DELETE TIMETABLE|SUCCESS";
+}
+
+/**
+ * @brief POTATO
+ *
+ * Sends a string containing the current potato number
+ * @Author  Vladimir Zhurov
+ * @dates   25/11/2019
+ * @return  potato_text     An output string that contains potato_num
+ */
 string potato_output(){
     string potato_text = "POTATO|"+to_string(potatoNum);
     potatoNum++;
@@ -175,11 +246,9 @@ void console_control(string pid){
                     out_stream << user_delete(parts);
                 else if(parts.at(0).compare("CREATE TIMETABLE") == 0) // CREATE TIMETABLE|table_name|access_type|username
                     out_stream << timeable_create(parts);
-                else if(parts.at(0).compare("GET TIMETABLES") == 0)
+                else if(parts.at(0).compare("GET TIMETABLE") == 0) // GET TIMETABLE|get_type|username
                     out_stream << timetable_get(parts);
-                else if(parts.at(0).compare("GET TIMETABLE#") == 0)
-                    out_stream << timetable_get(parts);
-                else if(parts.at(0).compare("DELETE TIMETABLE#") == 0)
+                else if(parts.at(0).compare("DELETE TIMETABLE") == 0)
                     out_stream << timetable_delete(parts);
                 else if (parts.at(0).compare("COMPARE TIMETABLES") == 0)
                     out_stream << timetable_compare(parts);
