@@ -8,16 +8,6 @@
 
 using namespace std;
 
-Event::Event(string in_eventName, string in_details, time_t in_start_time,time_t in_end_time,string in_access_t, string in_owner_id, string in_repeatType){
-    eventName = in_eventName;
-    details = in_details;
-    start_time = in_start_time;
-    end_time = in_end_time;
-    access_t = in_access_t;
-    owner_id = in_owner_id;
-    repeatType = in_repeatType;
-}
-
 void Event::set_eventName(string newEventName){
     eventName = newEventName;
 }
@@ -43,5 +33,5 @@ void Event::set_owner_id(string newOwner){
 }
 
 void Event::set_repeat_type(string newRepeatType){
-    repeatType = newRepeatType;
+    repeat_type = newRepeatType;
 }
