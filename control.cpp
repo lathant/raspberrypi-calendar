@@ -39,134 +39,71 @@ private Clock clock;
 private Observer_1 observer_1; #rename to descirbe observer when implemented
 */
 
+string user_login(vector<string> parts){
+    if(user_manager->check_user(parts.at(1), parts.at(2))){
+        string login_text = "LOGIN|SUCCESS|"+parts.at(1)+"|"+parts.at(2);
+        return login_text;
+    }
+    else
+        return "LOGIN|FAILURE";
+}
 
-string potato_output(string username){
-    string potato_text = "potato has been called " + to_string(potatoNum) + " times \n["+username+"]: ";
+string user_create(vector<string> parts){
+    string create_text;
+    User* user = user_manager->get_user(parts.at(1));
+    if(user == NULL){
+        user = user_manager->create_user(parts.at(1), parts.at(2));
+        create_text = "CREATE USER|SUCCESS|"+parts.at(1)+"|"+parts.at(2);
+    }
+    else
+        create_text = "CREATE USER|FAILURE";
+    delete user;
+    return create_text;
+}
+
+string potato_output(){
+    string potato_text = "POTATO|"+to_string(potatoNum);
     potatoNum++;
     return potato_text;
 }
 
-string help_output(string username){
-    string help_text = "Commands: \n"
-    "-help\n\tDisplay all valid commands \n"
-    "potato\n\tDisplay the potato num \n"
-    "EXIT\n\tClose down this console \n"
-    "["+username+"]: ";
-    return help_text;
-}
-
 void console_control(string pid){
-    User* user;
-    string username, password;
-    bool expect_i, expect_un, expect_p, create_flag;
-
     string b_file = "b_"+pid+".txt"; // send
     string a_file = "a_"+pid+".txt"; // recive
 
     ofstream out_stream(b_file.c_str());
     ifstream in_stream;
 
+    usleep(10000);
+
+    out_stream << "START";
+    out_stream.close();
+
     string command;
     vector<string> parts;
     bool control = true;
-
-    usleep(10000);
-
-    expect_i = true;
-    out_stream << "Create or LogIn: ";
-    out_stream.close();
     while (control){
         in_stream.open(a_file.c_str());
         // check to see if file is non-empty
         if(in_stream.peek() != fstream::traits_type::eof()){
        	    // read in each line for commands
             while(getline(in_stream, command)){
-                out_stream.open(b_file.c_str());
-                /*
                 stringstream ss (command);
-                while(getline(ss, command, ',')){
+                while(getline(ss, command, '|'))
                     parts.push_back(command);
-                }
+
+                out_stream.open(b_file.c_str());
                 if(parts.at(0).compare("EXIT") == 0)
                     control = false;
-                else if(parts.at(0).compare("LOGIN") == 0){
-                    if(user_manager->check_user(parts.at(1), parts.at(2))){
-                        user = user_manager->get_user(parts.at(1));
-                        username = parts.at(1)
-                        out_stream << "LOG IN SUCCESS\n["+username+"]: ";
-                    }
-                    else{
-                        out_stream << "LOG IN FAILURE\nCreate or LogIn: ";
-                    }
-                }
+                else if(parts.at(0).compare("LOGIN") == 0)
+                    out_stream << user_login(parts);
+                else if(parts.at(0).compare("CREATE USER") == 0)
+                    out_stream << user_create(parts);
+                else if(parts.at(0).compare("POTATO"))
+                    out_stream << potato_output();
                 else
                     out_stream << "INVALID COMMAND TYPE";
                 parts.clear();
-                */
-                if(command.compare("EXIT") == 0)
-                    control = false;
-                else if(expect_i) // expect that first input is related to logging in or create
-                {
-                    //can be reformated to remove unneeded lines
-                    if(command.compare("Create") == 0) // temporarly treated as the same as log in
-                    {
-                        expect_i = false;
-                        expect_un = true;
-                        create_flag = true;
-                        out_stream << "Username: ";
-                    }
-                    else if(command.compare("LogIn") == 0){
-                        expect_i = false;
-                        expect_un = true;
-                        create_flag = false;
-                        out_stream << "Username: ";
-                    }
-                    else
-                        out_stream << "Create OR LogIn: ";
-                }
-                else if(expect_un) //expect that the input is a username
-                {
-                    expect_un = false;
-                    username = command;
-                    expect_p = true;
-                    out_stream << "Password: ";
-                }
-                else if(expect_p) //expect that the input is a password
-                {
-                    expect_p = false;
-                    if(create_flag)// create a new user after checking to see if they are not already real
-                    {
-                        user = user_manager->get_user(username);
-                        if(user == NULL){
-                            user = user_manager->create_user(username, password);
-                            out_stream << "USER CREATED\n["+username+"]: ";
-                        }
-                        else{
-                            delete user;
-                            expect_i = true;
-			    out_stream << "USER ALREADY IS REAL\nCreate or LogIn: " ;
-                        }
-                    }
-                    else // check to see if the user info is correct if else output the it failed and ask to create or log in again
-                    {
-                        if(user_manager->check_user(username, password)){
-                            user = user_manager->get_user(username);
-                            out_stream << "LOG IN SUCCESS\n["+username+"]: ";
-                        }
-                        else{
-                            expect_i = true;
-                            out_stream << "LOG IN FAILURE\nCreate or LogIn: ";
-                        }
-                    }
-                }
-                else if (command.compare("") == 0)
-                    out_stream <<
-                else if (command.compare("potato") == 0)
-                    out_stream << potato_output(username);
-                else if(command.compare("-help") == 0)
-                    out_stream << help_output(username);
-                else
-		            out_stream << "INVALID COMMAND TYPE -help FOR LIST OF COMMANDS\n["+username+"]: ";
             }
 	        out_stream.close();
             in_stream.close();
