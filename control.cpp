@@ -41,7 +41,7 @@ private Observer_1 observer_1; #rename to descirbe observer when implemented
 */
 
 /**
- * @breaf Log in a user
+ * @brief Log in a user
  *
  * Check to see if a user log in information is correct and respond back with a string of either success or failure
  * @author  Vladimir Zhurov
@@ -58,6 +58,15 @@ string user_login(vector<string> parts){
         return "LOGIN|FAILURE";
 }
 
+/**
+ * @brief Create a new user
+ *
+ * Check to see if a user is already real, if provided information is unique creat a new user
+ * @Author  Vladimir Zhurov
+ * @dates   25/11/2019
+ * @param   parts           A vector of string containing <CREATE USER,username,password>
+ * @return  create_text     An output string that says if user create was success or failure
+ */
 string user_create(vector<string> parts){
     string create_text;
     User* user = user_manager->get_user(parts.at(1));
@@ -71,6 +80,17 @@ string user_create(vector<string> parts){
     return create_text;
 }
 
+/**
+ * @brief Delete an exsisting user
+ *
+ * Check to see if a user is already real, then delete all the timetables they
+ * own, remove them as members from any timetables they have joined, delete
+ * any events that they own, remove any reminders pointed at them.
+ * @Author  Vladimir Zhurov
+ * @dates   25/11/2019
+ * @param   parts           A vector of string containing <DELETE USER,username,password>
+ * @return  create_text     An output string that says if user delete was success or failure
+ */
 string user_delete(vector<string> parts){
     User* user = user_manager->get_user(parts.at(1));
     if(user == NULL)
@@ -90,12 +110,28 @@ string user_delete(vector<string> parts){
     }
 
     //Delete all events that user created and remove from any that is attached to
+    //todo
     delete user;
     user_manager->delete_user(parts.at(1));
     return "DELETE USER|SUCCESS";
 }
 
+/**
+ * @brief Create a timetable for a given user
+ *
+ * Assume user is real and create a blank timetable using the given information
+ * @Author  Vladimir Zhurov
+ * @dates   25/11/2019
+ * @param   parts           A vector of string containing <CREATE TIMETABLE,table_name,access_type,username>
+ * @return  create_text     An output string that says if create timetable was success or failure
+ */
+string timeable_create(vector<string> parts){
+    int success = timetable_manager->create_timetable(parts.at(1), parts.at(2), parts.at(3))
+    if(success == 0)
+        return "CREATE TIMETABLE|FAILURE";
+    return "CREATE TIMETABLE|SUCCESS";
 
+}
 
 string potato_output(){
     string potato_text = "POTATO|"+to_string(potatoNum);
@@ -137,7 +173,7 @@ void console_control(string pid){
                     out_stream << user_create(parts);
                 else if(parts.at(0).compare("DELETE USER") == 0) // DELETE USER|username|password
                     out_stream << user_delete(parts);
-                else if(parts.at(0).compare("CREATE TIMETABLE") == 0) // CREATE TIMETABLE|
+                else if(parts.at(0).compare("CREATE TIMETABLE") == 0) // CREATE TIMETABLE|table_name|access_type|username
                     out_stream << timeable_create(parts);
                 else if(parts.at(0).compare("GET TIMETABLES") == 0)
                     out_stream << timetable_get(parts);
