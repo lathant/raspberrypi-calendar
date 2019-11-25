@@ -23,7 +23,16 @@ private:
     
     
 public:
-    Event(std::string in_eventName, std::string in_details, std::time_t in_start_time,std::time_t in_end_time,std::string in_access_t, std::string in_owner_id, std::string in_repeatType);
+    Event(){};
+    Event(std::string in_eventName, std::string in_details, std::time_t in_start_time,std::time_t in_end_time,std::string in_access_t, std::string in_owner_id, std::string in_repeatType){
+            eventName = in_eventName;
+            details = in_details;
+            start_time = in_start_time;
+            end_time = in_end_time;
+            access_t = in_access_t;
+            owner_id = in_owner_id;
+            repeat_type = in_repeatType;
+    };
     std::string get_eventName(){return eventName;}
     std::string get_details(){return details;}
     std::time_t get_start_time(){return start_time;}
