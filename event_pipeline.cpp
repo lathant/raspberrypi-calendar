@@ -1,3 +1,4 @@
+  
 /* Class for event pipeline
  * CREATED BY: Lathan Thangavadivel
  * LAST EDITED BY: Abarna Srikantharajah
@@ -6,23 +7,57 @@
  */
 
 
-#include <queue>
+#include "event_pipeline.h"
+
 
 using namespace std;
 
-Event_Pipeline::Event_Pipeline(){}
-
-bool CompareTime (Event const &event1, Event const &event2) {
-        double diff = difftime(event1.get_time(),event2.get_time());
-        return diff < 0;
+void Event_Pipeline::enqueue(Reminder event){
+        pipe.push_front(event);
     }
     
-void Event_Pipeline::enqueue(Event event){
-        queue.push(event);
+Reminder Event_Pipeline::dequeue(){
+    list <Reminder> :: iterator scan; 
+    list <Reminder> :: iterator smallest;
+    smallest = pipe.begin();
+    Reminder smallestValue;
+    for (scan = pipe.begin(); scan != pipe.end(); ++scan) { 
+        Reminder scanValue = *scan;
+        smallestValue = *smallest;
+        if (difftime(scanValue.get_remind_time(),smallestValue.get_remind_time())<0){
+            smallest = scan;
+        }
+    }
+    pipe.erase(smallest);
+    return smallestValue;
     }
     
-Event Event_Pipeline::dequeue(){
-        return queue.pop();
+    
+Reminder Event_Pipeline::peak(){
+    list <Reminder> :: iterator scan; 
+    list <Reminder> :: iterator smallest;
+    smallest = pipe.begin();
+    Reminder smallestValue;
+    for (scan = pipe.begin(); scan != pipe.end(); ++scan) { 
+        Reminder scanValue = *scan;
+        smallestValue = *smallest;
+        if (difftime(scanValue.get_remind_time(),smallestValue.get_remind_time())<0){
+            smallest = scan;
+        }
     }
+    return smallestValue;
+};
 
+bool Event_Pipeline::contains(Reminder event){
+    list <Reminder> :: iterator scan; 
+    for (scan = pipe.begin(); scan != pipe.end(); ++scan) { 
+        Reminder scanValue = *scan;
+        
+        if (scanValue.get_event().get_eventName().compare(event.get_event().get_eventName())){
+            if(difftime(scanValue.get_remind_time(),event.get_remind_time()) == 0){
+                return true;
+            }
+        }
+    }
+    return false;
 };
