@@ -9,20 +9,21 @@
 #define EVENT_PIPELINE_H
 
 #include "event.h"
-#include <queue>
+#include "reminder.h"
+#include <list>
+#include <iterator>
 
 
 class Event_Pipeline{
     private:
-        std::queue<event,vector<event>,CompareTime> eventQueue;
+        std::list<Reminder> pipe;
                 
     public:
-        Event_Pipeline();
-        std::string get_queue(){return eventqueue;}
-        static queue<Event,vector<Event>,CompareTime> eventQueue;
-        std::bool CompareTime(std::Event const &event1, std::Event const &event2);
-        void enqueue(std::Event event);
-        std::Event Event_Pipeline::dequeue();
+        Event_Pipeline(){};
+        void enqueue(Reminder event);
+        Reminder dequeue();
+        Reminder peak();
+        bool contains(Reminder event);
 };
 
 #endif /* EVENT_PIPELINE_H */
