@@ -3,7 +3,11 @@
  * @author     Vladimir Zhurov
  * @date       25/11/2019
  */
-
+ #include <iostream>
+ #include <fstream>
+ #include <string.h>
+ #include <stdio.h>
+ #include "string"
  #include "event_manager.h"
 
 using namespace std;
@@ -25,18 +29,40 @@ Event_Manager* Event_Manager::get_instance() {
 }
 
 /**
+ *
+ */
+Event* Event_Manager::get_event(string event_name){
+
+}
+
+/**
  * @brief       create a new event
  *
  * @author      Vladimir Zhurov
  * @date        25/11/2019
- * @param
- * @param
- * @return
+ * @param       eventName
+ * @param       details
+ * @param       start_time
+ * @param       end_time
+ * @param       access_t
+ * @param       owner_id
+ * @param       repeatType
+ * @return      int                 -1 duplicate, 0 on failure, and 1 on success
  */
-int Event_Manager::create_event(string eventName, string details,
-    time_t start_time, time_t end_time,string access_t, string owner_id,
-    string repeatType){
-
+int Event_Manager::create_event(string eventName, string details, time_t start_time,
+    time_t end_time, string access_t, string owner_id, string repeatType){
+    Event* event = get_event(eventName);
+    if (event != NULL)
+        return -1;
+    Event_Factory* factory = new Event_Factory();
+    event = factory->create_event(eventName, details, start_time, end_time,
+        access_t, owner_id, repeatType);
+    string event_db_entry = eventName + "," + details + "," + to_string(start_time) +
+        "," + to_string(end_time) + "," + access_t + "," + owner_id + "," + repeatType;
+    ofstream out(STORAGE_FILE_PATH, ios::app);
+    out << event_db_entry << endl;
+    out.close();
+    return 1;
 }
 
 /**
