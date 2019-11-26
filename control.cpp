@@ -215,7 +215,7 @@ string timetable_compare(vector<string> parts){
     if(cTable.compare("ERROR") == 0)
         return "COMPARE TIMETABLE|FAILURE";
     string text_output = "COMPARE TIMETABLE|SUCCESS|";
-    text_output += cTable
+    text_output += cTable;
     return text_output;
 }
 
