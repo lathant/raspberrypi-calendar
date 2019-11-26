@@ -82,12 +82,14 @@ int Event_Manager::delete_event(string event_name){
     string new_database_string = "";
     while(getline(file_input, line)) {
         current_event_name = ;
+
         if (current_event_name.compare(event_name) != 0) {
             line = line + "\n";
             new_database_string += line;
         }
     }
-
+    file_input.close();
+    remove(STORAGE_FILE_PATH.c_str());
     ofstream out(STORAGE_FILE_PATH);
     out << new_database_string;
     out.close();
@@ -104,18 +106,6 @@ int Event_Manager::delete_event(string event_name){
  * @return
  */
 set<Event> Event_Manager::get_personal_events(string owner_id){
-
-}
-
-/**
- * @brief       get all shared events for a user
- *
- * @author      Vladimir Zhurov
- * @date        25/11/2019
- * @param       owner_id          The name of the user
- * @return
- */
-set<Event> Event_Manager::get_shared_events(string owner_id){
 
 }
 

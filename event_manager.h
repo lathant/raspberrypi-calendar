@@ -23,7 +23,6 @@ class Event_Manager {
             std::string owner_id, std::string repeatType);
         int delete_event(std::string event_name);
         std::set<Event> get_personal_events(std::string owner_id);
-        std::set<Event> get_shared_events(std::string owner_id);
         std::set<Event> get_public_events();
         std::string event_to_txt(Event event);
 

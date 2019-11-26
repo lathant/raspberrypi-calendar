@@ -268,11 +268,8 @@ string event_create(vector<string> parts){
  * @brief get a or multiple events
  *
  * if get_type = 0 get all personal events
- * if get_type = 1 get all shared events
- * if get_type = 2 get all public events
- * if get_type = 3 get both personal and shared
- * if get_type = 4 get both shared and public
- * if get_type = 5 get all events avalible to given user
+ * if get_type = 1 get all public events
+ * if get_type = 2 get all events
  *
  * @Author  Vladimir Zhurov
  * @date   25/11/2019
@@ -283,7 +280,7 @@ string event_get(vector<string> parts){
     int get_type = stoi(parts.at(1));
     set<Event> storage;
     string text_output= "GET TIMETABLE";
-    if(get_type == 0 || get_type == 3 || get_type == 5){
+    if(get_type == 0 || get_type == 2){
         storage = event_manager->get_personal_events(parts.at(2));
         text_output += "|PERSONAL";
         for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
@@ -291,15 +288,7 @@ string event_get(vector<string> parts){
             text_output += event_manager->event_to_txt(*it);
         }
     }
-    if(get_type == 1 || get_type == 3 || get_type == 5){
-        storage = event_manager->get_shared_events(parts.at(2));
-        text_output += "|SHARED";
-        for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
-            text_output += "|";
-            text_output += event_manager->event_to_txt(*it);
-        }
-    }
-    if(get_type == 2 || get_type == 4 || get_type == 5){
+    if(get_type == 1 || get_type == 2){
         storage = event_manager->get_public_events();
         text_output += "|PUBLIC";
         for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){

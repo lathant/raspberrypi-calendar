@@ -106,7 +106,8 @@ bool User_Manager::delete_user(string username) {
             new_database_string += line;
         }
     }
-
+    file_input.close();
+    remove(STORAGE_FILE_PATH.c_str());
     ofstream out(DATABASE_FILE_PATH);
     out << new_database_string;
     out.close();
