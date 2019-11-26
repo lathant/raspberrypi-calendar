@@ -117,7 +117,7 @@ set<Event> Event_Manager::get_personal_events(string owner_id){
  * @return
  */
 set<Event> Event_Manager::get_public_events(){
-    
+
 }
 
 /**

@@ -20,16 +20,15 @@ class Timetable_Manager {
         static Timetable_Manager* get_instance();
         int create_timetable(std::string name, std::string access_t, std::string owner_id);
         int save_timetable(Timetable table);
-        int delete_timetable(std::string name, std::string owner_id);
-        int delete_timetable(Timetable* table, std::string owner_id);
-        int append_date(Timetable table, std::string event_info);
-        int add_member(Timetable* table, std::string owner_id, std::string member_id);
-        int remove_member(Timetable* table, std::string owner_id, std::string member_id);
+        int delete_timetable(std::string table_name);
+        int append_date(std::string tablename, std::string event_info);
+        int add_member(std:: string tablename, std::string member_id);
+        int remove_member(std::string tablename, std::string member_id);
         std::set<Timetable> get_personal_tables(std::string owner_id);
         std::set<Timetable> get_shared_tables(std::string owner_id);
         std::set<Timetable> get_public_tables();
         std::string timetable_to_txt(Timetable timetable);
-        Timetable* compare_timetables(Timetable table1, Timetable table2);
+        Timetable* compare_timetables(std::string table1name, std::string table2name);
 
 };
 

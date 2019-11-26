@@ -191,11 +191,11 @@ string timetable_get(vector<string> parts){
  * Assume user is real and delete a given timetable
  * @Author  Vladimir Zhurov
  * @date   25/11/2019
- * @param   parts           A vector of string containing <DELETE TIMETABLE,table_name,username>
+ * @param   parts           A vector of string containing <DELETE TIMETABLE,table_name>
  * @return  create_text     An output string that says if delete timetable was success or failure
  */
 string timetable_delete(vector<string> parts){
-    int success = timetable_manager->delete_timetable(parts.at(1), parts.at(2));
+    int success = timetable_manager->delete_timetable(parts.at(1));
     if(success == 0)
         return "DELETE TIMETABLE|FAILURE";
     return "DELETE TIMETABLE|SUCCESS";
