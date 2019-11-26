@@ -106,7 +106,7 @@ int Event_Manager::delete_event(string event_name){
  * @return
  */
 set<Event> Event_Manager::get_personal_events(string owner_id){
-
+    // read file line by line and create event objects feed all event objects where owner matches into set
 }
 
 /**
@@ -117,7 +117,7 @@ set<Event> Event_Manager::get_personal_events(string owner_id){
  * @return
  */
 set<Event> Event_Manager::get_public_events(){
-
+    
 }
 
 /**
