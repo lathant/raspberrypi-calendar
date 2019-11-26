@@ -216,68 +216,145 @@ string timetable_compare(vector<string> parts){
 }
 
 /**
+ * @brief string to time_t converter
+ *
+ * A converter that parases a string and creates a time_t
+ * @Author  Vladimir Zhurov
+ * @dates   25/11/2019
+ * @param   sTime       A string that contains the information needed to create a time_t
+ * @return  time        A time_t that contains the information of string sTime
+ */
+time_t string_to_time_t(string sTime){
+    int year, month, day, hour, minute, second;
+    struct tm time_converter;
+
+    //convert string rep of time its componats
+
+    time_converter.tm_year = year - 1900;
+    time_converter.tm_mon = month - 1;
+    time_converter.tm_mday = day;
+    time_converter.tm_hour = hour;
+    time_converter.tm_min = minute;
+    time_converter.tm_sec = second;
+    time_converter.tm_isdst = 0; //change if needed for daylight savings
+    return mktime(&time_converter);
+}
+
+/**
  * @brief create an event for a given user
  *
  *
  * @Author  Vladimir Zhurov
  * @dates   25/11/2019
- * @param   parts           A vector of string containing <CREATE EVENT,table_name1,table_name2>
- * @return  create_text     An output string that says if create event was success or failure
+ * @param   parts           A vector of string containing <CREATE EVENT,eventName,
+ *                              details,start_time_string,end_time_string,access_t,username,repeatType>
+ * @return  string     An output string that says if create event was success or failure
  */
 string event_create(vector<string> parts){
-    (string eventName, string details, time_t start_time,time_t end_time,string access_t, string owner_id, string repeatType)
+    time_t start_time = string_to_time_t(parts.at(3));
+    time_t end_time = string_to_time_t(parts.at(4));
+    int success = event_manager->create_event(parts.at(1), parts.at(2), start_time,
+        end_time, parts.at(5), parts.at(6),parts.at(7));
+    if(success == 0)
+        return "CREATE EVENT|FAILURE";
+    return "CREATE EVENT|SUCCESS";
 }
 
 /**
  * @brief get a or multiple events
  *
+ * if get_type = 0 get all personal events
+ * if get_type = 1 get all shared events
+ * if get_type = 2 get all public events
+ * if get_type = 3 get both personal and shared
+ * if get_type = 4 get both shared and public
+ * if get_type = 5 get all events avalible to given user
  *
  * @Author  Vladimir Zhurov
  * @dates   25/11/2019
- * @param   parts           A vector of string containing <CREATE EVENT,table_name1,table_name2>
- * @return  create_text     An output string that says if create event was success or failure
+ * @param   parts           A vector of string containing <GET EVENT,get_type,username>
+ * @return  text_output     An output string that says if get event was success or failure and the events in string form
  */
 string event_get(vector<string> parts){
-
+    int get_type = stoi(parts.at(1));
+    set<Event> storage
+    string text_output= "GET TIMETABLE";
+    if(get_type == 0 || get_type == 3 || get_type == 5){
+        storage = event_manager->get_personal_events(parts.at(2));
+        text_output += "|PERSONAL"
+        for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
+            text_output += "|"
+            text_output += event_manager->event_to_txt(*it);
+            delete *it;
+        }
+    }
+    if(get_type == 1 || get_type == 3 || get_type == 5){
+        storage = event_manager->get_shared_events(parts.at(2));
+        text_output += "|SHARED"
+        for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
+            text_output += "|"
+            text_output += event_manager->event_to_txt(*it);
+            delete *it;
+        }
+    }
+    if(get_type == 2 || get_type == 4 || get_type == 5){
+        storage = event_manager->get_public_events();
+        text_output += "|PUBLIC"
+        for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
+            text_output += "|"
+            text_output += event_manager->event_to_txt(*it);
+            delete *it;
+        }
+    }
+    return text_output;
 }
 
 /**
  * @brief adds an event to a timetable
  *
- *
+ * Calls the append_date method from timetable_manager and gives it an event to add to a timetable
  * @Author  Vladimir Zhurov
  * @dates   25/11/2019
- * @param   parts           A vector of string containing <CREATE EVENT,table_name1,table_name2>
- * @return  create_text     An output string that says if create event was success or failure
+ * @param   parts           A vector of string containing <ADD EVENT,table_name,event_info>
+ * @return  string     An output string that says if add event to timetable was success or failure
  */
 string event_add(vector<string> parts){
-
+    timetable_manager->append_date(parts.at(1), parts.at(2));
+    if(success == 0)
+        return "CREATE EVENT|FAILURE";
+    return "CREATE EVENT|SUCCESS";
 }
 
 /**
  * @brief remove an event from a timetable
  *
- *
+ * Calls the remove_date method from timetable_manager and gives it an event's name that is to be removed from table
  * @Author  Vladimir Zhurov
  * @dates   25/11/2019
- * @param   parts           A vector of string containing <CREATE EVENT,table_name1,table_name2>
- * @return  create_text     An output string that says if create event was success or failure
+ * @param   parts           A vector of string containing <REMOVE EVENT,table_name,event_name>
+ * @return  string     An output string that says if create event was success or failure
  */
 string event_remove(vector<string> parts){
-
+    timetable_manager->remove_date(parts.at(1), parts.at(2));
+    if(success == 0)
+        return "REMOVE EVENT|FAILURE";
+    return "REMOVE EVENT|SUCCESS";
 }
 
 /**
  * @brief delete an event
  *
- *
+ * Delete an event and prevent it from being added to other timetables (does not remove from timetables)
  * @Author  Vladimir Zhurov
  * @dates   25/11/2019
- * @param   parts           A vector of string containing <CREATE EVENT,table_name1,table_name2>
- * @return  create_text     An output string that says if create event was success or failure
+ * @param   parts           A vector of string containing <DELETE EVENT,event_name>
+ * @return  string     An output string that says if create event was success or failure
  */
 string event_delete(vector<string> parts){
-
+    event_manager->delete_event(parts.at(1));
+    if(success == 0)
+        return "DELETE EVENT|FAILURE";
+    return "DELETE EVENT|SUCCESS";
 }
 
 /**
@@ -336,9 +413,9 @@ void console_control(string pid){
                     out_stream << timetable_delete(parts);
                 else if (parts.at(0).compare("COMPARE TIMETABLES") == 0) // COMPARE TIMETABLE|table_name1|table_name2
                     out_stream << timetable_compare(parts);
-                else if(parts.at(0).compare("CREATE EVENT") == 0) //
+                else if(parts.at(0).compare("CREATE EVENT") == 0) // CREATE EVENT|eventName|details|start_time_string|end_time_string|access_t|username|repeatType>
                     out_stream << event_create(parts);
-                else if(parts.at(0).compare("GET EVENT") == 0) //
+                else if(parts.at(0).compare("GET EVENT") == 0) // GET EVENT|get_type|username
                     out_stream << event_get(parts);
                 else if(parts.at(0).compare("ADD EVENT") == 0) //
                     out_stream << event_add(parts);
@@ -373,10 +450,10 @@ void init_User_Manager(){
     }
 }
 
-void init_Time_Table_Manager(){
+void init_Timetable_Manager(){
     if (TESTING)
         cout << "Time Table Manager intialized" << endl;
-    time_table_manager = Timetable_Manager::get_instance();
+    timetable_manager = Timetable_Manager::get_instance();
     if(TESTING){
         //implement rigerous tests
     }
@@ -401,7 +478,7 @@ int main(){
     if (TESTING)
         cout << "Calender Planner server is turned on" << endl;
     init_User_Manager();
-    init_Time_Table_Manager();
+    init_Timetable_Manager();
 
     init_Event_Manager();
 
