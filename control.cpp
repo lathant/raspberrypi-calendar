@@ -109,14 +109,14 @@ string user_delete(vector<string> parts){
     set<Timetable> owns = timetable_manager->get_personal_tables("username");
     for(set<Timetable>::iterator it = owns.begin(); it != owns.end(); it++){
         timetable_manager->delete_timetable(*it, "username");
-        delete *it;
+        delete it;
     }
 
     //Remove user from any timetable that hey are members of
     set<Timetable> uses = timetable_manager->get_shared_tables("username");
     for(set<Timetable>::iterator it = uses.begin(); it != uses.end(); it++){
         timetable_manager->remove_member(*it, "username");
-        delete *it;
+        delete it;
     }
 
     //Delete all events that user created and remove from any that is attached to
@@ -136,7 +136,7 @@ string user_delete(vector<string> parts){
  * @return  create_text     An output string that says if create timetable was success or failure
  */
 string timeable_create(vector<string> parts){
-    int success = timetable_manager->create_timetable(parts.at(1), parts.at(2), parts.at(3))
+    int success = timetable_manager->create_timetable(parts.at(1), parts.at(2), parts.at(3));
     if(success == 0)
         return "CREATE TIMETABLE|FAILURE";
     return "CREATE TIMETABLE|SUCCESS";
@@ -158,31 +158,31 @@ string timeable_create(vector<string> parts){
  */
 string timetable_get(vector<string> parts){
     int get_type = stoi(parts.at(1));
-    set<Timetable> storage
+    set<Timetable> storage;
     string text_output= "GET TIMETABLE";
     if(get_type == 0 || get_type == 3 || get_type == 5){
         storage = timetable_manager->get_personal_tables(parts.at(2));
-        text_output += "|PERSONAL"
+        text_output += "|PERSONAL";
         for(set<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
-            text_output += "|"
+            text_output += "|";
             text_output += timetable_manager->timetable_to_txt(*it);
-            delete *it;
+            delete it;
         }
     }
     if(get_type == 1 || get_type == 3 || get_type == 5){
         storage = timetable_manager->get_shared_tables(parts.at(2));
-        text_output += "|SHARED"
+        text_output += "|SHARED";
         for(set<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
-            text_output += "|"
+            text_output += "|";
             text_output += timetable_manager->timetable_to_txt(*it);
-            delete *it;
+            delete it;
         }
     }
     if(get_type == 2 || get_type == 4 || get_type == 5){
         storage = timetable_manager->get_public_tables();
-        text_output += "|PUBLIC"
+        text_output += "|PUBLIC";
         for(set<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
-            text_output += "|"
+            text_output += "|";
             text_output += timetable_manager->timetable_to_txt(*it);
             delete *it;
         }
@@ -218,10 +218,10 @@ string timetable_delete(vector<string> parts){
 string timetable_compare(vector<string> parts){
     Timetable* cTable = timetable_manager->compare_timetables(parts.at(1), parts.at(2));
     if(*cTable == NULL)
-        return "COMPARE TIMETABLE|FAILURE"
-    string text_output = "COMPARE TIMETABLE|SUCCESS|"
+        return "COMPARE TIMETABLE|FAILURE";
+    string text_output = "COMPARE TIMETABLE|SUCCESS|";
     text_output += timetable_manager->timetable_to_txt(*cTable);
-    delete *cTable;
+    delete cTable;
     return text_output;
 }
 
@@ -287,33 +287,33 @@ string event_create(vector<string> parts){
  */
 string event_get(vector<string> parts){
     int get_type = stoi(parts.at(1));
-    set<Event> storage
+    set<Event> storage;
     string text_output= "GET TIMETABLE";
     if(get_type == 0 || get_type == 3 || get_type == 5){
         storage = event_manager->get_personal_events(parts.at(2));
-        text_output += "|PERSONAL"
+        text_output += "|PERSONAL";
         for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
-            text_output += "|"
+            text_output += "|";
             text_output += event_manager->event_to_txt(*it);
-            delete *it;
+            delete it;
         }
     }
     if(get_type == 1 || get_type == 3 || get_type == 5){
         storage = event_manager->get_shared_events(parts.at(2));
-        text_output += "|SHARED"
+        text_output += "|SHARED";
         for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
-            text_output += "|"
+            text_output += "|";
             text_output += event_manager->event_to_txt(*it);
-            delete *it;
+            delete it;
         }
     }
     if(get_type == 2 || get_type == 4 || get_type == 5){
         storage = event_manager->get_public_events();
-        text_output += "|PUBLIC"
+        text_output += "|PUBLIC";
         for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
-            text_output += "|"
+            text_output += "|";
             text_output += event_manager->event_to_txt(*it);
-            delete *it;
+            delete it;
         }
     }
     return text_output;
@@ -329,7 +329,7 @@ string event_get(vector<string> parts){
  * @return  string          An output string that says if add event to timetable was success or failure
  */
 string event_add(vector<string> parts){
-    timetable_manager->append_date(parts.at(1), parts.at(2));
+    int success = timetable_manager->append_date(parts.at(1), parts.at(2));
     if(success == 0)
         return "ADD EVENT|FAILURE";
     return "ADD EVENT|SUCCESS";
@@ -345,7 +345,7 @@ string event_add(vector<string> parts){
  * @return  string          An output string that says if create event was success or failure
  */
 string event_remove(vector<string> parts){
-    timetable_manager->remove_date(parts.at(1), parts.at(2));
+    int success = timetable_manager->remove_date(parts.at(1), parts.at(2));
     if(success == 0)
         return "REMOVE EVENT|FAILURE";
     return "REMOVE EVENT|SUCCESS";
@@ -361,7 +361,7 @@ string event_remove(vector<string> parts){
  * @return  string          An output string that says if create event was success or failure
  */
 string event_delete(vector<string> parts){
-    event_manager->delete_event(parts.at(1));
+    int success = event_manager->delete_event(parts.at(1));
     if(success == 0)
         return "DELETE EVENT|FAILURE";
     return "DELETE EVENT|SUCCESS";
