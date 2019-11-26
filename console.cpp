@@ -6,11 +6,13 @@
  */
 
 #include <iostream>
-#include "unistd.h"
-#include "fstream"
-#include "sstream"
-#include "vector"
-#include "string"
+#include <unistd.h>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+#include <cstdio>
+#include <ctime>
 
 using namespace std;
 
@@ -42,18 +44,20 @@ int main(){
     ofstream out_stream(a_file.c_str(), ios_base::app);
     ifstream in_stream;
 
-    string line, command;
-    bool control = true;
-
     //sync up
     out_stream << " ";
     out_stream.close();
     usleep(10000);
-	
+
+    clock_t last_input = clock();
+    double time_elapsed;
+    string line, command;
+    bool control = true;
     while (control){
         in_stream.open(b_file.c_str());
         // check to see if file is non-empty
         if(in_stream.peek() != fstream::traits_type::eof()){
+            last_input = clock();
             // read in each line and output
             while(getline(in_stream, line))
                 cout << endl << line;
@@ -70,6 +74,9 @@ int main(){
         if(in_stream)
             in_stream.close();
         usleep(10000);
+        time_elapsed = (clock() - last_input)/(double) CLOCKS_PER_SEC;
+        if(time_elapsed >= 240.0) //timeout
+            control = false;
     }
     out_stream.close();
 

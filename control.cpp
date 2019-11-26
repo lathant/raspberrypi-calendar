@@ -11,16 +11,26 @@
  *  expand exsisting functionality in console_control
  */
 
+ /**
+  * @brief the main controling instance for the calandar system
+  *
+  * The main instance for the calandar system which spawns threads to deal with users and interacts with the manager classes
+  * @author  Vladimir Zhurov
+  * @date   25/11/2019
+  */
+
 #include <iostream>
-#include "iostream"
-#include "fstream"
-#include "sstream"
-#include "vector"
-#include "string"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <thread>
+#include <cstdio>
+#include <ctime>
 
 #include "user_manager.h"
 #include "timetable_manager.h"
@@ -28,7 +38,7 @@
 
 using namespace std;
 
-static bool TESTING = true;
+static bool TESTING = false;
 static string GET_FILE = "getF.txt";
 int potatoNum = 1;
 
@@ -45,7 +55,7 @@ private Observer_1 observer_1; #rename to descirbe observer when implemented
  *
  * Check to see if a user log in information is correct and respond back with a string of either success or failure
  * @author  Vladimir Zhurov
- * @dates   25/11/2019
+ * @date   25/11/2019
  * @param   parts           A vector of strings containing <LOGIN,username,password>
  * @return  login_text      An output string that says if login success or failure
  */
@@ -63,7 +73,7 @@ string user_login(vector<string> parts){
  *
  * Check to see if a user is already real, if provided information is unique creat a new user
  * @Author  Vladimir Zhurov
- * @dates   25/11/2019
+ * @date   25/11/2019
  * @param   parts           A vector of string containing <CREATE USER,username,password>
  * @return  create_text     An output string that says if user create was success or failure
  */
@@ -87,7 +97,7 @@ string user_create(vector<string> parts){
  * own, remove them as members from any timetables they have joined, delete
  * any events that they own, remove any reminders pointed at them.
  * @Author  Vladimir Zhurov
- * @dates   25/11/2019
+ * @date   25/11/2019
  * @param   parts           A vector of string containing <DELETE USER,username,password>
  * @return  create_text     An output string that says if user delete was success or failure
  */
@@ -121,7 +131,7 @@ string user_delete(vector<string> parts){
  *
  * Assume user is real and create a blank timetable using the given information
  * @Author  Vladimir Zhurov
- * @dates   25/11/2019
+ * @date   25/11/2019
  * @param   parts           A vector of string containing <CREATE TIMETABLE,table_name,access_type,username>
  * @return  create_text     An output string that says if create timetable was success or failure
  */
@@ -142,7 +152,7 @@ string timeable_create(vector<string> parts){
  * if get_type = 4 get both shared and public
  * if get_type = 5 get all timetables avalible to given user
  * @Author  Vladimir Zhurov
- * @dates   25/11/2019
+ * @date   25/11/2019
  * @param   parts           A vector of string containing <GET TIMETABLE,get_type,username>
  * @return  create_text     An output string that says if get timetable was success or failure and the timetables in string form
  */
@@ -185,7 +195,7 @@ string timetable_get(vector<string> parts){
  *
  * Assume user is real and delete a given timetable
  * @Author  Vladimir Zhurov
- * @dates   25/11/2019
+ * @date   25/11/2019
  * @param   parts           A vector of string containing <DELETE TIMETABLE,table_name,username>
  * @return  create_text     An output string that says if delete timetable was success or failure
  */
@@ -201,7 +211,7 @@ string timetable_delete(vector<string> parts){
  *
  * Call the compare_timetables() function and return the string rep of the comparison table
  * @Author  Vladimir Zhurov
- * @dates   25/11/2019
+ * @date   25/11/2019
  * @param   parts           A vector of string containing <COMPARE TIMETABLE,table_name1,table_name2>
  * @return  create_text     An output string rep of the comparison table
  */
@@ -220,7 +230,7 @@ string timetable_compare(vector<string> parts){
  *
  * A converter that parases a string and creates a time_t
  * @Author  Vladimir Zhurov
- * @dates   25/11/2019
+ * @date   25/11/2019
  * @param   sTime       A string that contains the information needed to create a time_t
  * @return  time        A time_t that contains the information of string sTime
  */
@@ -245,7 +255,7 @@ time_t string_to_time_t(string sTime){
  *
  *
  * @Author  Vladimir Zhurov
- * @dates   25/11/2019
+ * @date   25/11/2019
  * @param   parts           A vector of string containing <CREATE EVENT,eventName,
  *                              details,start_time_string,end_time_string,access_t,username,repeatType>
  * @return  string     An output string that says if create event was success or failure
@@ -271,7 +281,7 @@ string event_create(vector<string> parts){
  * if get_type = 5 get all events avalible to given user
  *
  * @Author  Vladimir Zhurov
- * @dates   25/11/2019
+ * @date   25/11/2019
  * @param   parts           A vector of string containing <GET EVENT,get_type,username>
  * @return  text_output     An output string that says if get event was success or failure and the events in string form
  */
@@ -314,15 +324,15 @@ string event_get(vector<string> parts){
  *
  * Calls the append_date method from timetable_manager and gives it an event to add to a timetable
  * @Author  Vladimir Zhurov
- * @dates   25/11/2019
+ * @date   25/11/2019
  * @param   parts           A vector of string containing <ADD EVENT,table_name,event_info>
- * @return  string     An output string that says if add event to timetable was success or failure
+ * @return  string          An output string that says if add event to timetable was success or failure
  */
 string event_add(vector<string> parts){
     timetable_manager->append_date(parts.at(1), parts.at(2));
     if(success == 0)
-        return "CREATE EVENT|FAILURE";
-    return "CREATE EVENT|SUCCESS";
+        return "ADD EVENT|FAILURE";
+    return "ADD EVENT|SUCCESS";
 }
 
 /**
@@ -330,9 +340,9 @@ string event_add(vector<string> parts){
  *
  * Calls the remove_date method from timetable_manager and gives it an event's name that is to be removed from table
  * @Author  Vladimir Zhurov
- * @dates   25/11/2019
+ * @date   25/11/2019
  * @param   parts           A vector of string containing <REMOVE EVENT,table_name,event_name>
- * @return  string     An output string that says if create event was success or failure
+ * @return  string          An output string that says if create event was success or failure
  */
 string event_remove(vector<string> parts){
     timetable_manager->remove_date(parts.at(1), parts.at(2));
@@ -346,9 +356,9 @@ string event_remove(vector<string> parts){
  *
  * Delete an event and prevent it from being added to other timetables (does not remove from timetables)
  * @Author  Vladimir Zhurov
- * @dates   25/11/2019
+ * @date   25/11/2019
  * @param   parts           A vector of string containing <DELETE EVENT,event_name>
- * @return  string     An output string that says if create event was success or failure
+ * @return  string          An output string that says if create event was success or failure
  */
 string event_delete(vector<string> parts){
     event_manager->delete_event(parts.at(1));
@@ -362,7 +372,7 @@ string event_delete(vector<string> parts){
  *
  * Sends a string containing the current potato number
  * @Author  Vladimir Zhurov
- * @dates   25/11/2019
+ * @date   25/11/2019
  * @return  potato_text     An output string that contains potato_num
  */
 string potato_output(){
@@ -371,6 +381,16 @@ string potato_output(){
     return potato_text;
 }
 
+/**
+ * @brief A thread instance that allows comunication between the user and the system
+ *
+ * Using the provided pid two files are created for comunication between the user console and the thread instance.
+ *      console_control will waits untill user's console writes to its file and then acts upon that input.
+ *      Upon compleating it's task console_control writes a response message through it's response file.
+ * @Author  Vladimir Zhurov
+ * @date    25/11/2019
+ * @param   pid                 A unique pid id for the user's console
+ */
 void console_control(string pid){
     string b_file = "b_"+pid+".txt"; // send
     string a_file = "a_"+pid+".txt"; // recive
@@ -383,6 +403,8 @@ void console_control(string pid){
     out_stream << "START";
     out_stream.close();
 
+    clock_t last_input = clock();
+    double time_elapsed;
     string command;
     vector<string> parts;
     bool control = true;
@@ -390,7 +412,8 @@ void console_control(string pid){
         in_stream.open(a_file.c_str());
         // check to see if file is non-empty
         if(in_stream.peek() != fstream::traits_type::eof()){
-       	    // read in each line for commands
+            last_input = clock();
+            // read in each line for commands
             while(getline(in_stream, command)){
                 stringstream ss (command);
                 while(getline(ss, command, '|'))
@@ -417,11 +440,11 @@ void console_control(string pid){
                     out_stream << event_create(parts);
                 else if(parts.at(0).compare("GET EVENT") == 0) // GET EVENT|get_type|username
                     out_stream << event_get(parts);
-                else if(parts.at(0).compare("ADD EVENT") == 0) //
+                else if(parts.at(0).compare("ADD EVENT") == 0) // ADD EVENT|table_name|event_info
                     out_stream << event_add(parts);
-                else if(parts.at(0).compare("REMOVE EVENT") == 0) //
+                else if(parts.at(0).compare("REMOVE EVENT") == 0) // REMOVE EVENT|table_name|event_name
                     out_stream << event_remove(parts);
-                else if(parts.at(0).compare("DELETE EVENT") == 0) //
+                else if(parts.at(0).compare("DELETE EVENT") == 0) // DELETE EVENT|event_name
                     out_stream << event_delete(parts);
                 else if(parts.at(0).compare("POTATO") == 0) // POTATO
                     out_stream << potato_output();
@@ -436,11 +459,20 @@ void console_control(string pid){
         if(in_stream)
             in_stream.close();
         usleep(10000);
+        time_elapsed = (clock() - last_input)/(double) CLOCKS_PER_SEC;
+        if(time_elapsed >= 240.0) // timeout
+            control = false;
     }
     out_stream.close();
 }
 
-//initilize the user_manager instance
+/**
+ * @brief initilize the user_manager
+ *
+ *
+ * @Author  Vladimir Zhurov
+ * @date    25/11/2019
+ */
 void init_User_Manager(){
     if (TESTING)
         cout << "User Manager intialized" << endl;
@@ -450,6 +482,13 @@ void init_User_Manager(){
     }
 }
 
+/**
+ * @brief initilize the timetable_manager
+ *
+ *
+ * @Author  Vladimir Zhurov
+ * @date    25/11/2019
+ */
 void init_Timetable_Manager(){
     if (TESTING)
         cout << "Time Table Manager intialized" << endl;
@@ -459,7 +498,13 @@ void init_Timetable_Manager(){
     }
 }
 
-
+/**
+ * @brief initilize the event_manager
+ *
+ *
+ * @Author  Vladimir Zhurov
+ * @date    25/11/2019
+ */
 void init_Event_Manager(){
     if (TESTING)
         cout << "Event Manager intialized" << endl;
@@ -468,12 +513,20 @@ void init_Event_Manager(){
         //implement rigerous tests
     }
 }
-void init_Clock(){if (TESTING)
-    cout << "Clock intialized" << endl;}
-void init_Observers(){if (TESTING)
-    cout << "Observers intialized" << endl;}
-void delete_everything(){ cout << "Everything deleted" << endl;}
+//void init_Clock(){if (TESTING)
+//    cout << "Clock intialized" << endl;}
+//void init_Observers(){if (TESTING)
+//    cout << "Observers intialized" << endl;}
+//void delete_everything(){ cout << "Everything deleted" << endl;}
 
+/**
+ * @brief The main process for the system that spawns threads to deal with individual users
+ *
+ * The main process initilizeses all of the required managers and then begins to wait on the GET_FILE
+ *      The user console will write a pid to the GET_FILE when this occours main will spawns a thread with the pid as argument and clear GET_FILE
+ * @Author  Vladimir Zhurov
+ * @date    25/11/2019
+ */
 int main(){
     if (TESTING)
         cout << "Calender Planner server is turned on" << endl;
@@ -482,9 +535,9 @@ int main(){
 
     init_Event_Manager();
 
-    init_Clock();
+    //init_Clock();
 
-    init_Observers();
+    //init_Observers();
 
     //Make sure IN_FILE and OUT_FILE are empty
     remove(GET_FILE.c_str());
@@ -500,7 +553,7 @@ int main(){
                 if(line.compare("TERMINATE") == 0){
                     cout << "Calender Planner TERMINATING" << endl;
                     in_stream.close();
-                    delete_everything();
+                    //delete_everything();
                     return 0;
                 }
 		thread threads(console_control, line);
@@ -513,6 +566,5 @@ int main(){
             in_stream.close();
         usleep(10000);
     }
-
     return 0;
 }
