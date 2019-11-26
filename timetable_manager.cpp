@@ -58,12 +58,12 @@ int save_timetable(Timetable table){
 }
 
 //Checks to see if the owner_id matches the table's owner_id then deletes it from the file
-int Timetable_Manager::delete_timetable(std::string name, std::string owner_id){
+int Timetable_Manager::delete_timetable(std::string table_name){ // fix with new table name
 /* if owner_id and table owner_id match then,
  * 		remove the time table from file
  *	else then return error
  */
-	Timetable * table = get_personal_tables(in_owner_id);
+	Timetable * table = get_personal_tables(table_name);
 	if (table = NULL){
 		return 0;
 	}
@@ -78,7 +78,7 @@ int Timetable_Manager::delete_timetable(std::string name, std::string owner_id){
 }
 
 //Checks to see if the timetable object's owner_id matches the owner_id then deletes the object and the data from the file
-int Timetable_Manager::delete_timetable(Timetable* table, std::string owner_id){
+int Timetable_Manager::delete_timetable(std::string table_name){
 /* if owner_id matches owner id given
  * 		then remove the timetable and data
  * else return error
@@ -100,7 +100,7 @@ int Timetable_Manager::delete_timetable(Timetable* table, std::string owner_id){
  *Check to see if the event_info is not already part of the timetable
  *Append the event to the set inside table and update the file
  */
-int Timetable_Manager::append_date(Timetable table, std::string event_info){ // come back to this
+int Timetable_Manager::append_date(std::string table_name, std::string event_info){ // come back to this
 	// check if the table exists
 		// then see if the info is in table
 			// if yes then do not add_member
@@ -116,7 +116,7 @@ int Timetable_Manager::append_date(Timetable table, std::string event_info){ // 
 //Add a new user to the members of the table if the owner_id matches and if they are not already present
 //Return -1 if owner_id match fail
 //Retturn 0 for normal fail
-int add_member(Timetable* table, std::string owner_id, std::string member_id){
+int add_member(std::string tablename, std::string member_id){
 	// check if owner id matches
 		// yes then check if user is not in members
 			// add the user with table method
@@ -136,7 +136,7 @@ int add_member(Timetable* table, std::string owner_id, std::string member_id){
 //Remove a user from the members of the table if the owner_id matches and if they are already present
 //Return -1 if owner_id match fail
 //Retturn 0 for normal fail
-int remove_member(Timetable* table, std::string owner_id, std::string member_id){
+int remove_member(std::string tablename, std::string member_id){
 	// check if owner id matches
 		// yes then check if user is in members
 			// remove the user with table method
@@ -191,6 +191,6 @@ std::string Timetable_Manager::timetable_to_txt(Timetable timetable){
  *events that overlap have sudo event present in overlap section
  *timetable is not stored in file
  */
-Timetable* Timetable_Manager::compare_timetables(Timetable table1, Timetable table2){
+Timetable* Timetable_Manager::compare_timetables(std::string table1name, std::string table2name){
 
 }
