@@ -22,7 +22,7 @@ class Timetable_Manager {
         int save_timetable(Timetable table);
         int delete_timetable(std::string table_name);
         int append_date(std::string tablename, std::string event_info);
-        int add_member(std:: string tablename, std::string member_id);
+        int add_member(std::string tablename, std::string member_id);
         int remove_member(std::string tablename, std::string member_id);
         std::set<Timetable> get_personal_tables(std::string owner_id);
         std::set<Timetable> get_shared_tables(std::string owner_id);
