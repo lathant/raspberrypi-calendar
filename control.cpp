@@ -109,14 +109,12 @@ string user_delete(vector<string> parts){
     set<Timetable> owns = timetable_manager->get_personal_tables("username");
     for(set<Timetable>::iterator it = owns.begin(); it != owns.end(); it++){
         timetable_manager->delete_timetable(*it, "username");
-        delete it;
     }
 
     //Remove user from any timetable that hey are members of
     set<Timetable> uses = timetable_manager->get_shared_tables("username");
     for(set<Timetable>::iterator it = uses.begin(); it != uses.end(); it++){
         timetable_manager->remove_member(*it, "username");
-        delete it;
     }
 
     //Delete all events that user created and remove from any that is attached to
@@ -166,7 +164,6 @@ string timetable_get(vector<string> parts){
         for(set<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
             text_output += "|";
             text_output += timetable_manager->timetable_to_txt(*it);
-            delete it;
         }
     }
     if(get_type == 1 || get_type == 3 || get_type == 5){
@@ -175,7 +172,6 @@ string timetable_get(vector<string> parts){
         for(set<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
             text_output += "|";
             text_output += timetable_manager->timetable_to_txt(*it);
-            delete it;
         }
     }
     if(get_type == 2 || get_type == 4 || get_type == 5){
@@ -184,7 +180,6 @@ string timetable_get(vector<string> parts){
         for(set<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
             text_output += "|";
             text_output += timetable_manager->timetable_to_txt(*it);
-            delete *it;
         }
     }
     return text_output;
@@ -216,12 +211,11 @@ string timetable_delete(vector<string> parts){
  * @return  create_text     An output string rep of the comparison table
  */
 string timetable_compare(vector<string> parts){
-    Timetable* cTable = timetable_manager->compare_timetables(parts.at(1), parts.at(2));
-    if(*cTable == NULL)
+    string cTable = timetable_manager->compare_timetables(parts.at(1), parts.at(2));
+    if(cTable.compare("ERROR") == 0)
         return "COMPARE TIMETABLE|FAILURE";
     string text_output = "COMPARE TIMETABLE|SUCCESS|";
-    text_output += timetable_manager->timetable_to_txt(*cTable);
-    delete cTable;
+    text_output += cTable
     return text_output;
 }
 
@@ -295,7 +289,6 @@ string event_get(vector<string> parts){
         for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
             text_output += "|";
             text_output += event_manager->event_to_txt(*it);
-            delete it;
         }
     }
     if(get_type == 1 || get_type == 3 || get_type == 5){
@@ -304,7 +297,6 @@ string event_get(vector<string> parts){
         for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
             text_output += "|";
             text_output += event_manager->event_to_txt(*it);
-            delete it;
         }
     }
     if(get_type == 2 || get_type == 4 || get_type == 5){
@@ -313,7 +305,6 @@ string event_get(vector<string> parts){
         for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
             text_output += "|";
             text_output += event_manager->event_to_txt(*it);
-            delete it;
         }
     }
     return text_output;
