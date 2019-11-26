@@ -71,10 +71,28 @@ int Event_Manager::create_event(string eventName, string details, time_t start_t
  * @author      Vladimir Zhurov
  * @date        25/11/2019
  * @param       event_name          The name of the event
- * @return
+ * @return      int                 0 on failure, 1 on success
  */
 int Event_Manager::delete_event(string event_name){
+    Event* event = get_event(event_name);
+    if (event == NULL)
+        return 0;
+    ifstream file_input(STORAGE_FILE_PATH);
+    string line, current_event_name;
+    string new_database_string = "";
+    while(getline(file_input, line)) {
+        current_event_name = ;
+        if (current_event_name.compare(event_name) != 0) {
+            line = line + "\n";
+            new_database_string += line;
+        }
+    }
 
+    ofstream out(STORAGE_FILE_PATH);
+    out << new_database_string;
+    out.close();
+
+    return 1;
 }
 
 /**
