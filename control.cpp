@@ -72,7 +72,7 @@ string user_login(vector<string> parts){
  * @brief Create a new user
  *
  * Check to see if a user is already real, if provided information is unique creat a new user
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date   25/11/2019
  * @param   parts           A vector of string containing <CREATE USER,username,password>
  * @return  create_text     An output string that says if user create was success or failure
@@ -96,7 +96,7 @@ string user_create(vector<string> parts){
  * Check to see if a user is already real, then delete all the timetables they
  * own, remove them as members from any timetables they have joined, delete
  * any events that they own, remove any reminders pointed at them.
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date   25/11/2019
  * @param   parts           A vector of string containing <DELETE USER,username,password>
  * @return  create_text     An output string that says if user delete was success or failure
@@ -128,7 +128,7 @@ string user_delete(vector<string> parts){
  * @brief Create a timetable for a given user
  *
  * Assume user is real and create a blank timetable using the given information
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date   25/11/2019
  * @param   parts           A vector of string containing <CREATE TIMETABLE,table_name,access_type,username>
  * @return  create_text     An output string that says if create timetable was success or failure
@@ -149,7 +149,7 @@ string timeable_create(vector<string> parts){
  * if get_type = 3 get both personal and shared
  * if get_type = 4 get both shared and public
  * if get_type = 5 get all timetables avalible to given user
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date   25/11/2019
  * @param   parts           A vector of string containing <GET TIMETABLE,get_type,username>
  * @return  create_text     An output string that says if get timetable was success or failure and the timetables in string form
@@ -189,7 +189,7 @@ string timetable_get(vector<string> parts){
  * @brief delete a timetable for a given user
  *
  * Assume user is real and delete a given timetable
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date   25/11/2019
  * @param   parts           A vector of string containing <DELETE TIMETABLE,table_name>
  * @return  create_text     An output string that says if delete timetable was success or failure
@@ -205,7 +205,7 @@ string timetable_delete(vector<string> parts){
  * @brief compare two timetable
  *
  * Call the compare_timetables() function and return the string rep of the comparison table
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date   25/11/2019
  * @param   parts           A vector of string containing <COMPARE TIMETABLE,table_name1,table_name2>
  * @return  create_text     An output string rep of the comparison table
@@ -220,10 +220,26 @@ string timetable_compare(vector<string> parts){
 }
 
 /**
+ * @brief add a meber to a timetable
+ *
+ * @author  Vladimir Zhurov
+ * @date    26/11/2019
+ * @param   parts           A vector of string containing <ADD MEMBER,table_name,member_name>
+ * @return  strings         An output of the result of the attempt to add member to timetable
+ */
+string timetable_add(vector<string> parts){
+    int success = timetable_manager->add_member(parts.at(1), parts.at(2));
+    if(success == 0)
+        return "ADD MEMBER|FAILURE";
+    else if (success == -1)
+        return "ADD MEMBER|DUPLICATE";
+    return "ADD MEMBER|SUCCESS";
+}
+/**
  * @brief string to time_t converter
  *
  * A converter that parases a string and creates a time_t
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date   25/11/2019
  * @param   sTime       A string that contains the information needed to create a time_t
  * @return  time        A time_t that contains the information of string sTime
@@ -248,7 +264,7 @@ time_t string_to_time_t(string sTime){
  * @brief create an event for a given user
  *
  *
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date   25/11/2019
  * @param   parts           A vector of string containing <CREATE EVENT,eventName,
  *                              details,start_time_string,end_time_string,access_t,username,repeatType>
@@ -271,7 +287,7 @@ string event_create(vector<string> parts){
  * if get_type = 1 get all public events
  * if get_type = 2 get all events
  *
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date   25/11/2019
  * @param   parts           A vector of string containing <GET EVENT,get_type,username>
  * @return  text_output     An output string that says if get event was success or failure and the events in string form
@@ -303,7 +319,7 @@ string event_get(vector<string> parts){
  * @brief adds an event to a timetable
  *
  * Calls the append_date method from timetable_manager and gives it an event to add to a timetable
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date   25/11/2019
  * @param   parts           A vector of string containing <ADD EVENT,table_name,event_info>
  * @return  string          An output string that says if add event to timetable was success or failure
@@ -319,7 +335,7 @@ string event_add(vector<string> parts){
  * @brief remove an event from a timetable
  *
  * Calls the remove_date method from timetable_manager and gives it an event's name that is to be removed from table
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date   25/11/2019
  * @param   parts           A vector of string containing <REMOVE EVENT,table_name,event_name>
  * @return  string          An output string that says if create event was success or failure
@@ -335,7 +351,7 @@ string event_remove(vector<string> parts){
  * @brief delete an event
  *
  * Delete an event and prevent it from being added to other timetables (does not remove from timetables)
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date   25/11/2019
  * @param   parts           A vector of string containing <DELETE EVENT,event_name>
  * @return  string          An output string that says if create event was success or failure
@@ -351,7 +367,7 @@ string event_delete(vector<string> parts){
  * @brief POTATO
  *
  * Sends a string containing the current potato number
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date   25/11/2019
  * @return  potato_text     An output string that contains potato_num
  */
@@ -367,7 +383,7 @@ string potato_output(){
  * Using the provided pid two files are created for comunication between the user console and the thread instance.
  *      console_control will waits untill user's console writes to its file and then acts upon that input.
  *      Upon compleating it's task console_control writes a response message through it's response file.
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date    25/11/2019
  * @param   pid                 A unique pid id for the user's console
  */
@@ -416,6 +432,8 @@ void console_control(string pid){
                     out_stream << timetable_delete(parts);
                 else if (parts.at(0).compare("COMPARE TIMETABLES") == 0) // COMPARE TIMETABLE|table_name1|table_name2
                     out_stream << timetable_compare(parts);
+                else if (parts.at(0).compare("ADD MEMBER") == 0) // ADD MEMBER|table_name|member_name
+                    out_stream << timetable_add(parts);
                 else if(parts.at(0).compare("CREATE EVENT") == 0) // CREATE EVENT|eventName|details|start_time_string|end_time_string|access_t|username|repeatType>
                     out_stream << event_create(parts);
                 else if(parts.at(0).compare("GET EVENT") == 0) // GET EVENT|get_type|username
@@ -450,7 +468,7 @@ void console_control(string pid){
  * @brief initilize the user_manager
  *
  *
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date    25/11/2019
  */
 void init_User_Manager(){
@@ -466,7 +484,7 @@ void init_User_Manager(){
  * @brief initilize the timetable_manager
  *
  *
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date    25/11/2019
  */
 void init_Timetable_Manager(){
@@ -482,7 +500,7 @@ void init_Timetable_Manager(){
  * @brief initilize the event_manager
  *
  *
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date    25/11/2019
  */
 void init_Event_Manager(){
@@ -504,7 +522,7 @@ void init_Event_Manager(){
  *
  * The main process initilizeses all of the required managers and then begins to wait on the GET_FILE
  *      The user console will write a pid to the GET_FILE when this occours main will spawns a thread with the pid as argument and clear GET_FILE
- * @Author  Vladimir Zhurov
+ * @author  Vladimir Zhurov
  * @date    25/11/2019
  */
 int main(){
