@@ -118,7 +118,11 @@ string user_delete(vector<string> parts){
     }
 
     //Delete all events that user created and remove from any that is attached to
-    //todo
+    set<Event> storage = event_manager->get_personal_events(parts.at(1));
+    for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
+        string eName = it->get_eventName();
+        event_manager->delete_event(eName);
+    }
     delete user;
     user_manager->delete_user(parts.at(1));
     return "DELETE USER|SUCCESS";
