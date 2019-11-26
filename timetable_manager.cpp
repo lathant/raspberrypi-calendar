@@ -30,7 +30,7 @@ Timetable_Manager* Timetable_Manager::get_instance() {
 int Timetable_Manager::create_timetable(std::string in_name, std::string in_access_t, std::string in_owner_id){
 	Timetable * table = get_personal_tables(in_owner_id);
 	if (table != NULL){
-			return 0; // already exists  
+			return 0; // already exists
 	}
 	else {
 		Timetable_Factory* factory = new Timetable_Factory;
