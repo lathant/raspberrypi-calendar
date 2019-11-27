@@ -9,12 +9,13 @@
  * Int = 0 Failure
  */
 
-//#include "timetable_manager.h"
+#include "timetable_manager.h"
 #include "string"
 #include <iostream>
 #include <stdio.h>
 #include <fstream>
 #include <sstream>
+#include <stdlib.h>
 
 /// Initialize begining of file on initial start 
 static std::string STORAGE_FILE_PATH = "./data/timetable/timetables.csv";
@@ -51,9 +52,9 @@ int Timetable_Manager::create_timetable(std::string name, std::string access_t, 
 	else {
 		Timetable_Factory* factory = new Timetable_Factory;
 		Timetable * new_table = factory->create_timetable(name, access_t, owner_id);
-		std::string user_timetable = timetable_to_txt(timetable);
-		ofstream out(STORAGE_FILE_PATH, ios::app);
-		out << user_timetable << endi;
+		std::string user_timetable = timetable_to_txt(new_table);
+		std::ofstream out(STORAGE_FILE_PATH, ios::app);
+		out << user_timetable << std::endl;
 		out.close();
 		return 1;
 	}
@@ -69,9 +70,9 @@ int Timetable_Manager::create_timetable(std::string name, std::string access_t, 
 int save_timetable(Timetable table){
     
 	if (table != NULL){
-		user_timetable = timetable_to_txt(table);
-		ofstream out(STORAGE_FILE_PATH, ios::app);
-		out << user_timetable << endi;
+		std::string user_timetable = timetable_to_txt(table);
+		std::ofstream out(STORAGE_FILE_PATH, ios::app);
+		out << user_timetable << std::endl;
 		out.close();
 		return 1;
 	}
@@ -95,11 +96,11 @@ int Timetable_Manager::delete_timetable(std::string table_name){
 	}
 	if (table.owner_id = owner_id){
 		Timetable * new_table = factory->create_timetable(NULL, NULL, NULL); // NOTE: temp for now till it can be removed
-			string user_timetable = timetable_to_txt(Timetable timetable);
-			ofstream out(STORAGE_FILE_PATH, ios::app);
-			out << user_timetable << endi;
-			out.close();
-			return 1;
+		string user_timetable = timetable_to_txt(Timetable timetable);
+		std::ofstream out(STORAGE_FILE_PATH, ios::app);
+		out << user_timetable << std::endl;
+		out.close();
+		return 1;
 	}
 }
 
@@ -118,15 +119,14 @@ int Timetable_Manager::append_date(std::string table_name, std::string event_inf
     Timetable * table = get_personal_tables(owner_id);
 	if (table_name != NULL){
 	    while(getline(STORAGE_FILE_PATH, tables)){
-                stringstream ss (tables);
-                while(getline(ss, tables, ',')){
-                    if (getline(ss, tablels) = table_name){
-                        table.add_date(event_info);
-                    }
+            stringstream ss (tables);
+            while(getline(ss, tables, ',')){
+                if (getline(ss, tablels) = table_name){
+                    table.add_date(event_info);
                 }
+            }
         }
 		table.add_date(event_info); // NOTE: need to find way to sort through the data in a timetable
-	    }
 	}
 }
 
@@ -179,12 +179,12 @@ std::set<Timetable> Timetable_Manager::get_personal_tables(std::string owner_id)
     
     if (owner_id != NULL){
         while(getline(STORAGE_FILE_PATH, tables)){
-                stringstream ss (tables);
-                while(getline(ss, tables, ',')){
-                    if (getline(ss, tablels) = owner_id){
-                        parts.push_back(tables);
-                    }
+            stringstream ss (tables);
+            while(getline(ss, tables, ',')){
+                if (getline(ss, tables) = owner_id){
+                    parts.push_back(tables);
                 }
+            }
         }
     }
     else {
@@ -201,7 +201,7 @@ std::set<Timetable> Timetable_Manager::get_personal_tables(std::string owner_id)
   */
 std::set<Timetable> Timetable_Manager::get_shared_tables(std::string owner_id){
     
-    if owner_id != NULL){
+    if (owner_id != NULL){
         while(getline(STORAGE_FILE_PATH, table)){
             stringstream ss (table);
             while(getline(ss, table, ',')){
@@ -290,6 +290,6 @@ Timetable* Timetable_Manager::compare_timetables(std::string table1name, std::st
     else{
         parts.push_back("No table");
     }
-}
+}}
 
 /// Errors in control pointer issues can be fixed, some functions not on windows 
