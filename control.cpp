@@ -106,15 +106,15 @@ string user_delete(vector<string> parts){
     if(user == NULL)
         return "DELETE USER|FAILURE";
     //Delete all timetables that user owns
-    set<Timetable> owns = timetable_manager->get_personal_tables("username");
+    set<Timetable> owns = timetable_manager->get_personal_tables(parts.at(1));
     for(set<Timetable>::iterator it = owns.begin(); it != owns.end(); it++){
-        timetable_manager->delete_timetable(*it, "username");
+        timetable_manager->delete_timetable(it->get_name());
     }
 
     //Remove user from any timetable that hey are members of
-    set<Timetable> uses = timetable_manager->get_shared_tables("username");
+    set<Timetable> uses = timetable_manager->get_shared_tables(parts.at(1));
     for(set<Timetable>::iterator it = uses.begin(); it != uses.end(); it++){
-        timetable_manager->remove_member(*it, "username");
+        timetable_manager->remove_member(it->get_name(), parts.at(1));
     }
 
     //Delete all events that user created and remove from any that is attached to

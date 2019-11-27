@@ -21,7 +21,7 @@ class Timetable {
 
     public:
         Timetable(std::string name, std::string access_t, std::string owner_id);
-        std::string get_name(){return name;}
+        std::string get_name() const{return name;}
         std::string get_access_t(){return access_t;}
         std::string get_owner_id(){return owner_id;}
         std::set<std::string> get_dates(){return dates;}

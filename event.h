@@ -20,8 +20,8 @@ private:
     std::string repeat_type;
     std::time_t start_time;
     std::time_t end_time;
-    
-    
+
+
 public:
     Event(){};
     Event(std::string in_eventName, std::string in_details, std::time_t in_start_time,std::time_t in_end_time,std::string in_access_t, std::string in_owner_id, std::string in_repeatType){
@@ -33,7 +33,7 @@ public:
             owner_id = in_owner_id;
             repeat_type = in_repeatType;
     };
-    std::string get_eventName(){return eventName;}
+    std::string get_eventName() const {return eventName;}
     std::string get_details(){return details;}
     std::time_t get_start_time(){return start_time;}
     std::time_t get_end_time(){return end_time;}
@@ -47,7 +47,7 @@ public:
     void set_access_t(std::string newAccess);
     void set_owner_id(std::string newOwner);
     void set_repeat_type(std::string newRepeat);
-    
+
 };
 
 #endif /* EVENT_H */

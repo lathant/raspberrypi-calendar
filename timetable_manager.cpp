@@ -191,6 +191,6 @@ std::string Timetable_Manager::timetable_to_txt(Timetable timetable){
  *events that overlap have sudo event present in overlap section
  *timetable is not stored in file
  */
-Timetable* Timetable_Manager::compare_timetables(std::string table1name, std::string table2name){
+string Timetable_Manager::compare_timetables(std::string table1name, std::string table2name){
 
 }
