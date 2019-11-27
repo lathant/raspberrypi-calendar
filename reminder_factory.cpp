@@ -1,3 +1,13 @@
+/* Class that generates reminders
+ * CREATED BY: Lathan Thangavadivel
+ * LAST EDITED BY: Lathan Thangavadivel
+ * LAST EDITED: 25/11/2019
+ * @brief creates an instance of a reminder using the factory method
+ *
+ * @author  Lathan Thangavadivel
+ * @date   25/11/2019
+ */
+
 #include "reminder_factory.h"
 
 using namespace std;
