@@ -1,8 +1,11 @@
-/* Class for event factory methods
+/* Class that generates events
  * CREATED BY: Abarna Srikantharajah
  * LAST EDITED BY: Abarna Srikantharajah
  * LAST EDITED: 19/11/2019
- * TODO:
+ * @brief creates an instance of an event using the factory method
+ *
+ * @author  Abarna Srikantharajah
+ * @date   19/11/2019
  */
 
 #include "event_factory.h"
