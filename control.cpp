@@ -118,8 +118,8 @@ string user_delete(vector<string> parts){
     }
 
     //Delete all events that user created and remove from any that is attached to
-    set<Event> storage = event_manager->get_personal_events(parts.at(1));
-    for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
+    vector<Event> storage = event_manager->get_personal_events(parts.at(1));
+    for(vector<Event>::iterator it = storage.begin(); it != storage.end(); it++){
         string eName = it->get_eventName();
         event_manager->delete_event(eName);
     }
@@ -239,30 +239,6 @@ string timetable_add(vector<string> parts){
         return "ADD MEMBER|DUPLICATE";
     return "ADD MEMBER|SUCCESS";
 }
-/**
- * @brief string to time_t converter
- *
- * A converter that parases a string and creates a time_t
- * @author  Vladimir Zhurov
- * @date   25/11/2019
- * @param   sTime       A string that contains the information needed to create a time_t
- * @return  time        A time_t that contains the information of string sTime
- */
-time_t string_to_time_t(string sTime){
-    int year, month, day, hour, minute, second;
-    struct tm time_converter;
-
-    //convert string rep of time its componats
-
-    time_converter.tm_year = year - 1900;
-    time_converter.tm_mon = month - 1;
-    time_converter.tm_mday = day;
-    time_converter.tm_hour = hour;
-    time_converter.tm_min = minute;
-    time_converter.tm_sec = second;
-    time_converter.tm_isdst = 0; //change if needed for daylight savings
-    return mktime(&time_converter);
-}
 
 /**
  * @brief create an event for a given user
@@ -275,8 +251,8 @@ time_t string_to_time_t(string sTime){
  * @return  string     An output string that says if create event was success or failure
  */
 string event_create(vector<string> parts){
-    time_t start_time = string_to_time_t(parts.at(3));
-    time_t end_time = string_to_time_t(parts.at(4));
+    time_t start_time = stol(parts.at(3));
+    time_t end_time = stol(parts.at(4));
     int success = event_manager->create_event(parts.at(1), parts.at(2), start_time,
         end_time, parts.at(5), parts.at(6),parts.at(7));
     if(success == 0)
@@ -298,12 +274,12 @@ string event_create(vector<string> parts){
  */
 string event_get(vector<string> parts){
     int get_type = stoi(parts.at(1));
-    set<Event> storage;
+    vector<Event> storage;
     string text_output= "GET TIMETABLE";
     if(get_type == 0 || get_type == 2){
         storage = event_manager->get_personal_events(parts.at(2));
         text_output += "|PERSONAL";
-        for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
+        for(vector<Event>::iterator it = storage.begin(); it != storage.end(); it++){
             text_output += "|";
             text_output += event_manager->event_to_txt(*it);
         }
@@ -311,7 +287,7 @@ string event_get(vector<string> parts){
     if(get_type == 1 || get_type == 2){
         storage = event_manager->get_public_events();
         text_output += "|PUBLIC";
-        for(set<Event>::iterator it = storage.begin(); it != storage.end(); it++){
+        for(vector<Event>::iterator it = storage.begin(); it != storage.end(); it++){
             text_output += "|";
             text_output += event_manager->event_to_txt(*it);
         }

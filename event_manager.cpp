@@ -34,45 +34,45 @@ Event_Manager* Event_Manager::get_instance() {
  *
  */
 Event* Event_Manager::get_event(string event_name){
-     // File pointer 
-    fstream fin; 
-  
-    // Open an existing file 
-    fin.open(STORAGE_FILE_PATH, ios::in); 
-  
-    // Read the Data from the file 
-    // as String Vector 
-    vector<string> row; 
-    string line, word, temp,token; 
+     // File pointer
+    fstream fin;
+
+    // Open an existing file
+    fin.open(STORAGE_FILE_PATH, ios::in);
+
+    // Read the Data from the file
+    // as String Vector
+    vector<string> row;
+    string line, word, temp,token;
     string delimiter = "^@^";
     size_t pos;
-    
+
     while (fin >> temp) {
-  
-        row.clear(); 
-  
-        // read an entire row and 
-        // store it in a string variable 'line' 
-        getline(fin, line); 
-        
+
+        row.clear();
+
+        // read an entire row and
+        // store it in a string variable 'line'
+        getline(fin, line);
+
         pos = 0;
-        
+
         while ((pos = line.find(delimiter)) != string::npos) {
             token = line.substr(0, pos);
             row.push_back(token);
             line.erase(0, pos + delimiter.length());
         }
-        
+
         if (row[0].compare(event_name) == 0){
             Event_Factory* factory = new Event_Factory();
             Event* event = factory->create_event(row[0], row[1], stoi(row[2]), stoi(row[3]),
                     row[4], row[5], row[6]);
             return event;
-            
+
         }
-        
+
     return NULL;
-        
+
     }
 }
 
@@ -121,7 +121,7 @@ int Event_Manager::delete_event(string event_name){
     ifstream file_input(STORAGE_FILE_PATH);
     string line, current_event_name;
     string new_database_string = "";
-    
+
     size_t pos;
     while(getline(file_input, line)) {
         pos = line.find("^@^");
@@ -151,30 +151,30 @@ int Event_Manager::delete_event(string event_name){
  */
 vector<Event> Event_Manager::get_personal_events(string owner_id){
     // read file line by line and create event objects feed all event objects where owner matches into set
-    
-    // File pointer 
-    fstream fin; 
+
+    // File pointer
+    fstream fin;
     vector<Event> output;
-    // Open an existing file 
-    fin.open(STORAGE_FILE_PATH, ios::in); 
-  
-    // Read the Data from the file 
-    // as String Vector 
-    vector<string> row; 
-    string line, word, temp,token; 
+    // Open an existing file
+    fin.open(STORAGE_FILE_PATH, ios::in);
+
+    // Read the Data from the file
+    // as String Vector
+    vector<string> row;
+    string line, word, temp,token;
     string delimiter = "^@^";
     size_t pos;
-    
+
     while (fin >> temp) {
 
-        row.clear(); 
+        row.clear();
 
-        // read an entire row and 
-        // store it in a string variable 'line' 
-        getline(fin, line); 
-        
+        // read an entire row and
+        // store it in a string variable 'line'
+        getline(fin, line);
+
         pos = 0;
-        
+
         while ((pos = line.find(delimiter)) != string::npos) {
             token = line.substr(0, pos);
             row.push_back(token);
@@ -198,29 +198,29 @@ vector<Event> Event_Manager::get_personal_events(string owner_id){
  * @return
  */
 vector<Event> Event_Manager::get_public_events(){
-    // File pointer 
-    fstream fin; 
+    // File pointer
+    fstream fin;
     vector<Event> output;
-    // Open an existing file 
-    fin.open(STORAGE_FILE_PATH, ios::in); 
-  
-    // Read the Data from the file 
-    // as String Vector 
-    vector<string> row; 
-    string line, word, temp,token; 
+    // Open an existing file
+    fin.open(STORAGE_FILE_PATH, ios::in);
+
+    // Read the Data from the file
+    // as String Vector
+    vector<string> row;
+    string line, word, temp,token;
     string delimiter = "^@^";
     size_t pos;
-    
+
     while (fin >> temp) {
 
-        row.clear(); 
+        row.clear();
 
-        // read an entire row and 
-        // store it in a string variable 'line' 
-        getline(fin, line); 
-        
+        // read an entire row and
+        // store it in a string variable 'line'
+        getline(fin, line);
+
         pos = 0;
-        
+
         while ((pos = line.find(delimiter)) != string::npos) {
             token = line.substr(0, pos);
             row.push_back(token);

@@ -1,4 +1,4 @@
-/* Header File for event manager entities 
+/* Header File for event manager entities
  * CREATED BY: Lathan Thangavadivel
  * LAST EDITED BY: Lathan Thangavadivel
  * LAST EDITED: 25/11/2019
