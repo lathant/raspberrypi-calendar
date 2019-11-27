@@ -1,9 +1,11 @@
-/* Class representing event factory
+/* Header File for generating event entities 
  * CREATED BY: Abarna Srikantharajah
  * LAST EDITED BY: Abarna Srikantharajah
  * LAST EDITED: 19/11/2019
- * TODO:
- *   header file that generates events
+ * @brief the file that contains all the prototype functions and variables for the event factory class
+ *
+ * @author  Abarna Srikantharajah
+ * @date   19/11/2019
  */
 
 #ifndef EVENT_FACTORY_H
