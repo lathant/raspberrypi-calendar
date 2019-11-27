@@ -1,3 +1,14 @@
+/* Header File for reminder entities 
+ * CREATED BY: Lathan Thangavadivel
+ * LAST EDITED BY: Lathan Thangavadivel
+ * LAST EDITED: 25/11/2019
+ * @brief the file that contains all the prototype functions and variables for the reminders class
+ *
+ * @author  Lathan Thangavadivel
+ * @date   25/11/2019
+ */
+
+
 #ifndef REMINDER_H
 #define REMINDER_H
 
@@ -10,17 +21,58 @@ class Reminder {
             std::time_t remind_time;
     public:
             Reminder(){};
+            //initialize reminder class
             Reminder(std::string in_event, std::string in_destination, std::time_t in_remind_time){
                 event = in_event;
                 destination = in_destination;
                 remind_time = in_remind_time;
             }
-
+           /*
+            * @brief get the event attribute
+            *
+            * @author             Lathan Thangavadivel
+            * @return  event      event attribute
+            */
             std::string get_event(){return event;}
+    
+            /*
+            * @brief get the destination attribute
+            *
+            * @author                   Lathan Thangavadivel
+            * @return  destination      destination attribute
+            */
             std::string get_destination(){return destination;}
+    
+           /*
+            * @brief get the reminder time attribute
+            *
+            * @author                   Lathan Thangavadivel
+            * @return  remind_time      reminder time attribute
+            */
             std::time_t get_remind_time(){return remind_time;}
+    
+           /*
+            * @brief sets the event string with the given new event string 
+            *
+            * @author             Lathan Thangavadivel
+            * @param  newEvent    new event attribute
+            */
             void set_event(std::string newEvent);
+    
+           /*
+            * @brief sets the destination string with the given new destination string 
+            *
+            * @author             Lathan Thangavadivel
+            * @param  newDestination    new destination attribute
+            */
             void set_destination(std::string newDestination);
+    
+           /*
+            * @brief sets the remind time attribute with the given new time 
+            *
+            * @author             Lathan Thangavadivel
+            * @param  newTime    new reminder time attribute
+            */
             void set_remind_time(std::time_t newTime);
 };
 
