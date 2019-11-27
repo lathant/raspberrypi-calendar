@@ -1,8 +1,8 @@
 /* Class for the timetable manager
  * CREATED BY: Vladimir Zhurov
  * LAST EDITED BY: David Truong
- * LAST EDITED: 23/11/2019
- * TODO: IMPLEMENT *WIP* need to adjust for other already made cpp and headers since I had made my own
+ * LAST EDITED: 27/11/2019
+ * TODO: IMPLEMENT *WIP* Debug
  */
 
 /* Int = 1 success
@@ -12,7 +12,7 @@
 #include "timetable_manager.h"
 #include "string"
 
-/// initialize begining of file on initial start 
+/// Initialize begining of file on initial start 
 static string STORAGE_FILE_PATH = "./data/timetable/timetables.csv";
 Timetable_Manager* Timetable_Manager::instance = NULL;
 
@@ -23,8 +23,8 @@ Timetable_Manager* Timetable_Manager::instance = NULL;
   * @param No parameter needed 
   * @returns instance of time table manager 
   */
-  
 Timetable_Manager* Timetable_Manager::get_instance() {
+    
     if (instance == NULL){
         instance = new Timetable_Manager;
     }
@@ -39,6 +39,7 @@ Timetable_Manager* Timetable_Manager::get_instance() {
   * @returns 0 on failure, 1 on success
   */
 int Timetable_Manager::create_timetable(std::string name, std::string access_t, std::string owner_id){
+    
 	Timetable * table = get_personal_tables(owner_id);
 	if (table != NULL){
 			return 0; 
@@ -62,6 +63,7 @@ int Timetable_Manager::create_timetable(std::string name, std::string access_t, 
   * @returns 0 on failure, 1 on success
   */
 int save_timetable(Timetable table){
+    
 	if (table != NULL){
 		user_timetable = timetable_to_txt(table);
 		ofstream out(STORAGE_FILE_PATH, ios::app);
@@ -77,13 +79,14 @@ int save_timetable(Timetable table){
 
 
 /**
-  * Function that Checks to see if the timetable object's owner_id matches the owner_id 
+  * Function that checks to see if the timetable object's owner_id matches the owner_id 
   * then deletes the object and the data from the file 
   * If one does not exist already do nothing 
   * @param string of tablename 
   * @returns 0 on failure, 1 on success
   */
 int Timetable_Manager::delete_timetable(std::string table_name){
+    
 	if (table_name = NULL){
 		return 0;
 	}
@@ -97,16 +100,17 @@ int Timetable_Manager::delete_timetable(std::string table_name){
 	}
 }
 
-// NOTE: a symbol needed to break up events ie: "^"
+/// NOTE: a symbol needed to break up events ie: "^"
 
 /**
-  * Function that Check to see if the event_info is not already part of the timetable
+  * Function that checks to see if the event_info is not already part of the timetable
   * Append the event to the set inside table and update the file
   * If one does not exist already create 
   * @param string of tablename, string of event info 
   * @returns 0 on failure, 1 on success
   */
 int Timetable_Manager::append_date(std::string table_name, std::string event_info){
+    
     Timetable * table = get_personal_tables(owner_id);
 	if (table_name != NULL){
 		table.add_date(event_info); // NOTE: need to find way to sort through the data in a timetable
@@ -115,12 +119,13 @@ int Timetable_Manager::append_date(std::string table_name, std::string event_inf
 }
 
 /**
-  * Function that Add a new user to the members of the table if the owner_id matches and if they are not already present
+  * Function that adds a new user to the members of the table if the owner_id matches and if they are not already present
   * If one does exist already do nothing 
   * @param string of tablename, string of member id 
-  * @returns 0 on failure, 1 on success, -1 if owner_id match fai
+  * @returns 0 on failure, 1 on success, -1 if owner_id match fail
   */
 int add_member(std::string tablename, std::string member_id){
+    
 	if (tablename = NULL){
 	    return -1; 
 	}
@@ -131,15 +136,14 @@ int add_member(std::string tablename, std::string member_id){
 	return 0;
 }
 
-//Remove a user from the members of the table if the owner_id matches and if they are already present
-//Return -1 if owner_id match fail
-//Return 0 for normal fail
+/**
+  * Function that removes a user to the members of the table if the owner_id matches and if they are already present
+  * If one does exist already do nothing 
+  * @param string of member id 
+  * @returns 0 on failure, 1 on success, -1 if owner_id match fail
+  */
 int remove_member(std::string tablename, std::string member_id){
-	// check if owner id matches
-		// yes then check if user is in members
-			// remove the user with table method
-		// return error
-	// return error                                                              
+    
 	if (tablename = NULL){
 	    return 0; // doesnt exist
 	}
@@ -150,19 +154,13 @@ int remove_member(std::string tablename, std::string member_id){
 	return 0;
 }
 
-/* read in line 
-while(getline(in_stream, command)){
-                stringstream ss (command);
-                while(getline(ss, command, '|'))
-                    parts.push_back(command);
-*/
-//Get all tables where owner_id matches
+/**
+  * Function that gets all tables where owner_id matches
+  * If one does exist already do nothing 
+  * @param string of member id 
+  * @returns tables
+  */
 std::set<Timetable> Timetable_Manager::get_personal_tables(std::string owner_id){
-	// check if the table with owner id exists
-		// if yes go through list of tables
-			// if match add to list
-		// else error
-	// return the list
     
     if (owner_id != NULL){
         while(getline(STORAGE_FILE_PATH, tables)){
@@ -175,19 +173,19 @@ std::set<Timetable> Timetable_Manager::get_personal_tables(std::string owner_id)
         }
     }
     else {
-        // catch error 
+        // catch error
     }
 
 }
 
-//Get all tables where owner_id is part of members but not equal to the table's owner_id
+/**
+  * Function that gets all tables where owner_id is part of members but not equal to the table's owner_id
+  * If one does exist already do nothing 
+  * @param string of tablename, string of member id 
+  * @returns tables 
+  */
 std::set<Timetable> Timetable_Manager::get_shared_tables(std::string owner_id){
-	// check if the table with owner id exists
-		// if yes go through list of tables
-			// if match for members and not owner add to list
-		// else error
-	// return the list
-	
+    
     if owner_id != NULL){
         while(getline(STORAGE_FILE_PATH, table)){
             stringstream ss (table);
@@ -203,15 +201,14 @@ std::set<Timetable> Timetable_Manager::get_shared_tables(std::string owner_id){
     }
 }
 
-//Get all tables that have access_t equal to public
+/**
+  * Function that gets all tables that have access_t equal to public
+  * If one does exist already do nothing 
+  * @param none
+  * @returns tables 
+  */
 std::set<Timetable> Timetable_Manager::get_public_tables(){
-	// check if the table with owner id exists
-		// if yes go through list of tables
-			// if match add to list
-		// else error
-	// return the list
-	
-
+    
     if (table != NULL){
         while(getline(STORAGE_FILE_PATH, table)){
             stringstream ss (table);
@@ -227,8 +224,14 @@ std::set<Timetable> Timetable_Manager::get_public_tables(){
     }
 }
 
-// read in file line, get name and sort to get the line 
-//Convert the Timetable object into a string for output to user interface
+
+/**
+  * Function that reads in file line, gets name and sort to get the line convert 
+  * the Timetable object into a string for output to user interface
+  * If one does exist already do nothing 
+  * @param Timetable 
+  * @returns tables 
+  */
 std::string Timetable_Manager::timetable_to_txt(Timetable timetable){
     
     if (timetable != NULL){
@@ -241,17 +244,22 @@ std::string Timetable_Manager::timetable_to_txt(Timetable timetable){
     }
 }
 
-// Compare time tables; return time table as comparison, read in events for 1 and 2, if 
-// event over laps (time), create free events, b is overlap, a is the same as 1, return timetable
-// of events 1 + 2 + overlap (dont create events, create strings), OVERLAP
 
-/*Create a timetable that is the comparison of two timetables, events that match are shown,
- *events that do not match are shown but information is hidden
- *events that overlap have sudo event present in overlap section
- *timetable is not stored in file
- */
+/**
+  * Function that creates a timetable that is the comparison of two timetables, events that match are shown,
+  * events that do not match are shown but information is hidden
+  * events that overlap have sudo event present in overlap section
+  * timetable is not stored in file 
+  * If one does exist already do nothing 
+  * @param Timetable 
+  * @returns tables 
+  */
+  
+/** Compare time tables; return time table as comparison, read in events for 1 and 2, if 
+  * event over laps (time), create free events, b is overlap, a is the same as 1, return timetable
+  * of events 1 + 2 + overlap (dont create events, create strings), OVERLAP
+  */
 Timetable* Timetable_Manager::compare_timetables(std::string table1name, std::string table2name){
-    
     
     if (timetable != NULL){
         while(getline(STORAGE_FILE_PATH, table1)){
@@ -263,4 +271,4 @@ Timetable* Timetable_Manager::compare_timetables(std::string table1name, std::st
     }
 }
 
-// errors in control pointer issues can be fixed, some functions not on windows 
+/// Errors in control pointer issues can be fixed, some functions not on windows 
