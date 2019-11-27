@@ -17,6 +17,7 @@
 class Event_Manager {
     private:
         static Event_Manager* instance;
+        //initialize event manager class
         Event_Manager(){};
         Event* get_event(std::string event_name);
 
