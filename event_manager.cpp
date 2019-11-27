@@ -1,8 +1,13 @@
-/**
- * @brief      Class for the event manager
- * @author     Vladimir Zhurov
- * @date       25/11/2019
+/* Class for the event manager
+ * CREATED BY: Lathan Thangavadivel
+ * LAST EDITED BY: Lathan Thangavadivel
+ * LAST EDITED: 25/11/2019
+ * @brief the file that contains the functions to handle events
+ *
+ * @author  Lathan Thangavadivel, Vladimir Zhurov
+ * @date   25/11/2019
  */
+
  #include <iostream>
  #include <fstream>
  #include <string.h>
@@ -30,9 +35,13 @@ Event_Manager* Event_Manager::get_instance() {
     return instance;
 }
 
-/**
- *
- */
+/*
+* @brief gets the event attribute string
+*
+* @author             Lathan Thangavadivel
+* @param  event_name  event name as a string           
+* @return event      event attribute
+*/
 Event* Event_Manager::get_event(string event_name){
      // File pointer
     fstream fin;
@@ -144,10 +153,9 @@ int Event_Manager::delete_event(string event_name){
 /**
  * @brief       get all personal events for a user
  *
- * @author      Vladimir Zhurov
- * @date        25/11/2019
+ * @author      Lathan Thangavadivel
  * @param       owner_id          The name of the user
- * @return
+ * @return      event object as a vector
  */
 vector<Event> Event_Manager::get_personal_events(string owner_id){
     // read file line by line and create event objects feed all event objects where owner matches into set
@@ -193,9 +201,8 @@ vector<Event> Event_Manager::get_personal_events(string owner_id){
 /**
  * @brief       get all public events
  *
- * @author      Vladimir Zhurov
- * @date        25/11/2019
- * @return
+ * @author      Lathan Thangavadivel
+ * @return      event object as a vector
  */
 vector<Event> Event_Manager::get_public_events(){
     // File pointer
