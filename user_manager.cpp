@@ -70,7 +70,7 @@ User* User_Manager::get_user(string username) {
     while(getline(file_input, line)) {
         string current_username = line_to_username(line);
         string current_password = line_to_password(line);
-        if (current_username == username)
+        if (current_username.compare(username) == 0)
             return new User(current_username, current_password);
     }
     return NULL;
@@ -83,7 +83,7 @@ bool User_Manager::check_user(string username, string password) {
     string user_encrypted_password = user->get_password();
     Authenticator * auth = new Authenticator;
     string user_password = auth->decrypt(user_encrypted_password);
-    if (password == user_password)
+    if (password.compare(user_password))
         return true;
     else
         return false;
@@ -101,13 +101,13 @@ bool User_Manager::delete_user(string username) {
         string current_username = line_to_username(line);
 
         string current_password = line_to_password(line);
-        if (current_username != username) {
+        if (current_username.compare(username) != 0) {
             line = line + "\n";
             new_database_string += line;
         }
     }
     file_input.close();
-    remove(STORAGE_FILE_PATH.c_str());
+    remove(DATABASE_FILE_PATH.c_str());
     ofstream out(DATABASE_FILE_PATH);
     out << new_database_string;
     out.close();
