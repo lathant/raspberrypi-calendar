@@ -50,29 +50,8 @@ class Reminder {
             * @return  remind_time      reminder time attribute
             */
             std::time_t get_remind_time(){return remind_time;}
-    
-           /*
-            * @brief sets the event string with the given new event string 
-            *
-            * @author             Lathan Thangavadivel
-            * @param  newEvent    new event attribute
-            */
             void set_event(std::string newEvent);
-    
-           /*
-            * @brief sets the destination string with the given new destination string 
-            *
-            * @author             Lathan Thangavadivel
-            * @param  newDestination    new destination attribute
-            */
             void set_destination(std::string newDestination);
-    
-           /*
-            * @brief sets the remind time attribute with the given new time 
-            *
-            * @author             Lathan Thangavadivel
-            * @param  newTime    new reminder time attribute
-            */
             void set_remind_time(std::time_t newTime);
 };
 
