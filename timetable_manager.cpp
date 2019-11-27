@@ -9,11 +9,15 @@
  * Int = 0 Failure
  */
 
-#include "timetable_manager.h"
+//#include "timetable_manager.h"
 #include "string"
+#include <iostream>
+#include <stdio.h>
+#include <fstream>
+#include <sstream>
 
 /// Initialize begining of file on initial start 
-static string STORAGE_FILE_PATH = "./data/timetable/timetables.csv";
+static std::string STORAGE_FILE_PATH = "./data/timetable/timetables.csv";
 Timetable_Manager* Timetable_Manager::instance = NULL;
 
 
@@ -47,9 +51,9 @@ int Timetable_Manager::create_timetable(std::string name, std::string access_t, 
 	else {
 		Timetable_Factory* factory = new Timetable_Factory;
 		Timetable * new_table = factory->create_timetable(name, access_t, owner_id);
-		string user_timetable = timetable_to_txt(timetable);
+		std::string user_timetable = timetable_to_txt(timetable);
 		ofstream out(STORAGE_FILE_PATH, ios::app);
-		out << user_timetable << end1;
+		out << user_timetable << endi;
 		out.close();
 		return 1;
 	}
@@ -67,7 +71,7 @@ int save_timetable(Timetable table){
 	if (table != NULL){
 		user_timetable = timetable_to_txt(table);
 		ofstream out(STORAGE_FILE_PATH, ios::app);
-		out << user_timetable << end1;
+		out << user_timetable << endi;
 		out.close();
 		return 1;
 	}
@@ -75,7 +79,6 @@ int save_timetable(Timetable table){
 		return 0;
 	}
 }
-
 
 
 /**
@@ -94,11 +97,12 @@ int Timetable_Manager::delete_timetable(std::string table_name){
 		Timetable * new_table = factory->create_timetable(NULL, NULL, NULL); // NOTE: temp for now till it can be removed
 			string user_timetable = timetable_to_txt(Timetable timetable);
 			ofstream out(STORAGE_FILE_PATH, ios::app);
-			out << user_timetable << end1;
+			out << user_timetable << endi;
 			out.close();
 			return 1;
 	}
 }
+
 
 /// NOTE: a symbol needed to break up events ie: "^"
 
@@ -113,10 +117,19 @@ int Timetable_Manager::append_date(std::string table_name, std::string event_inf
     
     Timetable * table = get_personal_tables(owner_id);
 	if (table_name != NULL){
+	    while(getline(STORAGE_FILE_PATH, tables)){
+                stringstream ss (tables);
+                while(getline(ss, tables, ',')){
+                    if (getline(ss, tablels) = table_name){
+                        table.add_date(event_info);
+                    }
+                }
+        }
 		table.add_date(event_info); // NOTE: need to find way to sort through the data in a timetable
 	    }
 	}
 }
+
 
 /**
   * Function that adds a new user to the members of the table if the owner_id matches and if they are not already present
@@ -145,13 +158,15 @@ int add_member(std::string tablename, std::string member_id){
 int remove_member(std::string tablename, std::string member_id){
     
 	if (tablename = NULL){
-	    return 0; // doesnt exist
+	    return 0; 
 	}
 	if (Timetable::is_member(member_id) = 0){
-	   Timetable::remove_member(member_id);  // fix 
+	   Timetable::remove_member(member_id);
 	   return 1;
 	}
-	return 0;
+	else{
+	    return 0;
+	}
 }
 
 /**
@@ -173,7 +188,7 @@ std::set<Timetable> Timetable_Manager::get_personal_tables(std::string owner_id)
         }
     }
     else {
-        // catch error
+        parts.push_back("No table");
     }
 
 }
@@ -197,7 +212,7 @@ std::set<Timetable> Timetable_Manager::get_shared_tables(std::string owner_id){
         }        
     }
     else {
-        // catch error  
+        parts.push_back("No table");
     }
 }
 
@@ -220,7 +235,7 @@ std::set<Timetable> Timetable_Manager::get_public_tables(){
         
     }
     else {
-        // return error 
+        parts.push_back("No table");
     }
 }
 
@@ -241,6 +256,9 @@ std::string Timetable_Manager::timetable_to_txt(Timetable timetable){
                 parts.push_back(table);
             }
         }
+    }
+    else{
+        parts.push_back("No table");
     }
 }
 
@@ -268,6 +286,9 @@ Timetable* Timetable_Manager::compare_timetables(std::string table1name, std::st
                 parts.push_back(table1);
             }
         }
+    }
+    else{
+        parts.push_back("No table");
     }
 }
 
