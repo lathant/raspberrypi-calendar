@@ -8,7 +8,7 @@
 #define EVENT_MANAGER_H
 
 #include "event_factory.h"
-#include "set"
+#include <vector>
 
 class Event_Manager {
     private:
@@ -22,8 +22,8 @@ class Event_Manager {
             time_t start_time, time_t end_time, std::string access_t,
             std::string owner_id, std::string repeatType);
         int delete_event(std::string event_name);
-        std::set<Event> get_personal_events(std::string owner_id);
-        std::set<Event> get_public_events();
+        std::vector<Event> get_personal_events(std::string owner_id);
+        std::vector<Event> get_public_events();
         std::string event_to_txt(Event event);
 
 };
