@@ -9,6 +9,7 @@
  * Int = 0 Failure
  */
 
+
 #include "timetable_manager.h"
 #include "string"
 #include <iostream>
@@ -48,15 +49,15 @@ Timetable_Manager* Timetable_Manager::get_instance() {
   * @param strings for name, access_t and owner_id 
   * @returns 0 on failure, 1 on success
   */
-int Timetable_Manager::create_timetable(std::string name, std::string access_t, std::string owner_id){
+int create_timetable(std::string name, std::string access_t, std::string owner_id){
     
-	if (name != NULL){
+	if (name != ""){
 			return 0; 
 	}
 	else {
 		Timetable_Factory* factory = new Timetable_Factory;
 		Timetable * new_table = factory->create_timetable(name, access_t, owner_id);
-		std::string user_timetable = std string::timetable_to_txt(name);
+		std::string user_timetable = timetable_to_txt(new_table);
 		std::ofstream out(STORAGE_FILE_PATH, ios::app);
 		out << user_timetable << std::endl;
 		out.close();
@@ -75,7 +76,8 @@ int Timetable_Manager::create_timetable(std::string name, std::string access_t, 
   */
 int save_timetable(Timetable table){
     
-	if (table != NULL){
+    std::string user_timetable = timetable_to_txt(table);
+	if (user_timetable != ""){
 		std::string user_timetable = timetable_to_txt(table);
 		std::ofstream out(STORAGE_FILE_PATH, ios::app);
 		out << user_timetable << std::endl;
@@ -97,14 +99,16 @@ int save_timetable(Timetable table){
   * @param string of tablename 
   * @returns 0 on failure, 1 on success
   */
-int Timetable_Manager::delete_timetable(std::string table_name){
+int delete_timetable(std::string table_name){
     
-	if (table_name = NULL){
+	if (table_name = ){
 		return 0;
 	}
+	
 	if (table.owner_id = owner_id){
+	    Timetable timetable = get_personal_tables(owner_id);
 		Timetable * new_table = factory->create_timetable(NULL, NULL, NULL); // NOTE: temp for now till it can be removed
-		string user_timetable = timetable_to_txt(Timetable timetable);
+		std::string user_timetable = timetable_to_txt(timetable);
 		std::ofstream out(STORAGE_FILE_PATH, ios::app);
 		out << user_timetable << std::endl;
 		out.close();
@@ -124,7 +128,7 @@ int Timetable_Manager::delete_timetable(std::string table_name){
   * @param string of tablename, string of event info 
   * @returns 0 on failure, 1 on success
   */
-int Timetable_Manager::append_date(std::string table_name, std::string event_info){
+int append_date(std::string table_name, std::string event_info){
     
     Timetable * table = get_personal_tables(owner_id);
 	if (table_name != NULL){
@@ -269,13 +273,13 @@ std::set<Timetable> Timetable_Manager::get_public_tables(){
   * @param Timetable 
   * @returns tables 
   */
-std::string Timetable_Manager::timetable_to_txt(Timetable timetable){
+std::string timetable_to_txt(Timetable timetable){
     
     if (timetable != NULL){
-        while(getline(STORAGE_FILE_PATH, table)){
-            stringstream ss (table);
-            while(getline(ss, table, ',')){
-                parts.push_back(table);
+        while(getline(STORAGE_FILE_PATH, timetable)){
+            stringstream ss (timetable);
+            while(getline(ss, timetable, ',')){
+                parts.push_back(timetable);
             }
         }
     }
@@ -301,6 +305,7 @@ std::string Timetable_Manager::timetable_to_txt(Timetable timetable){
   * event over laps (time), create free events, b is overlap, a is the same as 1, return timetable
   * of events 1 + 2 + overlap (dont create events, create strings), OVERLAP
   */
+/**
 std::string compare_timetables(std::string table1name, std::string table2name){
     
     if (timetable != NULL){
@@ -319,5 +324,6 @@ std::string compare_timetables(std::string table1name, std::string table2name){
         parts.push_back("No table");
     }
 }
+*/
 
 /// Errors in control pointer issues can be fixed, some functions not on windows 
