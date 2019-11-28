@@ -3,6 +3,7 @@
   *
   * A representation of timetable
   * @author Vladimir Zhurov
+  * @author Lathan Thangavadivel
   * @date   05/11/2019
   */
 #ifndef TIMETABLE_H
