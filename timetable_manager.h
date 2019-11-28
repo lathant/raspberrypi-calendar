@@ -19,7 +19,7 @@ class Timetable_Manager {
 
     public:
         static Timetable_Manager* get_instance();
-        Timetable* Timetable_Manager::get_timetable(std::string table_name);
+        Timetable* get_timetable(std::string table_name);
         int create_timetable(std::string name, std::string access_t, std::string owner_id);
         int save_timetable(Timetable table);
         int delete_timetable(std::string table_name);

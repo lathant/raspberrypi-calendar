@@ -93,14 +93,14 @@ string user_delete(vector<string> parts){
     if(user == NULL)
         return "DELETE USER|FAILURE";
     //Delete all timetables that user owns
-    set<Timetable> owns = timetable_manager->get_personal_tables(parts.at(1));
-    for(set<Timetable>::iterator it = owns.begin(); it != owns.end(); it++){
+    vector<Timetable> owns = timetable_manager->get_personal_tables(parts.at(1));
+    for(vector<Timetable>::iterator it = owns.begin(); it != owns.end(); it++){
         timetable_manager->delete_timetable(it->get_name());
     }
 
     //Remove user from any timetable that hey are members of
-    set<Timetable> uses = timetable_manager->get_shared_tables(parts.at(1));
-    for(set<Timetable>::iterator it = uses.begin(); it != uses.end(); it++){
+    vector<Timetable> uses = timetable_manager->get_shared_tables(parts.at(1));
+    for(vector<Timetable>::iterator it = uses.begin(); it != uses.end(); it++){
         timetable_manager->remove_member(it->get_name(), parts.at(1));
     }
 
@@ -147,12 +147,12 @@ string timeable_create(vector<string> parts){
  */
 string timetable_get(vector<string> parts){
     int get_type = stoi(parts.at(1));
-    set<Timetable> storage;
+    vector<Timetable> storage;
     string text_output= "GET TIMETABLE";
     if(get_type == 0 || get_type == 3 || get_type == 5){
         storage = timetable_manager->get_personal_tables(parts.at(2));
         text_output += "|PERSONAL";
-        for(set<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
+        for(vector<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
             text_output += "|";
             text_output += timetable_manager->timetable_to_txt(*it);
         }
@@ -160,7 +160,7 @@ string timetable_get(vector<string> parts){
     if(get_type == 1 || get_type == 3 || get_type == 5){
         storage = timetable_manager->get_shared_tables(parts.at(2));
         text_output += "|SHARED";
-        for(set<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
+        for(vector<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
             text_output += "|";
             text_output += timetable_manager->timetable_to_txt(*it);
         }
@@ -168,7 +168,7 @@ string timetable_get(vector<string> parts){
     if(get_type == 2 || get_type == 4 || get_type == 5){
         storage = timetable_manager->get_public_tables();
         text_output += "|PUBLIC";
-        for(set<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
+        for(vector<Timetable>::iterator it = storage.begin(); it != storage.end(); it++){
             text_output += "|";
             text_output += timetable_manager->timetable_to_txt(*it);
         }

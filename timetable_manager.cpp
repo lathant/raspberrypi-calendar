@@ -17,21 +17,21 @@
 #include <unistd.h>
 
 using namespace std;
-/// Initialize begining of file on initial start 
+/// Initialize begining of file on initial start
 static std::string STORAGE_FILE_PATH = "./data/timetable/timetables.csv";
 Timetable_Manager* Timetable_Manager::instance = NULL;
 
 
 /**
-  * @breif Function that retrieves an instance of a time table manager 
-  * If one does not exist already then create 
-  * @author  David T 
+  * @breif Function that retrieves an instance of a time table manager
+  * If one does not exist already then create
+  * @author  David T
   * @date   27/11/2019
-  * @param No parameter needed 
-  * @returns instance of time table manager 
+  * @param No parameter needed
+  * @returns instance of time table manager
   */
 Timetable_Manager* Timetable_Manager::get_instance() {
-    
+
     if (instance == NULL){
         instance = new Timetable_Manager;
     }
@@ -71,7 +71,7 @@ Timetable* Timetable_Manager::get_timetable(string table_name){
 
         if (row[0].compare(timetable_name) == 0){
             Timetable_Factory* factory = new Timetable_Factory();
-            Timetable* table = factory->create_timetable(row[0], row[1], stoi(row[2]), stoi(row[3]), // adjust 
+            Timetable* table = factory->create_timetable(row[0], row[1], stoi(row[2]), stoi(row[3]), // adjust
                     row[4], row[5], row[6]);
             return table;
 
@@ -83,11 +83,11 @@ Timetable* Timetable_Manager::get_timetable(string table_name){
 }
 
 /**
-  * @breif Function that calls the factory method to create a new timetable and write to file   
-  * If one does exist already do nothing 
-  * @author  David T 
+  * @breif Function that calls the factory method to create a new timetable and write to file
+  * If one does exist already do nothing
+  * @author  David T
   * @date   27/11/2019
-  * @param strings for name, access_t and owner_id 
+  * @param strings for name, access_t and owner_id
   * @returns 0 on failure, 1 on success
   */
 int create_timetable(string name, string access_t, string owner_id){
@@ -105,11 +105,11 @@ int create_timetable(string name, string access_t, string owner_id){
 
 
 /**
-  * @breif Function that saves timetable to a file or overwrite if needed  
-  * If one does not exist already then create 
-  * @author  David T 
+  * @breif Function that saves timetable to a file or overwrite if needed
+  * If one does not exist already then create
+  * @author  David T
   * @date   27/11/2019
-  * @param Timetable  
+  * @param Timetable
   * @returns 0 on failure, 1 on success
   */
 int save_timetable(Timetable table){
@@ -140,12 +140,12 @@ int save_timetable(Timetable table){
 
 
 /**
-  * @breif Function that checks to see if the timetable object's owner_id matches the owner_id 
-  * then deletes the object and the data from the file 
-  * If one does not exist already do nothing 
-  * @author  David T 
+  * @breif Function that checks to see if the timetable object's owner_id matches the owner_id
+  * then deletes the object and the data from the file
+  * If one does not exist already do nothing
+  * @author  David T
   * @date   27/11/2019
-  * @param string of tablename 
+  * @param string of tablename
   * @returns 0 on failure, 1 on success
   */
 int delete_timetable(string table_name){
@@ -178,13 +178,13 @@ int delete_timetable(string table_name){
 /**
   * @breif Function that checks to see if the event_info is not already part of the timetable
   * Append the event to the set inside table and update the file
-  * If one does not exist already create 
-  * @author  David T 
+  * If one does not exist already create
+  * @author  David T
   * @date   27/11/2019
-  * @param string of tablename, string of event info 
+  * @param string of tablename, string of event info
   * @returns 0 on failure, 1 on success
   */
-int append_date(string table_name, string event_info){ // adjust 
+int append_date(string table_name, string event_info){ // adjust
     Timetable* time_table = get_timetable(table_name);
     if (time_table == NULL)
         return 0;
@@ -214,10 +214,10 @@ int append_date(string table_name, string event_info){ // adjust
 /**
   * @breif Function that checks to see if the event_info is not already part of the timetable
   * Append the event to the set inside table and update the file
-  * If one does not exist already create 
-  * @author  David T 
+  * If one does not exist already create
+  * @author  David T
   * @date   27/11/2019
-  * @param string of tablename, string of event info 
+  * @param string of tablename, string of event info
   * @returns 0 on failure, 1 on success
   */
 int remove_date(string table_name, string event_info){ // adjust
@@ -249,19 +249,19 @@ int remove_date(string table_name, string event_info){ // adjust
 
 /**
   * @breif Function that adds a new user to the members of the table if the owner_id matches and if they are not already present
-  * If one does exist already do nothing 
-  * @author  David T 
+  * If one does exist already do nothing
+  * @author  David T
   * @date   27/11/2019
-  * @param string of tablename, string of member id 
+  * @param string of tablename, string of member id
   * @returns 0 on failure, 1 on success, -1 if owner_id match fail
   */
 int add_member(string tablename, string member_id){
     Timetable* time_table = get_timetable(tablename);
     if (time_table = NULL){
-	    return -1; 
+	    return -1;
 	}
 	if (time_table -> is_member(member_id)){
-	   time_table -> add_member(member_id); 
+	   time_table -> add_member(member_id);
 	   return 1;
 	}
 	return 0;
@@ -269,16 +269,16 @@ int add_member(string tablename, string member_id){
 
 /**
   * @breif Function that removes a user to the members of the table if the owner_id matches and if they are already present
-  * If one does exist already do nothing 
-  * @author  David T 
+  * If one does exist already do nothing
+  * @author  David T
   * @date   27/11/2019
-  * @param string of member id 
+  * @param string of member id
   * @returns 0 on failure, 1 on success, -1 if owner_id match fail
   */
 int remove_member(string tablename, string member_id){
 	Timetable* time_table = get_timetable(tablename);
 	if (time_table = NULL){
-	    return 0; 
+	    return 0;
 	}
 	if (time_table -> is_member(member_id)){
 	   time_table -> remove_member(member_id);
@@ -286,7 +286,7 @@ int remove_member(string tablename, string member_id){
 	}
 	else{
 	    return 0;
-	}    
+	}
 }
 
 vector<Timetable> Timetable_Manager::get_personal_tables(string owner_id){
