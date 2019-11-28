@@ -76,7 +76,7 @@ Event* Event_Manager::get_event(string event_name){
 
         if (row[0].compare(event_name) == 0){
             Event_Factory* factory = new Event_Factory();
-            Event* event = factory->create_event(row[0], row[1], stoi(row[2]), stoi(row[3]),
+            Event* event = factory->create_event(row[0], row[1], stol(row[2]), stol(row[3]),
                     row[4], row[5], row[6]);
             return event;
 
@@ -190,7 +190,7 @@ vector<Event> Event_Manager::get_personal_events(string owner_id){
         }
         if (row[5].compare(owner_id) == 0){
             Event_Factory* factory = new Event_Factory();
-            Event* newEvent = factory->create_event(row[0], row[1], stoi(row[2]), stoi(row[3]),
+            Event* newEvent = factory->create_event(row[0], row[1], stol(row[2]), stol(row[3]),
                                                     row[4], row[5], row[6]);
             output.push_back(*newEvent);
         }
@@ -235,7 +235,7 @@ vector<Event> Event_Manager::get_public_events(){
         }
         if (row[6].compare("public") == 0){
             Event_Factory* factory = new Event_Factory();
-            Event* newEvent = factory->create_event(row[0], row[1], stoi(row[2]), stoi(row[3]),
+            Event* newEvent = factory->create_event(row[0], row[1], stol(row[2]), stol(row[3]),
                                                     row[4], row[5], row[6]);
             output.push_back(*newEvent);
         }
