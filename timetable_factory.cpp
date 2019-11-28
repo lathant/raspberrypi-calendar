@@ -43,8 +43,8 @@ Timetable* Timetable_Factory::create_timetable(string in_name, string in_access_
  * @param   in_name         The timetable name
  * @param   in_access_t     The access type of the timetable
  * @param   in_owner_id     The owner's username
- * @param   in_access_t     The access type of the timetable
- * @param   in_owner_id     The owner's username
+ * @param   inmember_id     Set of members
+ * @param   indates         Set of dates
  * @return  timetable       A new timetable object
  */
 Timetable* Timetable_Factory::create_timetable(string in_name, string in_access_t, string in_owner_id,
