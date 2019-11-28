@@ -1,10 +1,10 @@
-/* Class representing timetable factory
-* CREATED BY: Vladimir Zhurov
-* LAST EDITED BY: Vladimir Zhurov
-* LAST EDITED: 05/11/2019
-* TODO: Expand
-*/
-
+/**
+ * @brief Class representing for timetable factory methods
+ *
+ * Representing for timetable factory methods
+ * @author  Vladimir Zhurov
+ * @date    05/11/2019
+ */
 #ifndef TIMETABLE_FACTORY_H
 #define TIMETABLE_FACTORY_H
 

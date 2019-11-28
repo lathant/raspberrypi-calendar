@@ -1,16 +1,3 @@
-/* Main instance for calandar system that handles users
- * CREATED BY: Vladimir Zhurov
- * LAST EDITED BY: Vladimir Zhurov
- * LAST EDITED: 30/10/2019
- * TODO: fix output text format
- * 	add more robust error checking
- * 	connect and implement other classes
- * 	improve comments
- *  add timeout functionality in threads to prevent memory leak from idel threads
- *  seperate some of console_control thread opperations into seperate functions
- *  expand exsisting functionality in console_control
- */
-
  /**
   * @brief the main controling instance for the calandar system
   *

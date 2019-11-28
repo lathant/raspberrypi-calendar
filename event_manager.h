@@ -4,6 +4,7 @@
  * LAST EDITED: 25/11/2019
  * @brief the file that contains all the prototype functions and variables for the event manager class
  *
+ * @author  Vladimir Zhurov
  * @author  Lathan Thangavadivel
  * @date   25/11/2019
  */

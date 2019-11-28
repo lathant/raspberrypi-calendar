@@ -39,7 +39,7 @@ Event_Manager* Event_Manager::get_instance() {
 * @brief gets the event attribute string
 *
 * @author             Lathan Thangavadivel
-* @param  event_name  event name as a string           
+* @param  event_name  event name as a string
 * @return event      event attribute
 */
 Event* Event_Manager::get_event(string event_name){
