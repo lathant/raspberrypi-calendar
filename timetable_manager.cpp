@@ -84,7 +84,7 @@ Timetable* Timetable_Manager::get_timetable(string name){
             while (getline(scan1,checktoken,',')){
                 inmem.insert(checktoken);
             }
-            table = new Timetable(inname,inaccess,inowner,indate,inmem);
+            table = new Timetable(inname,inaccess,inowner,inmem,indate);
             file_input.close();
             return table;
         }
