@@ -3,12 +3,9 @@
  * LAST EDITED BY: David Truong
  * LAST EDITED: 27/11/2019
  * TODO: IMPLEMENT *WIP* Debug
+ * @breif Class that changes the timetables in and out of storage
+ * @author
  */
-
-/* Int = 1 success
- * Int = 0 Failure
- */
-
 
 #include "timetable_manager.h"
 #include "string"
@@ -19,6 +16,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+using namespace std;
 /// Initialize begining of file on initial start 
 static std::string STORAGE_FILE_PATH = "./data/timetable/timetables.csv";
 Timetable_Manager* Timetable_Manager::instance = NULL;
@@ -41,6 +39,49 @@ Timetable_Manager* Timetable_Manager::get_instance() {
 }
 
 
+Timetable* Timetable_Manager::get_timetable(string table_name){
+     // File pointer
+    fstream fin;
+
+    // Open an existing file
+    fin.open(STORAGE_FILE_PATH, ios::in);
+
+    // Read the Data from the file
+    // as String Vector
+    vector<string> row;
+    string line, word, temp,token;
+    string delimiter = "^@^";
+    size_t pos;
+
+    while (fin >> temp) {
+
+        row.clear();
+
+        // read an entire row and
+        // store it in a string variable 'line'
+        getline(fin, line);
+
+        pos = 0;
+
+        while ((pos = line.find(delimiter)) != string::npos) {
+            token = line.substr(0, pos);
+            row.push_back(token);
+            line.erase(0, pos + delimiter.length());
+        }
+
+        if (row[0].compare(timetable_name) == 0){
+            Timetable_Factory* factory = new Timetable_Factory();
+            Timetable* table = factory->create_timetable(row[0], row[1], stoi(row[2]), stoi(row[3]), // adjust 
+                    row[4], row[5], row[6]);
+            return table;
+
+        }
+
+    return NULL;
+
+    }
+}
+
 /**
   * @breif Function that calls the factory method to create a new timetable and write to file   
   * If one does exist already do nothing 
@@ -49,20 +90,17 @@ Timetable_Manager* Timetable_Manager::get_instance() {
   * @param strings for name, access_t and owner_id 
   * @returns 0 on failure, 1 on success
   */
-int create_timetable(std::string name, std::string access_t, std::string owner_id){
-    
-	if (name != ""){
-			return 0; 
-	}
-	else {
-		Timetable_Factory* factory = new Timetable_Factory;
-		Timetable * new_table = factory->create_timetable(name, access_t, owner_id);
-		std::string user_timetable = timetable_to_txt(new_table);
-		std::ofstream out(STORAGE_FILE_PATH, ios::app);
-		out << user_timetable << std::endl;
-		out.close();
-		return 1;
-	}
+int create_timetable(string name, string access_t, string owner_id){
+    Timetable* time_table = get_timetable(timetable_name);
+    if (table != NULL)
+        return -1;
+    Timetable_Factory* factory = new Timetable_Factory();
+    table = factory->create_timetable(timetable_name, access_t, owner_id);
+    string table_db_entry = timetable_name + "^@^" + access_t + "^@^" +  owner_id + "^@^";
+    ofstream out(STORAGE_FILE_PATH, ios::app);
+    out << table_db_entry << endl;
+    out.close();
+    return 1;
 }
 
 
@@ -75,18 +113,29 @@ int create_timetable(std::string name, std::string access_t, std::string owner_i
   * @returns 0 on failure, 1 on success
   */
 int save_timetable(Timetable table){
-    
-    std::string user_timetable = timetable_to_txt(table);
-	if (user_timetable != ""){
-		std::string user_timetable = timetable_to_txt(table);
-		std::ofstream out(STORAGE_FILE_PATH, ios::app);
-		out << user_timetable << std::endl;
-		out.close();
-		return 1;
-	}
-	else{
-		return 0;
-	}
+    Timetable* time_table = get_timetable(table_name);
+    if (time_table == NULL)
+        return 0;
+    ifstream file_input(STORAGE_FILE_PATH);
+    string line, current_timetable_name;
+    string new_database_string = "";
+
+    size_t pos;
+    while(getline(file_input, line)) {
+        pos = line.find("^@^");
+        current_event_name = line.substr(0,pos);
+
+        if (current_timetable_name.compare(table_name) != 0) {
+            line = line + "\n";
+            new_database_string += line;
+        }
+    }
+    file_input.close();
+    ofstream out(STORAGE_FILE_PATH);
+    out << new_database_string;
+    out.close();
+
+    return 1;
 }
 
 
@@ -99,25 +148,32 @@ int save_timetable(Timetable table){
   * @param string of tablename 
   * @returns 0 on failure, 1 on success
   */
-int delete_timetable(std::string table_name){
-    
-	if (table_name = ){
-		return 0;
-	}
-	
-	if (table.owner_id = owner_id){
-	    Timetable timetable = get_personal_tables(owner_id);
-		Timetable * new_table = factory->create_timetable(NULL, NULL, NULL); // NOTE: temp for now till it can be removed
-		std::string user_timetable = timetable_to_txt(timetable);
-		std::ofstream out(STORAGE_FILE_PATH, ios::app);
-		out << user_timetable << std::endl;
-		out.close();
-		return 1;
-	}
+int delete_timetable(string table_name){
+    Timetable* time_table = get_timetable(table_name);
+    if (time_table == NULL)
+        return 0;
+    ifstream file_input(STORAGE_FILE_PATH);
+    string line, current_timetable_name;
+    string new_database_string = "";
+
+    size_t pos;
+    while(getline(file_input, line)) {
+        pos = line.find("^@^");
+        current_timetable_name = line.substr(0,pos);
+
+        if (current_timetable_name.compare(table_name) != 0) {
+            line = line + "\n";
+            new_database_string += line;
+        }
+    }
+    file_input.close();
+    remove(STORAGE_FILE_PATH.c_str());
+    ofstream out(STORAGE_FILE_PATH);
+    out << new_database_string;
+    out.close();
+
+    return 1;
 }
-
-
-/// NOTE: a symbol needed to break up events ie: "^"
 
 /**
   * @breif Function that checks to see if the event_info is not already part of the timetable
@@ -128,22 +184,68 @@ int delete_timetable(std::string table_name){
   * @param string of tablename, string of event info 
   * @returns 0 on failure, 1 on success
   */
-int append_date(std::string table_name, std::string event_info){
-    
-    Timetable * table = get_personal_tables(owner_id);
-	if (table_name != NULL){
-	    while(getline(STORAGE_FILE_PATH, tables)){
-            stringstream ss (tables);
-            while(getline(ss, tables, ',')){
-                if (getline(ss, tablels) = table_name){
-                    Timetable::add_date(event_info);
-                }
-            }
+int append_date(string table_name, string event_info){ // adjust 
+    Timetable* time_table = get_timetable(table_name);
+    if (time_table == NULL)
+        return 0;
+    ifstream file_input(STORAGE_FILE_PATH);
+    string line, current_timetable_name;
+    string new_database_string = "";
+
+    size_t pos;
+    while(getline(file_input, line)) {
+        pos = line.find("^@^");
+        current_timetable_name = line.substr(0,pos);
+
+        if (current_time_name.compare(table_name) != 0) {
+            line = line + "\n";
+            new_database_string += line;
         }
-		Timetable::add_date(event_info); // NOTE: need to find way to sort through the data in a timetable
-	}
+    }
+    file_input.close();
+    ofstream out(STORAGE_FILE_PATH);
+    out << new_database_string;
+    out.close();
+
+    return 1;
 }
 
+
+/**
+  * @breif Function that checks to see if the event_info is not already part of the timetable
+  * Append the event to the set inside table and update the file
+  * If one does not exist already create 
+  * @author  David T 
+  * @date   27/11/2019
+  * @param string of tablename, string of event info 
+  * @returns 0 on failure, 1 on success
+  */
+int remove_date(string table_name, string event_info){ // adjust
+    Timetable* time_table = get_timetable(table_name);
+    if (time_table == NULL)
+        return 0;
+    ifstream file_input(STORAGE_FILE_PATH);
+    string line, current_timetable_name;
+    string new_database_string = "";
+
+    size_t pos;
+    while(getline(file_input, line)) {
+        pos = line.find("^@^");
+        current_timetable_name = line.substr(0,pos);
+
+        if (current_time_name.compare(table_name) != 0) {
+            line = line + "\n";
+            new_database_string += line;
+        }
+    }
+    file_input.close();
+    remove(STORAGE_FILE_PATH.c_str());
+    ofstream out(STORAGE_FILE_PATH);
+    out << new_database_string;
+    out.close();
+
+    return 1;
+}
 
 /**
   * @breif Function that adds a new user to the members of the table if the owner_id matches and if they are not already present
@@ -153,13 +255,13 @@ int append_date(std::string table_name, std::string event_info){
   * @param string of tablename, string of member id 
   * @returns 0 on failure, 1 on success, -1 if owner_id match fail
   */
-int add_member(std::string tablename, std::string member_id){
-    
-	if (tablename = NULL){
+int add_member(string tablename, string member_id){
+    Timetable* time_table = get_timetable(tablename);
+    if (time_table = NULL){
 	    return -1; 
 	}
-	if (Timetable::is_member(member_id) = 0){
-	   Timetable::add_member(member_id); 
+	if (time_table -> is_member(member_id)){
+	   time_table -> add_member(member_id); 
 	   return 1;
 	}
 	return 0;
@@ -173,157 +275,142 @@ int add_member(std::string tablename, std::string member_id){
   * @param string of member id 
   * @returns 0 on failure, 1 on success, -1 if owner_id match fail
   */
-int remove_member(std::string tablename, std::string member_id){
-    
-	if (tablename = NULL){
+int remove_member(string tablename, string member_id){
+	Timetable* time_table = get_timetable(tablename);
+	if (time_table = NULL){
 	    return 0; 
 	}
-	if (Timetable::is_member(member_id) = 0){
-	   Timetable::remove_member(member_id);
+	if (time_table -> is_member(member_id)){
+	   time_table -> remove_member(member_id);
 	   return 1;
 	}
 	else{
 	    return 0;
-	}
+	}    
 }
 
-/**
-  * @breif Function that gets all tables where owner_id matches
-  * If one does exist already do nothing
-  * @author  David T 
-  * @date   27/11/2019
-  * @param string of member id 
-  * @returns tables
-  */
-std::set<Timetable> Timetable_Manager::get_personal_tables(std::string owner_id){
-    
-    if (owner_id != NULL){
-        while(getline(STORAGE_FILE_PATH, tables)){
-            stringstream ss (tables);
-            while(getline(ss, tables, ',')){
-                if (getline(ss, tables) = owner_id){
-                    parts.push_back(tables);
-                }
-            }
+vector<Timetable> Timetable_Manager::get_personal_tables(string owner_id){
+    // read file line by line and create event objects feed all event objects where owner matches into set
+
+    // File pointer
+    fstream fin;
+    vector<Timetable> output;
+    // Open an existing file
+    fin.open(STORAGE_FILE_PATH, ios::in);
+
+    // Read the Data from the file
+    // as String Vector
+    vector<string> row;
+    string line, word, temp,token;
+    string delimiter = "^@^";
+    size_t pos;
+
+    while (fin >> temp) {
+
+        row.clear();
+
+        // read an entire row and
+        // store it in a string variable 'line'
+        getline(fin, line);
+
+        pos = 0;
+
+        while ((pos = line.find(delimiter)) != string::npos) {
+            token = line.substr(0, pos);
+            row.push_back(token);
+            line.erase(0, pos + delimiter.length());
+        }
+        if (row[5].compare(owner_id) == 0){
+            Timetable_Factory* factory = new Timetable_Factory();
+            Timetable* new_Table = factory->create_timetable(row[0], row[1], stoi(row[2]));
+            output.push_back(*new_Table);
         }
     }
-    else {
-        parts.push_back("No table");
-    }
-
+    return output;
 }
 
-/**
-  * @breif Function that gets all tables where owner_id is part of members but not equal to the table's owner_id
-  * If one does exist already do nothing 
-  * @author  David T 
-  * @date   27/11/2019
-  * @param string of tablename, string of member id 
-  * @returns tables 
-  */
-std::set<Timetable> Timetable_Manager::get_shared_tables(std::string owner_id){
-    
-    if (owner_id != NULL){
-        while(getline(STORAGE_FILE_PATH, table)){
-            stringstream ss (table);
-            while(getline(ss, table, ',')){
-                if (getline(ss, tables) = Timetable::is_member(owner_id)){
-                    parts.push_back(command);
-                }
-            }
-        }        
-    }
-    else {
-        parts.push_back("No table");
-    }
-}
+vector<Timetable> Timetable_Manager::get_shared_tables(string owner_id){
+    // read file line by line and create event objects feed all event objects where owner matches into set
 
-/**
-  * @breif Function that gets all tables that have access_t equal to public
-  * If one does exist already do nothing 
-  * @author  David T 
-  * @date   27/11/2019
-  * @param none
-  * @returns tables 
-  */
-std::set<Timetable> Timetable_Manager::get_public_tables(){
-    
-    if (table != NULL){
-        while(getline(STORAGE_FILE_PATH, table)){
-            stringstream ss (table);
-            while(getline(ss, table, ',')){
-                parts.push_back(table);
-            }
-            
+    // File pointer
+    fstream fin;
+    vector<Timetable> output;
+    // Open an existing file
+    fin.open(STORAGE_FILE_PATH, ios::in);
+
+    // Read the Data from the file
+    // as String Vector
+    vector<string> row;
+    string line, word, temp,token;
+    string delimiter = "^@^";
+    size_t pos;
+
+    while (fin >> temp) {
+
+        row.clear();
+
+        // read an entire row and
+        // store it in a string variable 'line'
+        getline(fin, line);
+
+        pos = 0;
+
+        while ((pos = line.find(delimiter)) != string::npos) {
+            token = line.substr(0, pos);
+            row.push_back(token);
+            line.erase(0, pos + delimiter.length());
         }
-        
-    }
-    else {
-        parts.push_back("No table");
-    }
-}
-
-
-/**
-  * @breif Function that reads in file line, gets name and sort to get the line convert 
-  * the Timetable object into a string for output to user interface
-  * If one does exist already do nothing 
-  * @author  David T 
-  * @date   27/11/2019
-  * @param Timetable 
-  * @returns tables 
-  */
-std::string timetable_to_txt(Timetable timetable){
-    
-    if (timetable != NULL){
-        while(getline(STORAGE_FILE_PATH, timetable)){
-            stringstream ss (timetable);
-            while(getline(ss, timetable, ',')){
-                parts.push_back(timetable);
-            }
+        if (row[5].compare(owner_id) == 0){
+            Timetable_Factory* factory = new Timetable_Factory();
+            Timetable* new_Table = factory->create_timetable(row[0], row[1], stoi(row[2]));
+            output.push_back(*new_Table);
         }
     }
-    else{
-        parts.push_back("No table");
-    }
+    return output;
 }
 
+vector<Timetable> Timetable_Manager::get_public_tables(){
+    // File pointer
+    fstream fin;
+    vector<Timetable> output;
+    // Open an existing file
+    fin.open(STORAGE_FILE_PATH, ios::in);
 
-/**
-  * @breif Function that creates a timetable that is the comparison of two timetables, events that match are shown,
-  * events that do not match are shown but information is hidden
-  * events that overlap have sudo event present in overlap section
-  * timetable is not stored in file 
-  * If one does exist already do nothing 
-  * @author  David T 
-  * @date   27/11/2019
-  * @param Timetable 
-  * @returns tables 
-  */
-  
-/** Compare time tables; return time table as comparison, read in events for 1 and 2, if 
-  * event over laps (time), create free events, b is overlap, a is the same as 1, return timetable
-  * of events 1 + 2 + overlap (dont create events, create strings), OVERLAP
-  */
-/**
-std::string compare_timetables(std::string table1name, std::string table2name){
-    
-    if (timetable != NULL){
-        while(getline(STORAGE_FILE_PATH, table1name)){
-            stringstream ss (table1name);
-            while(getline(ss, table1name, ',')){
-                while(getline(ss, table2name,)){
-                    stringstream ss2 (table2name);
-                        while(getline(ss2, table2name, ',')){
-                }
-                parts.push_back(table1name);
-            }
+    // Read the Data from the file
+    // as String Vector
+    vector<string> row;
+    string line, word, temp,token;
+    string delimiter = "^@^";
+    size_t pos;
+
+    while (fin >> temp) {
+
+        row.clear();
+
+        // read an entire row and
+        // store it in a string variable 'line'
+        getline(fin, line);
+
+        pos = 0;
+
+        while ((pos = line.find(delimiter)) != string::npos) {
+            token = line.substr(0, pos);
+            row.push_back(token);
+            line.erase(0, pos + delimiter.length());
+        }
+        if (row[6].compare("public") == 0){
+            Timetable_Factory* factory = new Timetable_Factory();
+            Timetable* new_Table = factory->create_timetable(row[0], row[1], stoi(row[2]));
+            output.push_back(*new_Table);
         }
     }
-    else{
-        parts.push_back("No table");
-    }
+    return output;
 }
-*/
 
-/// Errors in control pointer issues can be fixed, some functions not on windows
+string timetable_to_txt(Timetable timetable){
+    string txt_rep = "";
+    txt_rep += timetable.get_name() + "," +
+        timetable.get_access_t() + "," +
+        timetable.get_owner_id();
+    return txt_rep;
+}
