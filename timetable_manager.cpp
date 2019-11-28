@@ -15,6 +15,7 @@
 #include <sstream>
 #include <stdlib.h>
 #include <unistd.h>
+#include <set>
 
 using namespace std;
 /// Initialize begining of file on initial start
@@ -39,48 +40,52 @@ Timetable_Manager* Timetable_Manager::get_instance() {
 }
 
 
-Timetable* Timetable_Manager::get_timetable(string table_name){
-     // File pointer
-    fstream fin;
-
-    // Open an existing file
-    fin.open(STORAGE_FILE_PATH, ios::in);
-
-    // Read the Data from the file
-    // as String Vector
-    vector<string> row;
-    string line, word, temp,token;
-    string delimiter = "^@^";
-    size_t pos;
-
-    while (fin >> temp) {
-
-        row.clear();
-
-        // read an entire row and
-        // store it in a string variable 'line'
-        getline(fin, line);
-
-        pos = 0;
-
-        while ((pos = line.find(delimiter)) != string::npos) {
-            token = line.substr(0, pos);
-            row.push_back(token);
-            line.erase(0, pos + delimiter.length());
-        }
-
-        if (row[0].compare(timetable_name) == 0){
-            Timetable_Factory* factory = new Timetable_Factory();
-            Timetable* table = factory->create_timetable(row[0], row[1], stoi(row[2]), stoi(row[3]), // adjust
-                    row[4], row[5], row[6]);
+Timetable* Timetable_Manager::get_timetable(string name){
+    ifstream file_input(STORAGE_FILE_PATH);
+    string line, current_timetable_name,checktoken,inname,inaccess,inowner,datestr,memberstr;
+    set<string> indate,inmem;
+    Timetable* table;
+    size_t pos,posEnd;
+    while(getline(file_input, line)){
+        pos = line.find("^@^");
+        current_timetable_name = line.substr(0,pos);
+        if (current_timetable_name.compare(name)==0){
+            
+            inname = line.substr(0, pos);
+            line.erase(0, pos + 3);
+            
+            pos = line.find("^@^");
+            inaccess = line.substr(0, pos);
+            line.erase(0, pos + 3);
+            
+            pos = line.find("^@^");
+            inowner = line.substr(0, pos);
+            line.erase(0, pos + 3);
+            
+            pos = line.find("DELIM@DATE");
+            posEnd = line.find("DELIM@DATEEND");
+            datestr = line.substr(pos + 10, posEnd);
+            stringstream scan(datestr);
+            while (getline(scan,checktoken,',')){
+                indate.insert(checktoken);
+            }
+            
+            pos = line.find("DELIM@MEMBER");
+            posEnd = line.find("DELIM@MEMBEREND");
+            datestr = line.substr(pos + 12, posEnd);
+            stringstream scan1(memberstr);
+            while (getline(scan1,checktoken,',')){
+                inmem.insert(checktoken);
+            }
+            *table = Timetable(inname,inaccess,inowner,indate,inmem);
+            file_input.close();
             return table;
-
         }
-
-    return NULL;
-
     }
+    file_input.close();
+    return NULL;
 }
+
 
 /**
   * @breif Function that calls the factory method to create a new timetable and write to file
@@ -90,17 +95,20 @@ Timetable* Timetable_Manager::get_timetable(string table_name){
   * @param strings for name, access_t and owner_id
   * @returns 0 on failure, 1 on success
   */
-int create_timetable(string name, string access_t, string owner_id){
-    Timetable* time_table = get_timetable(timetable_name);
-    if (table != NULL)
+int Timetable_Manager::create_timetable(string name, string access_t, string owner_id){
+    Timetable* time_table = get_timetable(name);
+    if (time_table != NULL){
         return -1;
+    }
+    else{
     Timetable_Factory* factory = new Timetable_Factory();
-    table = factory->create_timetable(timetable_name, access_t, owner_id);
-    string table_db_entry = timetable_name + "^@^" + access_t + "^@^" +  owner_id + "^@^";
+    Timetable* table = factory->create_timetable(name, access_t, owner_id);
+    string table_db_entry = name + "^@^" + access_t + "^@^" +  owner_id + "^@^" +"DELIM@DATE"+ "DELIM@DATEEND"+ "DELIM@MEMBER" + "DELIM@MEMBEREND";
     ofstream out(STORAGE_FILE_PATH, ios::app);
     out << table_db_entry << endl;
     out.close();
     return 1;
+    }
 }
 
 
@@ -112,22 +120,40 @@ int create_timetable(string name, string access_t, string owner_id){
   * @param Timetable
   * @returns 0 on failure, 1 on success
   */
-int save_timetable(Timetable table){
-    Timetable* time_table = get_timetable(table_name);
-    if (time_table == NULL)
-        return 0;
+int Timetable_Manager::save_timetable(Timetable table){
+    Timetable* time_table= get_timetable(table.get_name());
     ifstream file_input(STORAGE_FILE_PATH);
-    string line, current_timetable_name;
+    string line, current_timetable_name,token,current_event_name;
     string new_database_string = "";
+    if (time_table == NULL){
+        new_database_string += table.get_name() + "^@^"+ table.get_access_t() + "^@^"+ table.get_owner_id() 
+                                + "^@^" +"DELIM@DATE"+ "DELIM@DATEEND"+ "DELIM@MEMBER" + "DELIM@MEMBEREND";
+    }
+        
+    else{
 
-    size_t pos;
-    while(getline(file_input, line)) {
-        pos = line.find("^@^");
-        current_event_name = line.substr(0,pos);
-
-        if (current_timetable_name.compare(table_name) != 0) {
-            line = line + "\n";
-            new_database_string += line;
+        size_t pos, posEnd;
+        while(getline(file_input, line)) {
+            new_database_string = "";
+            pos = line.find("^@^");
+            current_event_name = line.substr(0,pos);
+    
+            if (current_timetable_name.compare(table.get_name()) != 0) {
+                line = line + "\n";
+                new_database_string += line;
+            }
+            else{
+                pos = line.find("DELIM@DATE");
+                posEnd = line.find ("DELIM@DATEEND");
+                token = line.substr(pos, posEnd + 13);
+                new_database_string += table.get_name() + "^@^"+ table.get_access_t() + "^@^"+ table.get_owner_id() + token;
+                
+                pos = line.find("DELIM@MEMBER");
+                posEnd = line.find("DELIM@MEMBEREND");
+                
+                token = line.substr(pos, posEnd + 15);
+                new_database_string += token;
+            }
         }
     }
     file_input.close();
@@ -148,7 +174,7 @@ int save_timetable(Timetable table){
   * @param string of tablename
   * @returns 0 on failure, 1 on success
   */
-int delete_timetable(string table_name){
+int Timetable_Manager::delete_timetable(string table_name){
     Timetable* time_table = get_timetable(table_name);
     if (time_table == NULL)
         return 0;
@@ -184,22 +210,34 @@ int delete_timetable(string table_name){
   * @param string of tablename, string of event info
   * @returns 0 on failure, 1 on success
   */
-int append_date(string table_name, string event_info){ // adjust
+int Timetable_Manager::append_date(string table_name, string event_info){ 
     Timetable* time_table = get_timetable(table_name);
-    if (time_table == NULL)
-        return 0;
+    if (time_table == NULL){return 0;}
     ifstream file_input(STORAGE_FILE_PATH);
-    string line, current_timetable_name;
+    string line, current_timetable_name,newline;
     string new_database_string = "";
+    string token = "";
 
-    size_t pos;
+    size_t pos,posEnd;
     while(getline(file_input, line)) {
         pos = line.find("^@^");
         current_timetable_name = line.substr(0,pos);
 
-        if (current_time_name.compare(table_name) != 0) {
+        if (current_timetable_name.compare(table_name) != 0) {
             line = line + "\n";
             new_database_string += line;
+        }
+        
+        else{
+            pos = line.find("DELIM@DATE");
+            posEnd = line.find ("DELIM@DATEEND");
+            token = line.substr(pos + 10, posEnd);
+            if (posEnd - (pos + 10) != 0){
+                token += ",";
+            }
+            token += "," + event_info;
+            newline = line.substr(0,pos + 10) + token + line.substr(pos + 10, line.length());
+            new_database_string += newline;
         }
     }
     file_input.close();
@@ -220,22 +258,39 @@ int append_date(string table_name, string event_info){ // adjust
   * @param string of tablename, string of event info
   * @returns 0 on failure, 1 on success
   */
-int remove_date(string table_name, string event_info){ // adjust
+int Timetable_Manager::remove_date(string table_name, string event_info){ // adjust
     Timetable* time_table = get_timetable(table_name);
-    if (time_table == NULL)
-        return 0;
+    if (time_table == NULL){return 0;}
     ifstream file_input(STORAGE_FILE_PATH);
-    string line, current_timetable_name;
+    string line, current_timetable_name,checktoken,token;
     string new_database_string = "";
+    string finalDates = "";
 
-    size_t pos;
+    size_t pos,posEnd, internalPos;
     while(getline(file_input, line)) {
         pos = line.find("^@^");
         current_timetable_name = line.substr(0,pos);
 
-        if (current_time_name.compare(table_name) != 0) {
+        if (current_timetable_name.compare(table_name) != 0) {
             line = line + "\n";
             new_database_string += line;
+        }
+        
+        else{
+            pos = line.find("DELIM@DATE");
+            posEnd = line.find ("DELIM@DATEEND");
+            token = line.substr(pos + 10, posEnd);
+            stringstream edit(token);
+            while(getline(edit,checktoken,',')){
+                if (checktoken.compare(event_info) != 0){
+                    if(finalDates.length() != 0){
+                        finalDates += ",";
+                    }
+                    finalDates += checktoken;
+                }
+            }
+            string newline = line.substr(0,pos + 10) + finalDates + line.substr(posEnd, line.length());
+            new_database_string += newline;
         }
     }
     file_input.close();
@@ -255,16 +310,53 @@ int remove_date(string table_name, string event_info){ // adjust
   * @param string of tablename, string of member id
   * @returns 0 on failure, 1 on success, -1 if owner_id match fail
   */
-int add_member(string tablename, string member_id){
+int Timetable_Manager::add_member(string tablename, string member_id){
     Timetable* time_table = get_timetable(tablename);
-    if (time_table = NULL){
-	    return -1;
+    if (time_table == NULL){
+	    return 0;
 	}
-	if (time_table -> is_member(member_id)){
-	   time_table -> add_member(member_id);
-	   return 1;
+	else{
+	    ifstream file_input(STORAGE_FILE_PATH);
+        string line, current_timetable_name,finalMems,checktoken;
+        string new_database_string = "";
+        string token = "";
+        
+        size_t pos,posEnd;
+	    while(getline(file_input, line)) {
+        pos = line.find("^@^");
+        current_timetable_name = line.substr(0,pos);
+
+        if (current_timetable_name.compare(tablename) != 0) {
+            line = line + "\n";
+            new_database_string += line;
+        }
+        
+        else{
+            pos = line.find("DELIM@MEMBER");
+            posEnd = line.find ("DELIM@MEMBEREND");
+            token = line.substr(pos + 12, posEnd);
+            stringstream edit(token);
+            while(getline(edit,checktoken,',')){
+                if (checktoken.compare(member_id) != 0){
+                    if(finalMems.length() != 0){
+                        finalMems += ",";
+                    }
+                    finalMems += checktoken;
+                }
+                else{return -1;}
+            }
+            string newline = line.substr(0,pos + 12) + finalMems + line.substr(posEnd, line.length());
+            new_database_string += newline;
+        }
+    }
+    file_input.close();
+    remove(STORAGE_FILE_PATH.c_str());
+    ofstream out(STORAGE_FILE_PATH);
+    out << new_database_string;
+    out.close();
+
+    return 1;
 	}
-	return 0;
 }
 
 /**
@@ -275,139 +367,136 @@ int add_member(string tablename, string member_id){
   * @param string of member id
   * @returns 0 on failure, 1 on success, -1 if owner_id match fail
   */
-int remove_member(string tablename, string member_id){
-	Timetable* time_table = get_timetable(tablename);
-	if (time_table = NULL){
-	    return 0;
-	}
-	if (time_table -> is_member(member_id)){
-	   time_table -> remove_member(member_id);
-	   return 1;
-	}
-	else{
-	    return 0;
-	}
+int Timetable_Manager::remove_member(string tablename, string member_id){
+    Timetable* time_table = get_timetable(tablename);
+    if (time_table == NULL){return 0;}
+    ifstream file_input(STORAGE_FILE_PATH);
+    string line, current_timetable_name,checktoken,token;
+    string new_database_string = "";
+    string finalMems = "";
+    bool memExists =false;
+
+    size_t pos,posEnd;
+    while(getline(file_input, line)) {
+        pos = line.find("^@^");
+        current_timetable_name = line.substr(0,pos);
+
+        if (current_timetable_name.compare(tablename) != 0) {
+            line = line + "\n";
+            new_database_string += line;
+        }
+        
+        else{
+            pos = line.find("DELIM@MEMBER");
+            posEnd = line.find ("DELIM@MEMBEREND");
+            token = line.substr(pos + 12, posEnd);
+            stringstream edit(token);
+            while(getline(edit,checktoken,',')){
+                if (checktoken.compare(member_id) != 0){
+                    if(finalMems.length() != 0){
+                        finalMems += ",";
+                    }
+                    finalMems += checktoken;
+                }
+                else{memExists = true;}
+            }
+            
+            string newline = line.substr(0,pos + 12) + finalMems + line.substr(posEnd, line.length());
+            new_database_string += newline;
+        }
+        if (!memExists) {return -1;}
+    }
+    file_input.close();
+    remove(STORAGE_FILE_PATH.c_str());
+    ofstream out(STORAGE_FILE_PATH);
+    out << new_database_string;
+    out.close();
+
+    return 1;
 }
 
 vector<Timetable> Timetable_Manager::get_personal_tables(string owner_id){
-    // read file line by line and create event objects feed all event objects where owner matches into set
-
-    // File pointer
-    fstream fin;
-    vector<Timetable> output;
-    // Open an existing file
-    fin.open(STORAGE_FILE_PATH, ios::in);
-
-    // Read the Data from the file
-    // as String Vector
-    vector<string> row;
-    string line, word, temp,token;
-    string delimiter = "^@^";
+    ifstream file_input(STORAGE_FILE_PATH);
+    string line, current_timetable_name,checktoken,inname,inaccess,inowner;
     size_t pos;
+    vector<Timetable> output;
+    Timetable* table;
+    while(getline(file_input, line)){
+        pos = line.find("^@^");
 
-    while (fin >> temp) {
-
-        row.clear();
-
-        // read an entire row and
-        // store it in a string variable 'line'
-        getline(fin, line);
-
-        pos = 0;
-
-        while ((pos = line.find(delimiter)) != string::npos) {
-            token = line.substr(0, pos);
-            row.push_back(token);
-            line.erase(0, pos + delimiter.length());
+        inname = line.substr(0, pos);
+        line.erase(0, pos + 3);
+        
+        pos = line.find("^@^");
+        inaccess = line.substr(0, pos);
+        line.erase(0, pos + 3);
+        
+        pos = line.find("^@^");
+        inowner = line.substr(0, pos);
+        line.erase(0, pos + 3);
+        
+        if (inowner.compare(owner_id)==0){
+            table = get_timetable(inname);
+            output.push_back(*table);
         }
-        if (row[5].compare(owner_id) == 0){
-            Timetable_Factory* factory = new Timetable_Factory();
-            Timetable* new_Table = factory->create_timetable(row[0], row[1], stoi(row[2]));
-            output.push_back(*new_Table);
-        }
-    }
     return output;
+    }
 }
 
 vector<Timetable> Timetable_Manager::get_shared_tables(string owner_id){
-    // read file line by line and create event objects feed all event objects where owner matches into set
-
-    // File pointer
-    fstream fin;
-    vector<Timetable> output;
-    // Open an existing file
-    fin.open(STORAGE_FILE_PATH, ios::in);
-
-    // Read the Data from the file
-    // as String Vector
-    vector<string> row;
-    string line, word, temp,token;
-    string delimiter = "^@^";
+    ifstream file_input(STORAGE_FILE_PATH);
+    string line, current_timetable_name,checktoken,inname,inaccess,inowner;
     size_t pos;
+    vector<Timetable> output;
+    Timetable* table;
+    while(getline(file_input, line)){
+        pos = line.find("^@^");
 
-    while (fin >> temp) {
-
-        row.clear();
-
-        // read an entire row and
-        // store it in a string variable 'line'
-        getline(fin, line);
-
-        pos = 0;
-
-        while ((pos = line.find(delimiter)) != string::npos) {
-            token = line.substr(0, pos);
-            row.push_back(token);
-            line.erase(0, pos + delimiter.length());
+        inname = line.substr(0, pos);
+        line.erase(0, pos + 3);
+        
+        pos = line.find("^@^");
+        inaccess = line.substr(0, pos);
+        line.erase(0, pos + 3);
+        
+        pos = line.find("^@^");
+        inowner = line.substr(0, pos);
+        line.erase(0, pos + 3);
+        
+        if (inowner.compare(owner_id)==0){
+            table = get_timetable(inname);
+            output.push_back(*table);
         }
-        if (row[5].compare(owner_id) == 0){
-            Timetable_Factory* factory = new Timetable_Factory();
-            Timetable* new_Table = factory->create_timetable(row[0], row[1], stoi(row[2]));
-            output.push_back(*new_Table);
-        }
-    }
     return output;
+    }
 }
 
 vector<Timetable> Timetable_Manager::get_public_tables(){
-    // File pointer
-    fstream fin;
+    
+    ifstream file_input(STORAGE_FILE_PATH);
+    string line, current_timetable_name,checktoken,inname,inaccess;
+    size_t pos,posEnd;
     vector<Timetable> output;
-    // Open an existing file
-    fin.open(STORAGE_FILE_PATH, ios::in);
+    Timetable* table;
+    while(getline(file_input, line)){
+        pos = line.find("^@^");
 
-    // Read the Data from the file
-    // as String Vector
-    vector<string> row;
-    string line, word, temp,token;
-    string delimiter = "^@^";
-    size_t pos;
-
-    while (fin >> temp) {
-
-        row.clear();
-
-        // read an entire row and
-        // store it in a string variable 'line'
-        getline(fin, line);
-
-        pos = 0;
-
-        while ((pos = line.find(delimiter)) != string::npos) {
-            token = line.substr(0, pos);
-            row.push_back(token);
-            line.erase(0, pos + delimiter.length());
+        inname = line.substr(0, pos);
+        line.erase(0, pos + 3);
+        
+        pos = line.find("^@^");
+        inaccess = line.substr(0, pos);
+        line.erase(0, pos + 3);
+        
+        if (inaccess.compare("public")==0){
+            table = get_timetable(inname);
+            output.push_back(*table);
         }
-        if (row[6].compare("public") == 0){
-            Timetable_Factory* factory = new Timetable_Factory();
-            Timetable* new_Table = factory->create_timetable(row[0], row[1], stoi(row[2]));
-            output.push_back(*new_Table);
-        }
-    }
     return output;
+    }
 }
 
-string timetable_to_txt(Timetable timetable){
+string Timetable_Manager::timetable_to_txt(Timetable timetable){
     string txt_rep = "";
     txt_rep += timetable.get_name() + "," +
         timetable.get_access_t() + "," +
