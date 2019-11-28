@@ -326,4 +326,4 @@ std::string compare_timetables(std::string table1name, std::string table2name){
 }
 */
 
-/// Errors in control pointer issues can be fixed, some functions not on windows 
+/// Errors in control pointer issues can be fixed, some functions not on windows

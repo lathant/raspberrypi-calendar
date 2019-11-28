@@ -1,10 +1,10 @@
-/* Class representing timetable
- * CREATED BY: Vladimir Zhurov
- * LAST EDITED BY: Vladimir Zhurov
- * LAST EDITED: 05/11/2019
- * TODO: ...
- */
-
+ /**
+  * @brief Class representing timetable
+  *
+  * A representation of timetable
+  * @author Vladimir Zhurov
+  * @date   05/11/2019
+  */
 #ifndef TIMETABLE_H
 #define TIMETABLE_H
 
