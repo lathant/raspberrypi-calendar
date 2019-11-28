@@ -4,7 +4,7 @@
   * A representation of timetable
   * @author Vladimir Zhurov
   * @author Lathan Thangavadivel
-  * @date   05/11/2019
+  * @date   28/11/2019
   */
 #ifndef TIMETABLE_H
 #define TIMETABLE_H
@@ -34,6 +34,7 @@ class Timetable {
         std::string get_access_t(){return access_t;}
         std::string get_owner_id(){return owner_id;}
         std::set<std::string> get_dates(){return dates;}
+        std::set<std::string> get_members(){return member_id;}
         void set_name(std::string name);
         void set_access_t(std::string access_t);
         int add_member(std::string user_id);

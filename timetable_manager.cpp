@@ -24,13 +24,13 @@ Timetable_Manager* Timetable_Manager::instance = NULL;
 
 
 /**
-  * @breif Function that retrieves an instance of a time table manager
-  * If one does not exist already then create
-  * @author  David T
-  * @date   27/11/2019
-  * @param No parameter needed
-  * @returns instance of time table manager
-  */
+ * @breif Function that retrieves an instance of a time table manager
+ * If one does not exist already then create
+ * @author  David T
+ * @date   27/11/2019
+ * @param No parameter needed
+ * @returns instance of time table manager
+ */
 Timetable_Manager* Timetable_Manager::get_instance() {
 
     if (instance == NULL){
@@ -39,7 +39,14 @@ Timetable_Manager* Timetable_Manager::get_instance() {
     return instance;
 }
 
-
+/**
+ * @brief Get timetable from file based on name
+ *
+ * Search the storage file for the timetable with the matching name provided and return a Timetable Object with it's information
+ * @author  Lathan Thangavadivel
+ * @param   name                    The name of the timetable
+ * @return  table                   The timetable object, Null if not found
+ */
 Timetable* Timetable_Manager::get_timetable(string name){
     ifstream file_input(STORAGE_FILE_PATH);
     string line, current_timetable_name,checktoken,inname,inaccess,inowner,datestr,memberstr;
@@ -88,21 +95,25 @@ Timetable* Timetable_Manager::get_timetable(string name){
 
 
 /**
-  * @breif Function that calls the factory method to create a new timetable and write to file
-  * If one does exist already do nothing
-  * @author  David T
-  * @date   27/11/2019
-  * @param strings for name, access_t and owner_id
-  * @returns 0 on failure, 1 on success
-  */
+ * @breif Function that calls the factory method to create a new timetable and write to file
+ * If one does exist already do nothing
+ * @author  David T
+ * @author  Lathan Thangavadivel
+ * @author  Vladimir Zhurov
+ * @date   28/11/2019
+ * @param strings for name, access_t and owner_id
+ * @returns 0 on failure, 1 on success
+ */
 int Timetable_Manager::create_timetable(string name, string access_t, string owner_id){
     Timetable* time_table = get_timetable(name);
     if (time_table != NULL){
         return -1;
     }
     else{
+    /* Unused
     Timetable_Factory* factory = new Timetable_Factory();
     Timetable* table = factory->create_timetable(name, access_t, owner_id);
+    */
     string table_db_entry = name + "^@^" + access_t + "^@^" +  owner_id + "^@^" +"DELIM@DATE"+ "DELIM@DATEEND"+ "DELIM@MEMBER" + "DELIM@MEMBEREND";
     ofstream out(STORAGE_FILE_PATH, ios::app);
     out << table_db_entry << endl;
@@ -113,13 +124,14 @@ int Timetable_Manager::create_timetable(string name, string access_t, string own
 
 
 /**
-  * @breif Function that saves timetable to a file or overwrite if needed
-  * If one does not exist already then create
-  * @author  David T
-  * @date   27/11/2019
-  * @param Timetable
-  * @returns 0 on failure, 1 on success
-  */
+ * @breif Function that saves timetable to a file or overwrite if needed
+ * If one does not exist already then create
+ * @author  David T
+ * @author  Lathan Thangavadivel
+ * @date   27/11/2019
+ * @param Timetable
+ * @returns 0 on failure, 1 on success
+ */
 int Timetable_Manager::save_timetable(Timetable table){
     Timetable* time_table= get_timetable(table.get_name());
     ifstream file_input(STORAGE_FILE_PATH);
@@ -166,14 +178,14 @@ int Timetable_Manager::save_timetable(Timetable table){
 
 
 /**
-  * @breif Function that checks to see if the timetable object's owner_id matches the owner_id
-  * then deletes the object and the data from the file
-  * If one does not exist already do nothing
-  * @author  David T
-  * @date   27/11/2019
-  * @param string of tablename
-  * @returns 0 on failure, 1 on success
-  */
+ * @breif Function that checks to see if the timetable object's owner_id matches the owner_id
+ * then deletes the object and the data from the file
+ * If one does not exist already do nothing
+ * @author  David T
+ * @date   27/11/2019
+ * @param string of tablename
+ * @returns 0 on failure, 1 on success
+ */
 int Timetable_Manager::delete_timetable(string table_name){
     Timetable* time_table = get_timetable(table_name);
     if (time_table == NULL)
@@ -202,14 +214,15 @@ int Timetable_Manager::delete_timetable(string table_name){
 }
 
 /**
-  * @breif Function that checks to see if the event_info is not already part of the timetable
-  * Append the event to the set inside table and update the file
-  * If one does not exist already create
-  * @author  David T
-  * @date   27/11/2019
-  * @param string of tablename, string of event info
-  * @returns 0 on failure, 1 on success
-  */
+ * @breif Function that checks to see if the event_info is not already part of the timetable
+ * Append the event to the set inside table and update the file
+ * If one does not exist already create
+ * @author  David T
+ * @author  Lathan Thangavadivel
+ * @date   27/11/2019
+ * @param string of tablename, string of event info
+ * @returns 0 on failure, 1 on success
+ */
 int Timetable_Manager::append_date(string table_name, string event_info){
     Timetable* time_table = get_timetable(table_name);
     if (time_table == NULL){return 0;}
@@ -254,6 +267,7 @@ int Timetable_Manager::append_date(string table_name, string event_info){
   * Append the event to the set inside table and update the file
   * If one does not exist already create
   * @author  David T
+  * @author  Lathan Thangavadivel
   * @date   27/11/2019
   * @param string of tablename, string of event info
   * @returns 0 on failure, 1 on success
@@ -266,7 +280,7 @@ int Timetable_Manager::remove_date(string table_name, string event_info){ // adj
     string new_database_string = "";
     string finalDates = "";
 
-    size_t pos,posEnd, internalPos;
+    size_t pos,posEnd;
     while(getline(file_input, line)) {
         pos = line.find("^@^");
         current_timetable_name = line.substr(0,pos);
@@ -306,6 +320,7 @@ int Timetable_Manager::remove_date(string table_name, string event_info){ // adj
   * @breif Function that adds a new user to the members of the table if the owner_id matches and if they are not already present
   * If one does exist already do nothing
   * @author  David T
+  * @author  Lathan Thangavadivel
   * @date   27/11/2019
   * @param string of tablename, string of member id
   * @returns 0 on failure, 1 on success, -1 if owner_id match fail
@@ -363,6 +378,7 @@ int Timetable_Manager::add_member(string tablename, string member_id){
   * @breif Function that removes a user to the members of the table if the owner_id matches and if they are already present
   * If one does exist already do nothing
   * @author  David T
+  * @author  Lathan Thangavadivel
   * @date   27/11/2019
   * @param string of member id
   * @returns 0 on failure, 1 on success, -1 if owner_id match fail
@@ -415,6 +431,14 @@ int Timetable_Manager::remove_member(string tablename, string member_id){
     return 1;
 }
 
+/**
+ * @brief get a vector of all a user's personal timetables
+ *
+ * Scans the storage file for all timetable's that have owner_id's that match
+ * @author  Lathan Thangavadivel
+ * @param   owner_id                The owner's username
+ * @return  output                  A vector<Timetable>
+ */
 vector<Timetable> Timetable_Manager::get_personal_tables(string owner_id){
     ifstream file_input(STORAGE_FILE_PATH);
     string line, current_timetable_name,checktoken,inname,inaccess,inowner;
@@ -439,10 +463,18 @@ vector<Timetable> Timetable_Manager::get_personal_tables(string owner_id){
             table = get_timetable(inname);
             output.push_back(*table);
         }
-    return output;
     }
+    return output;
 }
 
+/**
+ * @brief get a vector of all a user's shared timetables
+ *
+ * Scans the storage file for all timetable's that have user as a member
+ * @author  Lathan Thangavadivel
+ * @param   owner_id                The user's username
+ * @return  output                  A vector<Timetable>
+ */
 vector<Timetable> Timetable_Manager::get_shared_tables(string owner_id){
     ifstream file_input(STORAGE_FILE_PATH);
     string line, current_timetable_name,checktoken,inname, memline;
@@ -468,15 +500,22 @@ vector<Timetable> Timetable_Manager::get_shared_tables(string owner_id){
                 break;
             }
         }
-    return output;
     }
+    return output;
 }
 
+/**
+ * @brief get a vector of all public timetables
+ *
+ * Scans the storage file for all timetable's that are public
+ * @author  Lathan Thangavadivel
+ * @return  output                  A vector<Timetable>
+ */
 vector<Timetable> Timetable_Manager::get_public_tables(){
 
     ifstream file_input(STORAGE_FILE_PATH);
     string line, current_timetable_name,checktoken,inname,inaccess;
-    size_t pos,posEnd;
+    size_t pos;
     vector<Timetable> output;
     Timetable* table;
     while(getline(file_input, line)){
@@ -493,14 +532,36 @@ vector<Timetable> Timetable_Manager::get_public_tables(){
             table = get_timetable(inname);
             output.push_back(*table);
         }
-    return output;
     }
+    return output;
 }
 
+/**
+ * @brief convert timetable to string
+ *
+ * Create a string representation of a timetable object
+ * @author  Lathan  Thangavadivel
+ * @author  Vladimir Zhurov
+ * @param   time_table              The timetable to be converted
+ * @return  txt_rep                 A text representation of the timetable
+ */
 string Timetable_Manager::timetable_to_txt(Timetable timetable){
     string txt_rep = "";
     txt_rep += timetable.get_name() + "," +
         timetable.get_access_t() + "," +
-        timetable.get_owner_id();
+        timetable.get_owner_id() +",DELIM@DATE,";
+
+    // Add all dates to string rep
+    set<string> dates = timetable.get_dates();
+    for(set<string>::iterator it = dates.begin(); it != dates.end(); it++)
+        txt_rep += *it +",";
+    txt_rep += "DELIM@DATEEND,DELIM@MEMBER,";
+
+    // Add all members to string rep
+    set<string> members = timetable.get_members();
+    for(set<string>::iterator it = members.begin(); it != members.end(); it++)
+        txt_rep += *it +",";
+    txt_rep += "DELIM@MEMBEREND";
+
     return txt_rep;
 }
