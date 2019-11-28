@@ -14,6 +14,8 @@ class Timetable_Factory {
     public:
         Timetable_Factory();
         Timetable* create_timetable(std::string name, std::string access_t, std::string owner_id);
+        Timetable* create_timetable(std::string name, std::string access_t, std::string owner_id,
+        std::set<std::string> inmember_id, std::set<std::string> indates);
 };
 
 #endif /* TIMETABLE_FACTORY_H */

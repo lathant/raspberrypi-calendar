@@ -33,3 +33,22 @@ Timetable* Timetable_Factory::create_timetable(string in_name, string in_access_
     Timetable* timetable = new Timetable(in_name, in_access_t, in_owner_id);
     return timetable;
 }
+
+/**
+ * @brief Create a new timetable
+ *
+ * Call the timetable object constructor
+ * @author  Vladimir Zhurov
+ * @date    06/11/2019
+ * @param   in_name         The timetable name
+ * @param   in_access_t     The access type of the timetable
+ * @param   in_owner_id     The owner's username
+ * @param   in_access_t     The access type of the timetable
+ * @param   in_owner_id     The owner's username
+ * @return  timetable       A new timetable object
+ */
+Timetable* Timetable_Factory::create_timetable(string in_name, string in_access_t, string in_owner_id,
+    set<string> inmember_id, set<string> indates) {
+    Timetable* timetable = new Timetable(in_name, in_access_t, in_owner_id, inmember_id, indates);
+    return timetable;
+}
