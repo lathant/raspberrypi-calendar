@@ -1,5 +1,6 @@
-/* Header File for event manager entities
- * CREATED BY: Lathan Thangavadivel
+/** 
+ * Header File for event manager entities
+ * CREATED BY: Vladimir Zhurov
  * LAST EDITED BY: Lathan Thangavadivel
  * LAST EDITED: 25/11/2019
  * @brief the file that contains all the prototype functions and variables for the event manager class
