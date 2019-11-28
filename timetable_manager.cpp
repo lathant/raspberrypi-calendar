@@ -445,27 +445,28 @@ vector<Timetable> Timetable_Manager::get_personal_tables(string owner_id){
 
 vector<Timetable> Timetable_Manager::get_shared_tables(string owner_id){
     ifstream file_input(STORAGE_FILE_PATH);
-    string line, current_timetable_name,checktoken,inname,inaccess,inowner;
-    size_t pos;
+    string line, current_timetable_name,checktoken,inname, memline;
+    size_t pos, posEnd;
+    vector<string> row;
     vector<Timetable> output;
     Timetable* table;
     while(getline(file_input, line)){
         pos = line.find("^@^");
-
         inname = line.substr(0, pos);
-        line.erase(0, pos + 3);
         
-        pos = line.find("^@^");
-        inaccess = line.substr(0, pos);
-        line.erase(0, pos + 3);
+        pos = line.find("DELIM@MEMBER");
+        posEnd = line.find("DELIM@MEMBEREND");
         
-        pos = line.find("^@^");
-        inowner = line.substr(0, pos);
-        line.erase(0, pos + 3);
+        memline = line.substr(pos + 12,posEnd);
         
-        if (inowner.compare(owner_id)==0){
-            table = get_timetable(inname);
-            output.push_back(*table);
+        stringstream scan(memline);
+        
+        while(getline(scan,checktoken,',')){
+            if (checktoken.compare(owner_id)){
+                table = get_timetable(inname);
+                output.push_back(*table);
+                break;
+            }
         }
     return output;
     }
