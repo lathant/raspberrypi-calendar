@@ -1,12 +1,10 @@
-/**
- * Class for the event manager
+/* Class for the event manager
  * CREATED BY: Lathan Thangavadivel
  * LAST EDITED BY: Lathan Thangavadivel
  * LAST EDITED: 25/11/2019
  * @brief the file that contains the functions to handle events
  *
- * @author  Lathan Thangavadivel
- * @author  Vladimir Zhurov
+ * @author  Lathan Thangavadivel, Vladimir Zhurov
  * @date   25/11/2019
  */
 
@@ -37,13 +35,13 @@ Event_Manager* Event_Manager::get_instance() {
     return instance;
 }
 
-/**
- * @brief gets the event attribute string
- *
- * @author             Lathan Thangavadivel
- * @param  event_name  event name as a string
- * @return event      event attribute
- */
+/*
+* @brief gets the event attribute string
+*
+* @author             Lathan Thangavadivel
+* @param  event_name  event name as a string
+* @return event      event attribute
+*/
 Event* Event_Manager::get_event(string event_name){
      // File pointer
     fstream fin;
@@ -81,8 +79,10 @@ Event* Event_Manager::get_event(string event_name){
             return event;
 
         }
-    }
+
     return NULL;
+
+    }
 }
 
 /**

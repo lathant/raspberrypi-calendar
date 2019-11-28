@@ -24,6 +24,7 @@ Timetable::Timetable(string in_name, string in_access_t, string in_owner_id){
         name = in_name;
         access_t = in_access_t;
         owner_id = in_owner_id;
+        member_id.insert(in_owner_id);
 }
 
 /**
