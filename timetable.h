@@ -21,6 +21,14 @@ class Timetable {
 
     public:
         Timetable(std::string name, std::string access_t, std::string owner_id);
+        Timetable(std::string inname, std::string inaccess_t, std::string inowner_id,
+                    std::set<std::string> inmember_id, std::set<std::string> indates){
+            name = inname;
+            access_t = inaccess_t;
+            owner_id = inowner_id;
+            member_id = inmember_id;
+            dates = indates;
+        }
         std::string get_name() const{return name;}
         std::string get_access_t(){return access_t;}
         std::string get_owner_id(){return owner_id;}
