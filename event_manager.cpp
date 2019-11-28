@@ -254,9 +254,9 @@ vector<Event> Event_Manager::get_public_events(){
 string Event_Manager::event_to_txt(Event event){
     string txt_rep = "";
     txt_rep += event.get_eventName() + "," +
-        event.get_details() + "," +
+        event.get_details() + "," + "DELIM@START" +
         to_string(event.get_start_time()) + "," +
-        to_string(event.get_end_time()) + "," +
+        to_string(event.get_end_time()) + "," + "DELIM@END" +
         event.get_access_t() + "," +
         event.get_owner_id() + "," +
         event.get_repeat_type();
