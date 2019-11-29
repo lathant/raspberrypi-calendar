@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <set>
+#include <tuple>
+#include <time.h>
 
 using namespace std;
 /// Initialize begining of file on initial start
@@ -580,17 +582,17 @@ string Timetable_Manager::timetable_to_txt(Timetable timetable){
 string Timetable_Manager::compare_timetables(string table1, string table2){
     Timetable* firstTable = get_timetable(table1);
     Timetable* secondTable = get_timetable(table2);
-    
+
     if (firstTable ==NULL || secondTable ==NULL){
         string error = "ERROR";
         return error;
     }
-    
+
     set<string> firstDates = firstTable->get_dates();
     set<string> secondDates = secondTable->get_dates();
     string times,timetoken;
-    time_t starttime,endtime; 
-    
+    time_t starttime,endtime;
+
     set<string>::iterator firstitr;
     set<string>::iterator seconditr;
     vector<tuple<string,time_t,time_t>>::iterator finalitr;
@@ -599,71 +601,71 @@ string Timetable_Manager::compare_timetables(string table1, string table2){
     size_t pos_start, pos_end;
     int fIndex,fIndexPrev,fIndexNext;
     bool inserted=false;
-    
+
     //first table
     for (firstitr = firstDates.begin(); firstitr != firstDates.end();firstitr++){
         pos_start = firstitr->find("DELIM@START");
         pos_end = firstitr->find("DELIM@END");
         times = firstitr->substr(pos_start + 11, pos_end);
-        
+
         stringstream s(times);
-    
+
         getline(s,timetoken,',');
         starttime = stol(timetoken);
-        
+
         getline (s,timetoken,',');
         endtime = stol(timetoken);
-        
+
         temp = make_tuple(*firstitr,starttime,endtime);
-        
+
         //insert into values from first table final vector in a ordered manner
         if (final.empty()){
             final.push_back(temp);
         }
-        
+
         else{
             fIndex = 0;
             while (!inserted && fIndex < final.size()){
                 if (difftime(get<1>(final[fIndex]),starttime) < 0){
                     fIndex += 1;
                 }
-                
+
                 else{
                     finalitr = final.begin() + fIndex;
                     final.insert(finalitr,temp);
                     inserted = true;
                 }
-                
+
             }
             if (!inserted){
                 final.push_back(temp);
             }
         }
-        
+
     }
-    
+
     //second table
     inserted = false;
      for (seconditr = secondDates.begin(); seconditr != secondDates.end();seconditr++){
         pos_start = seconditr->find("DELIM@START");
         pos_end = seconditr->find("DELIM@END");
         times = seconditr->substr(pos_start + 11, pos_end);
-        
+
         stringstream s(times);
-    
+
         getline(s,timetoken,',');
         starttime = stol(timetoken);
-        
+
         getline (s,timetoken,',');
         endtime = stol(timetoken);
-        
+
         temp = make_tuple(*firstitr,starttime,endtime);
-        
+
         //insert into final vector in a ordered manner
         if (final.empty()){
             final.push_back(temp);
         }
-        
+
         else{
             fIndex = 0;
 
@@ -671,22 +673,22 @@ string Timetable_Manager::compare_timetables(string table1, string table2){
                 if (difftime(get<1>(final[fIndex]),starttime) < 0){
                     fIndex += 1;
                 }
-                
+
                 else{
                     finalitr = final.begin() + fIndex;
                     final.insert(finalitr,temp);
                     inserted = true;
                 }
-                
+
             }
             if (!inserted){
                 final.push_back(temp);
             }
         }
-        
+
     }
-    
-    
+
+
     //search for conflicts
     finalitr = final.begin();
     finalitr +=1;
@@ -704,10 +706,10 @@ string Timetable_Manager::compare_timetables(string table1, string table2){
             finalitr+=1;
         }
     }
-    
-    
+
+
     //print out the comparison Timetable
-    
+
     string finaloutput ="";
     finalitr = final.begin();
     string eventDetail,startDetails,endDetails,prevDelim, postDelim;
@@ -715,17 +717,17 @@ string Timetable_Manager::compare_timetables(string table1, string table2){
         eventDetail = get<0>(*finalitr);
         startDetails = to_string(get<1>(*finalitr));
         endDetails = to_string(get<2>(*finalitr));
-        
+
         if (eventDetail.compare("CONFLICT") == 0){
             finaloutput+= eventDetail + "DELIM@START" + startDetails + "," + endDetails + "DELIM@END" + "\n";
         }
         else{
             pos_start = eventDetail.find("DELIM@START");
             pos_end = eventDetail.find("DELIM@END");
-            
+
             prevDelim = eventDetail.substr(0,pos_start + 11);
             postDelim = eventDetail.substr(pos_end,eventDetail.length());
-            
+
             finaloutput += prevDelim + startDetails + "," + endDetails + postDelim +"\n";
         }
         finalitr+= 1;
