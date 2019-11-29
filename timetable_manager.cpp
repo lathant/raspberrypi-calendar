@@ -247,10 +247,10 @@ int Timetable_Manager::append_date(string table_name, string event_info){
             pos = line.find("DELIM@DATE");
             posEnd = line.find ("DELIM@DATEEND");
             token = line.substr(pos + 10, posEnd);
+            token += "," + event_info;
             if (posEnd - (pos + 10) != 0){
                 token += ",";
             }
-            token += "," + event_info;
             newline = line.substr(0,pos + 10) + token + line.substr(pos + 10, line.length());
             new_database_string += newline;
         }
