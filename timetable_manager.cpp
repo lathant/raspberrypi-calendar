@@ -134,54 +134,24 @@ int Timetable_Manager::create_timetable(string name, string access_t, string own
 
 /**
  * @breif Function that saves timetable to a file or overwrite if needed
- * If one does not exist already then create
+ *
+ * Saves a timetable object to the timetable file
  * @author  David T
  * @author  Lathan Thangavadivel
- * @date   27/11/2019
- * @param Timetable
- * @returns 0 on failure, 1 on success
+ * @author  Vladimir Zhurov
+ * @date    30/11/2019
+ * @param   Timetable               Timetable to be saved
+ * @returns int                     0 on failure, 1 on success
  */
 int Timetable_Manager::save_timetable(Timetable table){
-    Timetable* time_table= get_timetable(table.get_name());
-    ifstream file_input(STORAGE_FILE_PATH);
-    string line, current_timetable_name,token,current_event_name;
-    string new_database_string = "";
-    if (time_table == NULL){
-        new_database_string += table.get_name() + "^@^"+ table.get_access_t() + "^@^"+ table.get_owner_id()
-                                + "^@^" +"DELIM@DATE"+ "DELIM@DATEEND"+ "DELIM@MEMBER" + "DELIM@MEMBEREND";
-    }
-
-    else{
-
-        size_t pos, posEnd;
-        while(getline(file_input, line)) {
-            new_database_string = "";
-            pos = line.find("^@^");
-            current_event_name = line.substr(0,pos);
-
-            if (current_timetable_name.compare(table.get_name()) != 0) {
-                line = line + "\n";
-                new_database_string += line;
-            }
-            else{
-                pos = line.find("DELIM@DATE");
-                posEnd = line.find ("DELIM@DATEEND");
-                token = line.substr(pos, posEnd + 13);
-                new_database_string += table.get_name() + "^@^"+ table.get_access_t() + "^@^"+ table.get_owner_id() + token;
-
-                pos = line.find("DELIM@MEMBER");
-                posEnd = line.find("DELIM@MEMBEREND");
-
-                token = line.substr(pos, posEnd + 15);
-                new_database_string += token;
-            }
-        }
-    }
-    file_input.close();
-    ofstream out(STORAGE_FILE_PATH);
-    out << new_database_string;
-    out.close();
-
+    string table_db_entry = timetable_to_txt(table);
+    ofstream timetable_file(STORAGE_FILE_PATH, ios::app);
+    if(!timetable_file.is_open())
+        return 0; // Error occoured
+    if (get_timetable(table.get_name()) != NULL)
+        delete_timetable(table.get_name());
+    timetable_file << table_db_entry << endl;
+    timetable_file.close();
     return 1;
 }
 
