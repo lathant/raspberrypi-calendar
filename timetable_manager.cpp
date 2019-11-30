@@ -1,11 +1,12 @@
-/* Class for the timetable manager
- * CREATED BY: Vladimir Zhurov
- * LAST EDITED BY: David Truong
- * LAST EDITED: 27/11/2019
- * TODO: IMPLEMENT *WIP* Debug
- * @breif Class that changes the timetables in and out of storage
- * @author
- */
+ /**
+  * @brief Implementation of timetable manager
+  * 
+  * The implementation for a methods that interact with the timetable storage file
+  * @author	Vladimir Zhurov
+  * @author	David Truong
+  * @author Lathan Thangavadivel
+  * @date	30/11/2019
+  */
 
 #include "timetable_manager.h"
 #include "string"
@@ -16,6 +17,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <set>
+#include <tuple>
+#include <time.h>
 #include <QStandardPaths>
 
 using namespace std;
@@ -25,7 +28,7 @@ Timetable_Manager* Timetable_Manager::instance = NULL;
 
 
 /**
- * @breif Function that retrieves an instance of a time table manager
+ * @brief Function that retrieves an instance of a time table manager
  * If one does not exist already then create
  * @author  David T
  * @date   27/11/2019
@@ -566,3 +569,171 @@ string Timetable_Manager::timetable_to_txt(Timetable timetable){
 
     return txt_rep;
 }
+
+/**
+ * @brief       takes two tables combines and returns the string output of the
+ *              combined table while highlighting conflicts
+ *
+ * @author      Lathan Thangavadivel
+ * @date        25/11/2019
+ * @param       table1              name of the first table
+ * @param       table2              name of second table
+ * @return      string              string output of the combined tables
+ */
+string Timetable_Manager::compare_timetables(string table1, string table2){
+    Timetable* firstTable = get_timetable(table1);
+    Timetable* secondTable = get_timetable(table2);
+
+    if (firstTable ==NULL || secondTable ==NULL){
+        string error = "ERROR";
+        return error;
+    }
+
+    set<string> firstDates = firstTable->get_dates();
+    set<string> secondDates = secondTable->get_dates();
+    string times,timetoken;
+    time_t starttime,endtime;
+
+    set<string>::iterator firstitr;
+    set<string>::iterator seconditr;
+    vector<tuple<string,time_t,time_t>>::iterator finalitr;
+    vector<tuple<string,time_t,time_t>> final;
+    tuple<string,time_t,time_t> temp;
+    size_t pos_start, pos_end;
+    int fIndex,fIndexPrev,fIndexNext;
+    bool inserted=false;
+
+    //first table
+    for (firstitr = firstDates.begin(); firstitr != firstDates.end();firstitr++){
+        pos_start = firstitr->find("DELIM@START");
+        pos_end = firstitr->find("DELIM@END");
+        times = firstitr->substr(pos_start + 11, pos_end);
+
+        stringstream s(times);
+
+        getline(s,timetoken,',');
+        starttime = stol(timetoken);
+
+        getline (s,timetoken,',');
+        endtime = stol(timetoken);
+
+        temp = make_tuple(*firstitr,starttime,endtime);
+
+        //insert into values from first table final vector in a ordered manner
+        if (final.empty()){
+            final.push_back(temp);
+        }
+
+        else{
+            fIndex = 0;
+            while (!inserted && (fIndex < final.size())){
+                if (difftime(get<1>(final[fIndex]),starttime) < 0){
+                    fIndex += 1;
+                }
+
+                else{
+                    finalitr = final.begin() + fIndex;
+                    final.insert(finalitr,temp);
+                    inserted = true;
+                }
+
+            }
+            if (!inserted){
+                final.push_back(temp);
+            }
+        }
+
+    }
+
+    //second table
+    inserted = false;
+     for (seconditr = secondDates.begin(); seconditr != secondDates.end();seconditr++){
+        pos_start = seconditr->find("DELIM@START");
+        pos_end = seconditr->find("DELIM@END");
+        times = seconditr->substr(pos_start + 11, pos_end);
+
+        stringstream s(times);
+
+        getline(s,timetoken,',');
+        starttime = stol(timetoken);
+
+        getline (s,timetoken,',');
+        endtime = stol(timetoken);
+
+        temp = make_tuple(*firstitr,starttime,endtime);
+
+        //insert into final vector in a ordered manner
+        if (final.empty()){
+            final.push_back(temp);
+        }
+
+        else{
+            fIndex = 0;
+
+            while (!inserted && (fIndex < final.size())){
+                if (difftime(get<1>(final[fIndex]),starttime) < 0){
+                    fIndex += 1;
+                }
+
+                else{
+                    finalitr = final.begin() + fIndex;
+                    final.insert(finalitr,temp);
+                    inserted = true;
+                }
+
+            }
+            if (!inserted){
+                final.push_back(temp);
+            }
+        }
+
+    }
+
+
+    //search for conflicts
+    finalitr = final.begin();
+    finalitr +=1;
+    time_t timediff;
+    //if statement for if there are less than 2 items in final
+    if (final.size()>1){
+        while ( finalitr != final.end()){
+            timediff = difftime(get<2>(*(finalitr - 1)),get<1>(*finalitr));
+            if (timediff > 0){
+                get<2>(*(finalitr - 1)) -= timediff;
+                get<1>(*finalitr) += timediff;
+                temp = make_tuple("CONFLICT",get<2>(*(finalitr - 1)),get<1>(*finalitr));
+                final.insert(finalitr,temp);
+            }
+            finalitr+=1;
+        }
+    }
+
+
+    //print out the comparison Timetable
+
+    string finaloutput ="";
+    finalitr = final.begin();
+    string eventDetail,startDetails,endDetails,prevDelim, postDelim;
+    while (finalitr != final.end()){
+        eventDetail = get<0>(*finalitr);
+        startDetails = to_string(get<1>(*finalitr));
+        endDetails = to_string(get<2>(*finalitr));
+
+        if (eventDetail.compare("CONFLICT") == 0){
+            finaloutput+= eventDetail + "DELIM@START" + startDetails + "," + endDetails + "DELIM@END" + "\n";
+        }
+        else{
+            pos_start = eventDetail.find("DELIM@START");
+            pos_end = eventDetail.find("DELIM@END");
+
+            prevDelim = eventDetail.substr(0,pos_start + 11);
+            postDelim = eventDetail.substr(pos_end,eventDetail.length());
+
+            finaloutput += prevDelim + startDetails + "," + endDetails + postDelim +"\n";
+        }
+        finalitr+= 1;
+    }
+    return finaloutput;
+
+}
+
