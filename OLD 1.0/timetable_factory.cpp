@@ -1,4 +1,4 @@
-/**
+ /**
   * @brief Class for timetable factory methods
   *
   * Implementation for timetable factory methods

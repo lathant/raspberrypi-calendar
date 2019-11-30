@@ -1,9 +1,10 @@
-/* Header for class representing Authenticator
- * CREATED BY: John Jewell
- * LAST EDITED BY: John Jewell
- * LAST EDITED: 29/10/2019
- * TODO: IMPLEMENT
- */
+ /**
+  * @brief Class representing Authenticator
+  *
+  * The representing of Authenticator's functions
+  * @author  John Jewell
+  * @date   29/10/2019
+  */
 
 #ifndef AUTHENTICATOR_H
 #define AUTHENTICATOR_H

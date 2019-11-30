@@ -1,13 +1,13 @@
-/* Class to terminate control
- * CREATED BY: Vladimir Zhurov
- * LAST EDITED BY: Vladimir Zhurov
- * LAST EDITED: 28/10/2019
- * TODO: NONE
+ /**
+  * @brief A termination process for the main program
+  *
+  * A program that sends a terminate message to the main program through its get file
+  * @author  Vladimir Zhurov
+  * @date   28/10/2019
  */
 
 #include <iostream>
 #include "unistd.h"
-//#include "windows.h" //remove when on pi
 #include "iostream"
 #include "fstream"
 #include "sstream"
@@ -18,6 +18,13 @@ using namespace std;
 
 static string GET_FILE = "getF.txt";
 
+/**
+ * @brief A termination process for the main program
+ *
+ * A program that sends a terminate message to the main program through its get file
+ * @author  Vladimir Zhurov
+ * @date   28/10/2019
+*/
 int main(){
     cout << "TERMINATION CALLED ON CALENDER PLANNER" << endl;
     ofstream out_stream(GET_FILE.c_str(), ios::app);

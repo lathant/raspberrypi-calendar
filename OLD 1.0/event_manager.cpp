@@ -1,26 +1,27 @@
-/* Class for the event manager
+/**
+ * Class for the event manager
  * CREATED BY: Lathan Thangavadivel
  * LAST EDITED BY: Lathan Thangavadivel
  * LAST EDITED: 25/11/2019
  * @brief the file that contains the functions to handle events
  *
- * @author  Lathan Thangavadivel, Vladimir Zhurov
+ * @author  Lathan Thangavadivel
+ * @author  Vladimir Zhurov
  * @date   25/11/2019
  */
 
-#include <iostream>
-#include <fstream>
-#include <string.h>
-#include <stdio.h>
-#include <vector>
-#include <sstream>
-#include "string"
-#include "event_manager.h"
-#include <QStandardPaths>
+ #include <iostream>
+ #include <fstream>
+ #include <string.h>
+ #include <stdio.h>
+ #include <vector>
+ #include <sstream>
+ #include "string"
+ #include "event_manager.h"
 
 using namespace std;
 
-static string STORAGE_FILE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString() + "/events.csv";
+static string STORAGE_FILE_PATH = "./data/events/events.csv";
 
 Event_Manager* Event_Manager::instance = NULL;
 /**
@@ -36,23 +37,16 @@ Event_Manager* Event_Manager::get_instance() {
     return instance;
 }
 
-/*
-* @brief gets the event attribute string
-*
-* @author             Lathan Thangavadivel
-* @param  event_name  event name as a string
-* @return event      event attribute
-*/
+/**
+ * @brief gets the event attribute string
+ *
+ * @author             Lathan Thangavadivel
+ * @param  event_name  event name as a string
+ * @return event      event attribute
+ */
 Event* Event_Manager::get_event(string event_name){
      // File pointer
-
-    ifstream fin (STORAGE_FILE_PATH.c_str());
-
-    if (fin.good() == false) {
-        fin.close();
-        return NULL;
-    }
-
+    fstream fin;
 
     // Open an existing file
     fin.open(STORAGE_FILE_PATH, ios::in);
@@ -70,7 +64,6 @@ Event* Event_Manager::get_event(string event_name){
 
         // read an entire row and
         // store it in a string variable 'line'
-
         getline(fin, line);
 
         pos = 0;
@@ -81,21 +74,14 @@ Event* Event_Manager::get_event(string event_name){
             line.erase(0, pos + delimiter.length());
         }
 
-
         if (row[0].compare(event_name) == 0){
             Event_Factory* factory = new Event_Factory();
-            Event* event = factory->create_event(row[0], row[1], stoi(row[2]), stoi(row[3]), row[4], row[5], row[6]);
-            fin.close();
+            Event* event = factory->create_event(row[0], row[1], stol(row[2]), stol(row[3]),
+                    row[4], row[5], row[6]);
             return event;
 
         }
-        if (fin.eof()) {
-            fin.close();
-            return NULL;
-        }
-
     }
-    fin.close();
     return NULL;
 }
 
@@ -116,16 +102,13 @@ Event* Event_Manager::get_event(string event_name){
 int Event_Manager::create_event (string eventName, string details, time_t start_time,
     time_t end_time, string access_t, string owner_id, string repeatType){
     Event* event = get_event(eventName);
-
-    if (event != NULL) {
+    if (event != NULL)
         return -1;
-    }
     Event_Factory* factory = new Event_Factory();
     event = factory->create_event(eventName, details, start_time, end_time,
         access_t, owner_id, repeatType);
     string event_db_entry = eventName + "^@^" + details + "^@^" + to_string(start_time) +
         "^@^" + to_string(end_time) + "^@^" + access_t + "^@^" + owner_id + "^@^" + repeatType;
-
     ofstream out(STORAGE_FILE_PATH, ios::app);
     out << event_db_entry << endl;
     out.close();
@@ -207,7 +190,7 @@ vector<Event> Event_Manager::get_personal_events(string owner_id){
         }
         if (row[5].compare(owner_id) == 0){
             Event_Factory* factory = new Event_Factory();
-            Event* newEvent = factory->create_event(row[0], row[1], stoi(row[2]), stoi(row[3]),
+            Event* newEvent = factory->create_event(row[0], row[1], stol(row[2]), stol(row[3]),
                                                     row[4], row[5], row[6]);
             output.push_back(*newEvent);
         }
@@ -252,7 +235,7 @@ vector<Event> Event_Manager::get_public_events(){
         }
         if (row[6].compare("public") == 0){
             Event_Factory* factory = new Event_Factory();
-            Event* newEvent = factory->create_event(row[0], row[1], stoi(row[2]), stoi(row[3]),
+            Event* newEvent = factory->create_event(row[0], row[1], stol(row[2]), stol(row[3]),
                                                     row[4], row[5], row[6]);
             output.push_back(*newEvent);
         }
@@ -271,9 +254,9 @@ vector<Event> Event_Manager::get_public_events(){
 string Event_Manager::event_to_txt(Event event){
     string txt_rep = "";
     txt_rep += event.get_eventName() + "," +
-        event.get_details() + "," +
+        event.get_details() + "," + "DELIM@START" +
         to_string(event.get_start_time()) + "," +
-        to_string(event.get_end_time()) + "," +
+        to_string(event.get_end_time()) + "," + "DELIM@END" +
         event.get_access_t() + "," +
         event.get_owner_id() + "," +
         event.get_repeat_type();

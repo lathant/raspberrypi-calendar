@@ -16,11 +16,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <set>
-#include <QStandardPaths>
+#include <tuple>
+#include <time.h>
 
 using namespace std;
 /// Initialize begining of file on initial start
-static std::string STORAGE_FILE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString() + "/timetable.csv";
+static std::string STORAGE_FILE_PATH = "./data/timetable/timetables.csv";
 Timetable_Manager* Timetable_Manager::instance = NULL;
 
 
@@ -246,11 +247,11 @@ int Timetable_Manager::append_date(string table_name, string event_info){
             pos = line.find("DELIM@DATE");
             posEnd = line.find ("DELIM@DATEEND");
             token = line.substr(pos + 10, posEnd);
+            token += "," + event_info;
             if (posEnd - (pos + 10) != 0){
                 token += ",";
             }
-            token += "," + event_info;
-            newline = line.substr(0,pos + 10) + token + line.substr(pos + 10, line.length()) + "\n";
+            newline = line.substr(0,pos + 10) + token + line.substr(pos + 10, line.length());
             new_database_string += newline;
         }
     }
@@ -329,16 +330,16 @@ int Timetable_Manager::remove_date(string table_name, string event_info){ // adj
 int Timetable_Manager::add_member(string tablename, string member_id){
     Timetable* time_table = get_timetable(tablename);
     if (time_table == NULL){
-        return 0;
-    }
-    else{
-        ifstream file_input(STORAGE_FILE_PATH);
+	    return 0;
+	}
+	else{
+	    ifstream file_input(STORAGE_FILE_PATH);
         string line, current_timetable_name,finalMems,checktoken;
         string new_database_string = "";
         string token = "";
 
         size_t pos,posEnd;
-        while(getline(file_input, line)) {
+	    while(getline(file_input, line)) {
         pos = line.find("^@^");
         current_timetable_name = line.substr(0,pos);
 
@@ -372,7 +373,7 @@ int Timetable_Manager::add_member(string tablename, string member_id){
     out.close();
 
     return 1;
-    }
+	}
 }
 
 /**
@@ -565,4 +566,172 @@ string Timetable_Manager::timetable_to_txt(Timetable timetable){
     txt_rep += "DELIM@MEMBEREND";
 
     return txt_rep;
+}
+
+
+/**
+ * @brief       takes two tables combines and returns the string output of the
+ *              combined table while highlighting conflicts
+ *
+ * @author      Lathan Thangavadivel
+ * @date        25/11/2019
+ * @param       table1              name of the first table
+ * @param       table2              name of second table
+ * @return      string              string output of the combined tables
+ */
+string Timetable_Manager::compare_timetables(string table1, string table2){
+    Timetable* firstTable = get_timetable(table1);
+    Timetable* secondTable = get_timetable(table2);
+
+    if (firstTable ==NULL || secondTable ==NULL){
+        string error = "ERROR";
+        return error;
+    }
+
+    set<string> firstDates = firstTable->get_dates();
+    set<string> secondDates = secondTable->get_dates();
+    string times,timetoken;
+    time_t starttime,endtime;
+
+    set<string>::iterator firstitr;
+    set<string>::iterator seconditr;
+    vector<tuple<string,time_t,time_t>>::iterator finalitr;
+    vector<tuple<string,time_t,time_t>> final;
+    tuple<string,time_t,time_t> temp;
+    size_t pos_start, pos_end;
+    int fIndex,fIndexPrev,fIndexNext;
+    bool inserted=false;
+
+    //first table
+    for (firstitr = firstDates.begin(); firstitr != firstDates.end();firstitr++){
+        pos_start = firstitr->find("DELIM@START");
+        pos_end = firstitr->find("DELIM@END");
+        times = firstitr->substr(pos_start + 11, pos_end);
+
+        stringstream s(times);
+
+        getline(s,timetoken,',');
+        starttime = stol(timetoken);
+
+        getline (s,timetoken,',');
+        endtime = stol(timetoken);
+
+        temp = make_tuple(*firstitr,starttime,endtime);
+
+        //insert into values from first table final vector in a ordered manner
+        if (final.empty()){
+            final.push_back(temp);
+        }
+
+        else{
+            fIndex = 0;
+            while (!inserted && (fIndex < final.size())){
+                if (difftime(get<1>(final[fIndex]),starttime) < 0){
+                    fIndex += 1;
+                }
+
+                else{
+                    finalitr = final.begin() + fIndex;
+                    final.insert(finalitr,temp);
+                    inserted = true;
+                }
+
+            }
+            if (!inserted){
+                final.push_back(temp);
+            }
+        }
+
+    }
+
+    //second table
+    inserted = false;
+     for (seconditr = secondDates.begin(); seconditr != secondDates.end();seconditr++){
+        pos_start = seconditr->find("DELIM@START");
+        pos_end = seconditr->find("DELIM@END");
+        times = seconditr->substr(pos_start + 11, pos_end);
+
+        stringstream s(times);
+
+        getline(s,timetoken,',');
+        starttime = stol(timetoken);
+
+        getline (s,timetoken,',');
+        endtime = stol(timetoken);
+
+        temp = make_tuple(*firstitr,starttime,endtime);
+
+        //insert into final vector in a ordered manner
+        if (final.empty()){
+            final.push_back(temp);
+        }
+
+        else{
+            fIndex = 0;
+
+            while (!inserted && (fIndex < final.size())){
+                if (difftime(get<1>(final[fIndex]),starttime) < 0){
+                    fIndex += 1;
+                }
+
+                else{
+                    finalitr = final.begin() + fIndex;
+                    final.insert(finalitr,temp);
+                    inserted = true;
+                }
+
+            }
+            if (!inserted){
+                final.push_back(temp);
+            }
+        }
+
+    }
+
+
+    //search for conflicts
+    finalitr = final.begin();
+    finalitr +=1;
+    time_t timediff;
+    //if statement for if there are less than 2 items in final
+    if (final.size()>1){
+        while ( finalitr != final.end()){
+            timediff = difftime(get<2>(*(finalitr - 1)),get<1>(*finalitr));
+            if (timediff > 0){
+                get<2>(*(finalitr - 1)) -= timediff;
+                get<1>(*finalitr) += timediff;
+                temp = make_tuple("CONFLICT",get<2>(*(finalitr - 1)),get<1>(*finalitr));
+                final.insert(finalitr,temp);
+            }
+            finalitr+=1;
+        }
+    }
+
+
+    //print out the comparison Timetable
+
+    string finaloutput ="";
+    finalitr = final.begin();
+    string eventDetail,startDetails,endDetails,prevDelim, postDelim;
+    while (finalitr != final.end()){
+        eventDetail = get<0>(*finalitr);
+        startDetails = to_string(get<1>(*finalitr));
+        endDetails = to_string(get<2>(*finalitr));
+
+        if (eventDetail.compare("CONFLICT") == 0){
+            finaloutput+= eventDetail + "DELIM@START" + startDetails + "," + endDetails + "DELIM@END" + "\n";
+        }
+        else{
+            pos_start = eventDetail.find("DELIM@START");
+            pos_end = eventDetail.find("DELIM@END");
+
+            prevDelim = eventDetail.substr(0,pos_start + 11);
+            postDelim = eventDetail.substr(pos_end,eventDetail.length());
+
+            finaloutput += prevDelim + startDetails + "," + endDetails + postDelim +"\n";
+        }
+        finalitr+= 1;
+    }
+    return finaloutput;
+
 }

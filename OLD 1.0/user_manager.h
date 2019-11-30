@@ -1,9 +1,10 @@
-/* Class representing User
- * CREATED BY: John Jewell
- * LAST EDITED BY: John Jewell
- * LAST EDITED: 29/10/2019
- * TODO: IMPLEMENT
- */
+ /**
+  * @brief Class representing User_Manager
+  *
+  * A representation of User_Manager
+  * @author John Jewell
+  * @date   29/10/2019
+  */
 
 #ifndef USER_MANAGER_H
 #define USER_MANAGER_H

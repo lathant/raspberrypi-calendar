@@ -1,4 +1,4 @@
-/**
+ /**
   * @brief Class representing timetable
   *
   * A representation of timetable
