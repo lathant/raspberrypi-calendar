@@ -26,8 +26,6 @@ using namespace std;
 /// Initialize begining of file on initial start
 static string STORAGE_FILE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString() + "/timetable.csv";
 Timetable_Manager* Timetable_Manager::instance = NULL;
-Timetable_Factory* factory;
-//Timetable* table = factory->create_timetable(name, access_t, owner_id);
 
 /**
  * @brief Function that retrieves an instance of a time table manager
@@ -38,11 +36,8 @@ Timetable_Factory* factory;
  * @returns instance of time table manager
  */
 Timetable_Manager* Timetable_Manager::get_instance() {
-
-    if (instance == NULL){
+    if (instance == NULL)
         instance = new Timetable_Manager;
-        factory = new Timetable_Factory();
-    }
     return instance;
 }
 
@@ -96,6 +91,7 @@ Timetable* Timetable_Manager::get_timetable(string name){
                         position++;
                     }
                 }
+                Timetable_Factory* factory = new Timetable_Factory();
                 return factory->create_timetable(parts[0], parts[1], parts[2], dates, members);
             }
             parts.clear(); // Clean up parts for next line

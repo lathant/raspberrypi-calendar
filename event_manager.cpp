@@ -21,7 +21,7 @@ using namespace std;
 
 static string STORAGE_FILE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString() + "/events.csv";
 Event_Manager* Event_Manager::instance = NULL;
-Event_Factory* factory;
+
 /**
  * @brief   returns an instance of Event_Manager
  *
@@ -30,10 +30,8 @@ Event_Factory* factory;
  * @date    30/11/2019
  */
 Event_Manager* Event_Manager::get_instance() {
-    if (instance == NULL){
+    if (instance == NULL)
         instance = new Event_Manager;
-        factory = new Event_Factory();
-    }
     return instance;
 }
 
@@ -61,6 +59,7 @@ Event* Event_Manager::get_event(string event_name){
                 parts.push_back(line);
             // If event_name matches return Event
             if (parts[0].compare(event_name) == 0){
+                Event_Factory* factory = new Event_Factory();
                 return factory->create_event(parts[0], parts[1], stol(parts[2]), stol(parts[3]),
                     parts[4], parts[5], parts[6]);
             }
@@ -160,6 +159,7 @@ vector<Event> Event_Manager::get_personal_events(string owner_id){
             parts.push_back(line);
         // If owner_id matches add to collection
         if (parts[5].compare(owner_id) == 0){
+            Event_Factory* factory = new Event_Factory();
             Event* newEvent = factory->create_event(parts[0], parts[1], stol(parts[2]), stol(parts[3]),
                                                     parts[4], parts[5], parts[6]);
             output.push_back(*newEvent);
@@ -193,6 +193,7 @@ vector<Event> Event_Manager::get_public_events(){
             parts.push_back(line);
         // If access if public add to collection
         if (parts[4].compare("public") == 0){
+            Event_Factory* factory = new Event_Factory();
             Event* newEvent = factory->create_event(parts[0], parts[1], stol(parts[2]), stol(parts[3]),
                                                     parts[4], parts[5], parts[6]);
             output.push_back(*newEvent);
