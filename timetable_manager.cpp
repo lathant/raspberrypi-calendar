@@ -105,27 +105,30 @@ Timetable* Timetable_Manager::get_timetable(string name){
 
 
 /**
- * @breif Function that calls the factory method to create a new timetable and write to file
+ * @brief Function that calls the factory method to create a new timetable and write to file
+ *
  * If one does exist already do nothing
  * @author  David T
  * @author  Lathan Thangavadivel
  * @author  Vladimir Zhurov
- * @date   28/11/2019
- * @param strings for name, access_t and owner_id
- * @returns 0 on failure, 1 on success
+ * @date    30/11/2019
+ * @param   name                    The timetable's name
+ * @param   access_t                The timetable's access permissions
+ * @param   owner_id                The timetable's owner's username
+ * @returns int                     -1 on duplicate, 0 on failure, and 1 on success
  */
 int Timetable_Manager::create_timetable(string name, string access_t, string owner_id){
     Timetable* time_table = get_timetable(name);
     if (time_table != NULL){
         return -1;
     }
-    else{
-    string table_db_entry = name + "^@^" + access_t + "^@^" +  owner_id + "^@^" +"DELIM@DATE"+ "DELIM@DATEEND"+ "DELIM@MEMBER" + "DELIM@MEMBEREND";
-    ofstream out(STORAGE_FILE_PATH, ios::app);
-    out << table_db_entry << endl;
-    out.close();
+    string table_db_entry = name + "&" + access_t + "&" +  owner_id + "&" +"DELIM@DATE&DELIM@DATEEND&DELIM@MEMBER&DELIM@MEMBEREND";
+    ofstream timetable_file(STORAGE_FILE_PATH, ios::app);
+    if(!timetable_file.is_open())
+        return 0; // Error occoured
+    timetable_file << table_db_entry << endl;
+    timetable_file.close();
     return 1;
-    }
 }
 
 
