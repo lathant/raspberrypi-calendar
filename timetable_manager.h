@@ -1,10 +1,12 @@
-/* Class representing timetable manager
- * CREATED BY: Vladimir Zhurov
- * LAST EDITED BY: Vladimir Zhurov
- * LAST EDITED: 05/11/2019
- * TODO: IMPLEMENT
+/** 
+ * @brief Header File for timetable manager
+ *
+ * The header file that contains all the prototype functions and variables for the timetable manager class
+ *
+ * @author  Vladimir Zhurov
+ * @date	05/11/2019
  */
-
+ 
 #ifndef TIMETABLE_MANAGER_H
 #define TIMETABLE_MANAGER_H
 

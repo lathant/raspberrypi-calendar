@@ -1,10 +1,10 @@
 /**
-  * @brief Class for timetable factory methods
-  *
-  * Implementation for timetable factory methods
-  * @author  Vladimir Zhurov
-  * @date    06/11/2019
-  */
+ * @brief Class for timetable factory methods
+ *
+ * Implementation for timetable factory methods
+ * @author  Vladimir Zhurov
+ * @date    06/11/2019
+ */
 
 #include "timetable_factory.h"
 
