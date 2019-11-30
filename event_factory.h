@@ -1,4 +1,5 @@
-/* Header File for generating event entities
+/**
+ * Header File for generating event entities
  * CREATED BY: Abarna Srikantharajah
  * LAST EDITED BY: Abarna Srikantharajah
  * LAST EDITED: 19/11/2019
