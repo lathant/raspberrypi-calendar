@@ -1,9 +1,11 @@
-/* Class representing User
-* CREATED BY: John Jewell
-* LAST EDITED BY: Vladimir Zhurov
-* LAST EDITED: 30/10/2019
-* TODO: IMPLEMENT
-*/
+/**
+ * @brief Class representing User_Factory
+ *
+ * A representation of User_Factory
+ * @author John Jewell
+ * @author Vladimir Zhurov
+ * @date   30/10/2019
+ */
 
 #ifndef USER_FACTORY_H
 #define USER_FACTORY_H
