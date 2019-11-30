@@ -35,27 +35,10 @@ void MainWindow::update_table() {
     stringstream out_ss (request.c_str());
     while (getline(out_ss, request, '|'))
         out_parts.push_back(request);
-
+    cout << request << endl;
     response = event_get(out_parts);
-    stringstream in_ss(response);
-    while (getline(in_ss, response, '|'))
-        in_parts.push_back(response);
-
-    string minDate = ui->calendarWidget->minimumDate().toString();
-    string maxDate = ui->calendarWidget->maximumDate().toString();
-
-    cout << minDate + maxDate << endl;
-
-    /*
-    if (in_parts.size() == 2 || in_parts.at(2) == "")
-        return;
-
-    for (int i = 2; i < in_parts.size(); i++){
-        string current_event = in_parts.at(0);
-    }
 
     cout << response << endl;
-    */
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -175,7 +158,7 @@ void MainWindow::on_pushButton_10_clicked()
     string request, response;
     vector<string> in_parts, out_parts;
     string table_name = ui->lineEdit_5->text().toStdString();
-    string access_type = "nonpublic";
+    string access_type = "private";
     if (table_name == "") {
         QMessageBox::warning(this, "Warning", "Table must have name");
         return;
@@ -413,16 +396,9 @@ void MainWindow::on_pushButton_14_clicked()
         return;
     }
 
-    string type;
-    if (current_type == "shared" || current_type == "public")
-        type = "public";
-    else
-        type = "private";
-
-
     string request, response;
     vector<string> in_parts, out_parts;
-    request = "CREATE_EVENT|" + name + "|" + details + "|" + start_time_t_string + "|" + end_time_t_string + "|" + type + "|" + current_user + "|" + repeat_type;
+    request = "CREATE_EVENT|" + name + "|" + details + "|" + start_time_t_string + "|" + end_time_t_string + "|" + current_type + "|" + current_user + "|" + repeat_type;
     stringstream out_ss (request.c_str());
     while (getline(out_ss, request, '|'))
         out_parts.push_back(request);
@@ -442,7 +418,7 @@ void MainWindow::on_pushButton_14_clicked()
     string request2, response2;
     vector<string> in_parts2, out_parts2;
 
-    request2 = "ADD EVENT|" + current_table_name + "|" + name + "^@^" + details + "^@^" + start_time_t_string + "^@^" + end_time_t_string + "^@^" + type + "^@^" + current_user + "^@^" + repeat_type;
+    request2 = "ADD EVENT|" + current_table_name + "|" + name + "^@^" + details + "^@^" + start_time_t_string + "^@^" + end_time_t_string + "^@^" + current_type + "^@^" + current_user + "^@^" + repeat_type;
     stringstream out_ss2 (request2.c_str());
     while (getline(out_ss2, request2, '|'))
         out_parts2.push_back(request2);
