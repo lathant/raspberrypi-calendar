@@ -1,4 +1,4 @@
-/** 
+/**
  * @brief Header File for timetable manager
  *
  * The header file that contains all the prototype functions and variables for the timetable manager class
@@ -6,7 +6,7 @@
  * @author  Vladimir Zhurov
  * @date	05/11/2019
  */
- 
+
 #ifndef TIMETABLE_MANAGER_H
 #define TIMETABLE_MANAGER_H
 
@@ -25,10 +25,10 @@ class Timetable_Manager {
         int create_timetable(std::string name, std::string access_t, std::string owner_id);
         int save_timetable(Timetable table);
         int delete_timetable(std::string table_name);
-        int append_date(std::string tablename, std::string event_info);
-        int remove_date(std::string tablename, std::string event_info);
-        int add_member(std::string tablename, std::string member_id);
-        int remove_member(std::string tablename, std::string member_id);
+        int append_date(std::string table_name, std::string event_info);
+        int remove_date(std::string table_name, std::string event_info);
+        int add_member(std::string table_name, std::string member_id);
+        int remove_member(std::string table_name, std::string member_id);
         std::vector<Timetable> get_personal_tables(std::string owner_id);
         std::vector<Timetable> get_shared_tables(std::string owner_id);
         std::vector<Timetable> get_public_tables();

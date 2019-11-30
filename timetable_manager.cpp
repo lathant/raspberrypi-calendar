@@ -218,172 +218,69 @@ int Timetable_Manager::append_date(string table_name, string event_info){
 
 
 /**
-  * @breif Function that checks to see if the event_info is not already part of the timetable
-  * Append the event to the set inside table and update the file
-  * If one does not exist already create
-  * @author  David T
-  * @author  Lathan Thangavadivel
-  * @date   27/11/2019
-  * @param string of tablename, string of event info
-  * @returns 0 on failure, 1 on success
-  */
-int Timetable_Manager::remove_date(string table_name, string event_info){ // adjust
+ * @brief Remove a event to a timetable
+ *
+ * Gets the timetable and then saves it after removeing the event
+ * @author  David T
+ * @author  Lathan Thangavadivel
+ * @author  Vladimir Zhurov
+ * @date    30/11/2019
+ * @param   table_name              The name of the timetable
+ * @param   event_info              Text rep of an event
+ * @returns int                     0 on failure, and 1 on success
+ */
+int Timetable_Manager::remove_date(string table_name, string event_info){
     Timetable* time_table = get_timetable(table_name);
-    if (time_table == NULL){return 0;}
-    ifstream file_input(STORAGE_FILE_PATH);
-    string line, current_timetable_name,checktoken,token;
-    string new_database_string = "";
-    string finalDates = "";
-
-    size_t pos,posEnd;
-    while(getline(file_input, line)) {
-        pos = line.find("^@^");
-        current_timetable_name = line.substr(0,pos);
-
-        if (current_timetable_name.compare(table_name) != 0) {
-            line = line + "\n";
-            new_database_string += line;
-        }
-
-        else{
-            pos = line.find("DELIM@DATE");
-            posEnd = line.find ("DELIM@DATEEND");
-            token = line.substr(pos + 10, posEnd);
-            stringstream edit(token);
-            while(getline(edit,checktoken,',')){
-                if (checktoken.compare(event_info) != 0){
-                    if(finalDates.length() != 0){
-                        finalDates += ",";
-                    }
-                    finalDates += checktoken;
-                }
-            }
-            string newline = line.substr(0,pos + 10) + finalDates + line.substr(posEnd, line.length());
-            new_database_string += newline;
-        }
-    }
-    file_input.close();
-    remove(STORAGE_FILE_PATH.c_str());
-    ofstream out(STORAGE_FILE_PATH);
-    out << new_database_string;
-    out.close();
-
-    return 1;
-}
-
-/**
-  * @breif Function that adds a new user to the members of the table if the owner_id matches and if they are not already present
-  * If one does exist already do nothing
-  * @author  David T
-  * @author  Lathan Thangavadivel
-  * @date   27/11/2019
-  * @param string of tablename, string of member id
-  * @returns 0 on failure, 1 on success, -1 if owner_id match fail
-  */
-int Timetable_Manager::add_member(string tablename, string member_id){
-    Timetable* time_table = get_timetable(tablename);
-    if (time_table == NULL){
+    if (time_table == NULL)
         return 0;
-    }
-    else{
-        ifstream file_input(STORAGE_FILE_PATH);
-        string line, current_timetable_name,finalMems,checktoken;
-        string new_database_string = "";
-        string token = "";
-
-        size_t pos,posEnd;
-        while(getline(file_input, line)) {
-        pos = line.find("^@^");
-        current_timetable_name = line.substr(0,pos);
-
-        if (current_timetable_name.compare(tablename) != 0) {
-            line = line + "\n";
-            new_database_string += line;
-        }
-
-        else{
-            pos = line.find("DELIM@MEMBER");
-            posEnd = line.find ("DELIM@MEMBEREND");
-            token = line.substr(pos + 12, posEnd);
-            stringstream edit(token);
-            while(getline(edit,checktoken,',')){
-                if (checktoken.compare(member_id) != 0){
-                    if(finalMems.length() != 0){
-                        finalMems += ",";
-                    }
-                    finalMems += checktoken;
-                }
-                else{return -1;}
-            }
-            string newline = line.substr(0,pos + 12) + finalMems + line.substr(posEnd, line.length());
-            new_database_string += newline;
-        }
-    }
-    file_input.close();
-    remove(STORAGE_FILE_PATH.c_str());
-    ofstream out(STORAGE_FILE_PATH);
-    out << new_database_string;
-    out.close();
-
-    return 1;
-    }
+    if(time_table->remove_date(event_info) == 1)
+        return save_timetable(*time_table);
+    else
+        return 0;
 }
 
 /**
-  * @breif Function that removes a user to the members of the table if the owner_id matches and if they are already present
-  * If one does exist already do nothing
-  * @author  David T
-  * @author  Lathan Thangavadivel
-  * @date   27/11/2019
-  * @param string of member id
-  * @returns 0 on failure, 1 on success, -1 if owner_id match fail
-  */
-int Timetable_Manager::remove_member(string tablename, string member_id){
-    Timetable* time_table = get_timetable(tablename);
-    if (time_table == NULL){return 0;}
-    ifstream file_input(STORAGE_FILE_PATH);
-    string line, current_timetable_name,checktoken,token;
-    string new_database_string = "";
-    string finalMems = "";
-    bool memExists =false;
+ * @brief Add a member to a timetable
+ *
+ * Gets the timetable and then saves it after adding the member
+ * @author  David T
+ * @author  Lathan Thangavadivel
+ * @author  Vladimir Zhurov
+ * @date    30/11/2019
+ * @param   table_name              The name of the timetable
+ * @param   member_id               The member's username
+ * @returns int                     0 on failure, and 1 on success
+ */
+int Timetable_Manager::add_member(string table_name, string member_id){
+    Timetable* time_table = get_timetable(table_name);
+    if (time_table == NULL)
+        return 0;
+    if(time_table->add_member(member_id) == 1)
+        return save_timetable(*time_table);
+    else
+        return 0;
+}
 
-    size_t pos,posEnd;
-    while(getline(file_input, line)) {
-        pos = line.find("^@^");
-        current_timetable_name = line.substr(0,pos);
-
-        if (current_timetable_name.compare(tablename) != 0) {
-            line = line + "\n";
-            new_database_string += line;
-        }
-
-        else{
-            pos = line.find("DELIM@MEMBER");
-            posEnd = line.find ("DELIM@MEMBEREND");
-            token = line.substr(pos + 12, posEnd);
-            stringstream edit(token);
-            while(getline(edit,checktoken,',')){
-                if (checktoken.compare(member_id) != 0){
-                    if(finalMems.length() != 0){
-                        finalMems += ",";
-                    }
-                    finalMems += checktoken;
-                }
-                else{memExists = true;}
-            }
-
-            string newline = line.substr(0,pos + 12) + finalMems + line.substr(posEnd, line.length());
-            new_database_string += newline;
-        }
-        if (!memExists) {return -1;}
-    }
-    file_input.close();
-    remove(STORAGE_FILE_PATH.c_str());
-    ofstream out(STORAGE_FILE_PATH);
-    out << new_database_string;
-    out.close();
-
-    return 1;
+/**
+ * @brief Remove a member to a timetable
+ *
+ * Gets the timetable and then saves it after removeing the member
+ * @author  David T
+ * @author  Lathan Thangavadivel
+ * @author  Vladimir Zhurov
+ * @date    30/11/2019
+ * @param   table_name              The name of the timetable
+ * @param   member_id               The member's username
+ * @returns int                     0 on failure, and 1 on success
+ */
+int Timetable_Manager::remove_member(string table_name, string member_id){
+    Timetable* time_table = get_timetable(table_name);
+    if (time_table == NULL)
+        return 0;
+    if(time_table->remove_member(member_id) == 1)
+        return save_timetable(*time_table);
+    else
+        return 0;
 }
 
 /**
