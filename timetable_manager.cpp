@@ -157,39 +157,41 @@ int Timetable_Manager::save_timetable(Timetable table){
 
 
 /**
- * @breif Function that checks to see if the timetable object's owner_id matches the owner_id
- * then deletes the object and the data from the file
- * If one does not exist already do nothing
+ * @breif Delete a timetable form the storage file
+ *
+ * Searches the storage file for a matching timetable and removes it
  * @author  David T
- * @date   27/11/2019
- * @param string of tablename
- * @returns 0 on failure, 1 on success
+ * @author  Vladimir Zhurov
+ * @date    30/11/2019
+ * @param   table_name      The name of the table
+ * @returns int             0 on failure, 1 on success
  */
 int Timetable_Manager::delete_timetable(string table_name){
     Timetable* time_table = get_timetable(table_name);
     if (time_table == NULL)
         return 0;
-    ifstream file_input(STORAGE_FILE_PATH);
-    string line, current_timetable_name;
-    string new_database_string = "";
 
-    size_t pos;
-    while(getline(file_input, line)) {
-        pos = line.find("^@^");
-        current_timetable_name = line.substr(0,pos);
+    string line, name, new_database_string = "";
+    size_t length;
+    int success = 0;
 
-        if (current_timetable_name.compare(table_name) != 0) {
-            line = line + "\n";
-            new_database_string += line;
-        }
+    ifstream timetable_file(STORAGE_FILE_PATH);
+    if(!timetable_file.is_open())
+        return success; // Error occoured
+    while(getline(timetable_file, line)){
+        length = line.find("&"); // Length of timetable_name
+        name = line.substr(0, length);
+        if(name.compare(table_name) != 0)
+            new_database_string += line + "\n"; // Write non matching timetable to string
+        else
+            success = 1;
     }
-    file_input.close();
-    remove(STORAGE_FILE_PATH.c_str());
+    timetable_file.close();
+    remove(STORAGE_FILE_PATH.c_str()); // Remove file (deletes matching timetables)
     ofstream out(STORAGE_FILE_PATH);
-    out << new_database_string;
+    out << new_database_string; // Make new file and write all non matching timetables to it
     out.close();
-
-    return 1;
+    return success;
 }
 
 /**
