@@ -625,7 +625,7 @@ string Timetable_Manager::compare_timetables(string table1, string table2){
 
         else{
             fIndex = 0;
-            while (!inserted && fIndex < final.size()){
+            while (!inserted && (fIndex < final.size())){
                 if (difftime(get<1>(final[fIndex]),starttime) < 0){
                     fIndex += 1;
                 }
@@ -669,7 +669,7 @@ string Timetable_Manager::compare_timetables(string table1, string table2){
         else{
             fIndex = 0;
 
-            while (!inserted && fIndex < final.size()){
+            while (!inserted && (fIndex < final.size())){
                 if (difftime(get<1>(final[fIndex]),starttime) < 0){
                     fIndex += 1;
                 }
