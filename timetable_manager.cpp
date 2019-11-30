@@ -424,12 +424,12 @@ string Timetable_Manager::timetable_to_txt(Timetable timetable){
  * @brief comparison for tuple<string,time_t,time_t> sort function
  * @author  Vladimir Zhurov
  * @date    30/11/2019
- * @param   a               first tuple<string,time_t,time_t>
- * @param   b               second tuple<string,time_t,time_t>
- * @return  bool            true if difftime(get<1>(a), get<1>(b)) < 0
+ * @param   a               first tuple<int,time_t,time_t>
+ * @param   b               second tuple<int,time_t,time_t>
+ * @return  bool            true if (get<0>(a) < get<0>(b))
  */
-bool tuple_sort(tuple<string,time_t,time_t> a, tuple<string,time_t,time_t> b){
-    return (difftime(get<1>(a), get<1>(b)) < 0);
+bool tuple_sort(tuple<time_t,time_t> a, tuple<time_t,time_t> b){
+    return (get<0>(a) < get<0>(b));
 }
 
 /**
@@ -437,7 +437,8 @@ bool tuple_sort(tuple<string,time_t,time_t> a, tuple<string,time_t,time_t> b){
  *              combined table while highlighting conflicts
  *
  * @author      Lathan Thangavadivel
- * @date        25/11/2019
+ * @author      Vladimir Zhurov
+ * @date        30/11/2019
  * @param       table1              name of the first table
  * @param       table2              name of second table
  * @return      string              string output of the combined tables
@@ -451,12 +452,11 @@ string Timetable_Manager::compare_timetables(string table_name1, string table_na
 
     set<string> dates1 = table1->get_dates();
     set<string> dates2 = table2->get_dates();
-    tuple<string,time_t,time_t> temp;
-    vector<tuple<string,time_t,time_t>> final;
+    tuple<time_t,time_t> temp;
+    vector<tuple<time_t,time_t>> events, conflicts;
     time_t start_time, end_time;
     string temp_s;
     // Get all event times for table1
-    int index = 0;
     for(set<string>::iterator it = dates1.begin(); it != dates1.end(); it++){
         stringstream ss (*it);
         getline(ss, temp_s, '^');
@@ -465,12 +465,11 @@ string Timetable_Manager::compare_timetables(string table_name1, string table_na
         start_time = stol(temp_s);
         getline(ss, temp_s, '^');
         end_time = stol(temp_s);
-        temp = make_tuple(index++, start_time, end_time);
-        final.push_back(temp);
+        temp = make_tuple(start_time, end_time);
+        events.push_back(temp);
     }
 
     // Get all event times for table2
-    index = -1; // index for table2 events are negitive actual index = |+1|
     for(set<string>::iterator it = dates2.begin(); it != dates2.end(); it++){
         stringstream ss (*it);
         getline(ss, temp_s, '^');
@@ -479,55 +478,47 @@ string Timetable_Manager::compare_timetables(string table_name1, string table_na
         start_time = stol(temp_s);
         getline(ss, temp_s, '^');
         end_time = stol(temp_s);
-        temp = make_tuple(index--, start_time, end_time);
-        final.push_back(temp);
+        temp = make_tuple(start_time, end_time);
+        events.push_back(temp);
     }
-    sort(final.begin(), final.end(), tuple_sort);
-    // final contains all event tuples
+    sort(events.begin(), events.end(), tuple_sort);    // final contains all event tuples
 
     //search for conflicts
-    finalitr = final.begin();
-    finalitr +=1;
-    time_t timediff;
-    //if statement for if there are less than 2 items in final
-    if (final.size()>1){
-        while ( finalitr != final.end()){
-            timediff = difftime(get<2>(*(finalitr - 1)),get<1>(*finalitr));
-            if (timediff > 0){
-                get<2>(*(finalitr - 1)) -= timediff;
-                get<1>(*finalitr) += timediff;
-                temp = make_tuple("CONFLICT",get<2>(*(finalitr - 1)),get<1>(*finalitr));
-                final.insert(finalitr,temp);
+    if (events.size()>1){
+        time_t earliest, latest;
+        for(vector<tuple<time_t,time_t>>::iterator it1 = events.begin(); it1 != events.end(); it1++){
+            earliest = -1;
+            latest = -1;
+            for(vector<tuple<time_t,time_t>>::iterator it2 = it1; it2 != events.end(); it2++){
+                // The end time of an event that starts earlier then the start time of another
+                if(get<0>(*it2) < get<1>(*it1)){
+                    if(earliest == -1) // earliest pointt of conflict
+                        earliest = get<0>(*it2);
+                    if(get<1>(*it2) < get<1>(*it1)) // conflict ends before outer ends
+                        latest = get<1>(*it2);
+                    else
+                        latest = get<1>(*it1); // conflict drags past outer
+                }
             }
-            finalitr+=1;
+            if(earliest != -1){
+                temp = make_tuple(earliest, latest);
+                conflicts.push_back(temp);
+            }
         }
     }
 
-
-    //print out the comparison Timetable
-
-    string finaloutput ="";
-    finalitr = final.begin();
-    string eventDetail,startDetails,endDetails,prevDelim, postDelim;
-    while (finalitr != final.end()){
-        eventDetail = get<0>(*finalitr);
-        startDetails = to_string(get<1>(*finalitr));
-        endDetails = to_string(get<2>(*finalitr));
-
-        if (eventDetail.compare("CONFLICT") == 0){
-            finaloutput+= eventDetail + "DELIM@START" + startDetails + "^" + endDetails + "DELIM@END" + "\n";
-        }
-        else{
-            pos_start = eventDetail.find("DELIM@START");
-            pos_end = eventDetail.find("DELIM@END");
-
-            prevDelim = eventDetail.substr(0,pos_start + 11);
-            postDelim = eventDetail.substr(pos_end,eventDetail.length());
-
-            finaloutput += prevDelim + startDetails + "^" + endDetails + postDelim +"\n";
-        }
-        finalitr+= 1;
+    // construct out_string
+    string comp_table = "COMP&COMP&COMP&DELIM@DATE&";
+    for(set<string>::iterator it = dates1.begin(); it != dates1.end(); it++)
+        comp_table += *it + "&";
+    for(set<string>::iterator it = dates2.begin(); it != dates2.end(); it++)
+        comp_table += *it + "&";
+    for(vector<tuple<time_t,time_t>>::iterator it = conflicts.begin(); it != conflicts.end(); it++){
+            comp_table += "CONFLICT^CONFLICT^" +
+            to_string(get<0>(*it)) + "^" +
+            to_string(get<0>(*it)) + "^" +
+            "CONFLICT^CONFLICT^CONFLICT&";
     }
-    return finaloutput;
-
+    comp_table += "DELIM@DATEEND&DELIM@MEMBER&DELIM@MEMBEREND";
+    return comp_table;
 }
