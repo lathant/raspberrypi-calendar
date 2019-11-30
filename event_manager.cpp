@@ -20,7 +20,6 @@
 using namespace std;
 
 static string STORAGE_FILE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString() + "/events.csv";
-
 Event_Manager* Event_Manager::instance = NULL;
 Event_Factory* factory;
 /**
@@ -58,7 +57,7 @@ Event* Event_Manager::get_event(string event_name){
     while(getline(event_file, line)){
             // Parse string into componants
             stringstream ss (line);
-            while(getline(ss, line, "^@^"))
+            while(getline(ss, line, '^'))
                 parts.push_back(line);
             // If event_name matches return Event
             if (parts[0].compare(event_name) == 0){
@@ -93,8 +92,8 @@ int Event_Manager::create_event (string eventName, string details, time_t start_
     }
     delete event; // free memory
     // Write string rep to file;
-    string event_db_entry = eventName + "^@^" + details + "^@^" + to_string(start_time) +
-        "^@^" + to_string(end_time) + "^@^" + access_t + "^@^" + owner_id + "^@^" + repeatType;
+    string event_db_entry = eventName + "^" + details + "^" + to_string(start_time) +
+        "^" + to_string(end_time) + "^" + access_t + "^" + owner_id + "^" + repeatType;
     ofstream out(STORAGE_FILE_PATH, ios::app);
     if(!out.is_open())
         return 0;
@@ -121,7 +120,7 @@ int Event_Manager::delete_event(string event_name){
     if(!event_file.is_open())
         return success; // Error occoured
     while(getline(event_file, line)){
-        length = line.find("^@^"); // Length of event_name
+        length = line.find("^"); // Length of event_name
         name = line.substr(0, length);
         if(name.compare(event_name) != 0)
             new_database_string += line + "\n"; // Write non matching event to string
@@ -157,7 +156,7 @@ vector<Event> Event_Manager::get_personal_events(string owner_id){
     while(getline(event_file, line)){
         // Parse string into componants
         stringstream ss (line);
-        while(getline(ss, line, "^@^"))
+        while(getline(ss, line, '^'))
             parts.push_back(line);
         // If owner_id matches add to collection
         if (parts[5].compare(owner_id) == 0){
@@ -190,7 +189,7 @@ vector<Event> Event_Manager::get_public_events(){
     while(getline(event_file, line)){
         // Parse string into componants
         stringstream ss (line);
-        while(getline(ss, line, "^@^"))
+        while(getline(ss, line, '^'))
             parts.push_back(line);
         // If access if public add to collection
         if (parts[4].compare("public") == 0){
@@ -213,12 +212,12 @@ vector<Event> Event_Manager::get_public_events(){
  */
 string Event_Manager::event_to_txt(Event event){
     string txt_rep = "";
-    txt_rep += event.get_eventName() + "^@^" +
-        event.get_details() + "^@^" +
-        to_string(event.get_start_time()) + "^@^" +
-        to_string(event.get_end_time()) + "^@^" +
-        event.get_access_t() + "^@^" +
-        event.get_owner_id() + "^@^" +
+    txt_rep += event.get_eventName() + "^" +
+        event.get_details() + "^" +
+        to_string(event.get_start_time()) + "^" +
+        to_string(event.get_end_time()) + "^" +
+        event.get_access_t() + "^" +
+        event.get_owner_id() + "^" +
         event.get_repeat_type();
     return txt_rep;
 }
