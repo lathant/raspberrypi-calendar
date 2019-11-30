@@ -288,33 +288,30 @@ int Timetable_Manager::remove_member(string table_name, string member_id){
  *
  * Scans the storage file for all timetable's that have owner_id's that match
  * @author  Lathan Thangavadivel
+ * @author  Vladimir Zhurov
+ * @date    30/11/2019
  * @param   owner_id                The owner's username
  * @return  output                  A vector<Timetable>
  */
 vector<Timetable> Timetable_Manager::get_personal_tables(string owner_id){
-    ifstream file_input(STORAGE_FILE_PATH);
-    string line, current_timetable_name,checktoken,inname,inaccess,inowner;
-    size_t pos;
     vector<Timetable> output;
-    Timetable* table;
-    while(getline(file_input, line)){
-        pos = line.find("^@^");
+    vector<string> parts;
+    string line;
 
-        inname = line.substr(0, pos);
-        line.erase(0, pos + 3);
-
-        pos = line.find("^@^");
-        inaccess = line.substr(0, pos);
-        line.erase(0, pos + 3);
-
-        pos = line.find("^@^");
-        inowner = line.substr(0, pos);
-        line.erase(0, pos + 3);
-
-        if (inowner.compare(owner_id)==0){
-            table = get_timetable(inname);
-            output.push_back(*table);
+    ifstream timetable_file(STORAGE_FILE_PATH);
+    if(!timetable_file.is_open())
+        return output; // Error occoured
+    while(getline(timetable_file, line)){
+        // Parse string into componants
+        stringstream ss (line);
+        while(getline(ss, line, '&'))
+            parts.push_back(line);
+        // If owner_id matches add to collection
+        if (parts[1].compare(owner_id) == 0){
+            Timetable* time_table = get_timetable(parts[0]);
+            output.push_back(*time_table);
         }
+        parts.clear(); // Clean up parts for next line
     }
     return output;
 }
@@ -324,66 +321,70 @@ vector<Timetable> Timetable_Manager::get_personal_tables(string owner_id){
  *
  * Scans the storage file for all timetable's that have user as a member
  * @author  Lathan Thangavadivel
+ * @author  Vladimir Zhurov
+ * @date    30/11/2019
  * @param   owner_id                The user's username
  * @return  output                  A vector<Timetable>
  */
 vector<Timetable> Timetable_Manager::get_shared_tables(string owner_id){
-    ifstream file_input(STORAGE_FILE_PATH);
-    string line, current_timetable_name,checktoken,inname, memline;
-    size_t pos, posEnd;
-    vector<string> row;
     vector<Timetable> output;
-    Timetable* table;
-    while(getline(file_input, line)){
-        pos = line.find("^@^");
-        inname = line.substr(0, pos);
+    vector<string> parts;
+    string line, table_name;
+    size_t length, pos;
 
+    ifstream timetable_file(STORAGE_FILE_PATH);
+    if(!timetable_file.is_open())
+        return output; // Error occoured
+    while(getline(timetable_file, line)){
+        length = line.find("&"); // Length of timetable_name
+        table_name = line.substr(0, length);
         pos = line.find("DELIM@MEMBER");
-        posEnd = line.find("DELIM@MEMBEREND");
-
-        memline = line.substr(pos + 12,posEnd);
-
-        stringstream scan(memline);
-
-        while(getline(scan,checktoken,',')){
-            if (checktoken.compare(owner_id)){
-                table = get_timetable(inname);
-                output.push_back(*table);
-                break;
+        line = line.substr(pos); // Truncate line so that it only contains member info
+        // Parse member names into parts
+        stringstream ss (line);
+        while(getline(ss, line, '&'))
+            parts.push_back(line);
+        // Check for matches
+        for(unsigned int i = 0; i < parts.size(); i++)
+            if(parts[i].compare(owner_id) == 0){
+                //owner_id matched add to collection
+                Timetable* time_table = get_timetable(table_name);
+                output.push_back(*time_table);
             }
-        }
+        parts.clear(); // Clean up parts for next line
     }
     return output;
 }
 
-/**
- * @brief get a vector of all public timetables
- *
- * Scans the storage file for all timetable's that are public
- * @author  Lathan Thangavadivel
- * @return  output                  A vector<Timetable>
- */
+ /**
+  * @brief get a vector of all public timetables
+  *
+  * Scans the storage file for all timetable's that are public
+  * @author  Lathan Thangavadivel
+  * @author  Vladimir Zhurov
+  * @date    30/11/2019
+  * @param   owner_id                The user's username
+  * @return  output                  A vector<Timetable>
+  */
 vector<Timetable> Timetable_Manager::get_public_tables(){
-
-    ifstream file_input(STORAGE_FILE_PATH);
-    string line, current_timetable_name,checktoken,inname,inaccess;
-    size_t pos;
     vector<Timetable> output;
-    Timetable* table;
-    while(getline(file_input, line)){
-        pos = line.find("^@^");
+    vector<string> parts;
+    string line;
 
-        inname = line.substr(0, pos);
-        line.erase(0, pos + 3);
-
-        pos = line.find("^@^");
-        inaccess = line.substr(0, pos);
-        line.erase(0, pos + 3);
-
-        if (inaccess.compare("public")==0){
-            table = get_timetable(inname);
-            output.push_back(*table);
+    ifstream timetable_file(STORAGE_FILE_PATH);
+    if(!timetable_file.is_open())
+        return output; // Error occoured
+    while(getline(timetable_file, line)){
+        // Parse string into componants
+        stringstream ss (line);
+        while(getline(ss, line, '&'))
+            parts.push_back(line);
+        // If owner_id matches add to collection
+        if (parts[2].compare("public") == 0){
+            Timetable* time_table = get_timetable(parts[0]);
+            output.push_back(*time_table);
         }
+        parts.clear(); // Clean up parts for next line
     }
     return output;
 }
