@@ -47,7 +47,7 @@ Event_Manager* Event_Manager::get_instance() {
  * @return   event           event attribute
  */
 Event* Event_Manager::get_event(string event_name){
-    string line, name;
+    string line;
     vector<string> parts;
 
     ifstream event_file(STORAGE_FILE_PATH);

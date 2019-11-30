@@ -1,6 +1,6 @@
  /**
   * @brief Implementation of timetable manager
-  * 
+  *
   * The implementation for a methods that interact with the timetable storage file
   * @author	Vladimir Zhurov
   * @author	David Truong
@@ -19,14 +19,16 @@
 #include <set>
 #include <tuple>
 #include <time.h>
-#include <QStandardPaths>
+//#include <QStandardPaths>
 
 using namespace std;
 /// Initialize begining of file on initial start
-static std::string STORAGE_FILE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString() + "/timetable.csv";
+//static string STORAGE_FILE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString() + "/timetable.csv";
 Timetable_Manager* Timetable_Manager::instance = NULL;
+Timetable_Factory* factory;
+//Timetable* table = factory->create_timetable(name, access_t, owner_id);
 
-
+static string STORAGE_FILE_PATH = "";
 /**
  * @brief Function that retrieves an instance of a time table manager
  * If one does not exist already then create
@@ -39,6 +41,7 @@ Timetable_Manager* Timetable_Manager::get_instance() {
 
     if (instance == NULL){
         instance = new Timetable_Manager;
+        factory = new Timetable_Factory();
     }
     return instance;
 }
@@ -48,53 +51,56 @@ Timetable_Manager* Timetable_Manager::get_instance() {
  *
  * Search the storage file for the timetable with the matching name provided and return a Timetable Object with it's information
  * @author  Lathan Thangavadivel
+ * @author  Vladimir Zhurov
+ * @date    30/11/2019
  * @param   name                    The name of the timetable
  * @return  table                   The timetable object, Null if not found
  */
 Timetable* Timetable_Manager::get_timetable(string name){
-    ifstream file_input(STORAGE_FILE_PATH);
-    string line, current_timetable_name,checktoken,inname,inaccess,inowner,datestr,memberstr;
-    set<string> indate,inmem;
-    Timetable* table;
-    size_t pos,posEnd;
-    while(getline(file_input, line)){
-        pos = line.find("^@^");
-        current_timetable_name = line.substr(0,pos);
-        if (current_timetable_name.compare(name)==0){
-
-            inname = line.substr(0, pos);
-            line.erase(0, pos + 3);
-
-            pos = line.find("^@^");
-            inaccess = line.substr(0, pos);
-            line.erase(0, pos + 3);
-
-            pos = line.find("^@^");
-            inowner = line.substr(0, pos);
-            line.erase(0, pos + 3);
-
-            pos = line.find("DELIM@DATE");
-            posEnd = line.find("DELIM@DATEEND");
-            datestr = line.substr(pos + 10, posEnd);
-            stringstream scan(datestr);
-            while (getline(scan,checktoken,',')){
-                indate.insert(checktoken);
+    string line;
+    vector<string> parts;
+    ifstream timetable_file(STORAGE_FILE_PATH);
+    if(!timetable_file.is_open())
+        return NULL; // Error occoured
+    while(getline(timetable_file, line)){
+            // parse in the name
+            stringstream ss (line);
+            getline(ss, line, '&');
+            parts.push_back(line);
+            // If event_name matches return Event
+            if (name.compare(parts[0]) == 0){
+                // parse in rest of string
+                while(getline(ss, line, '&'))
+                    parts.push_back(line);
+                set<string> dates,members;
+                int position = 4;
+                bool control = true;
+                // Reads in dates untill "DELIM@DATEEND" is reached
+                while(control){
+                    if (parts[position].compare("DELIM@DATEEND") == 0){
+                        position += 2;
+                        break;
+                    }
+                    else{
+                        dates.insert(parts[position]);
+                        position++;
+                    }
+                }
+                // Reads in members untill "DELIM@MEMBEREND" is reached
+                while(control){
+                    if (parts[position].compare("DELIM@MEMBEREND") == 0){
+                        break;
+                    }
+                    else{
+                        members.insert(parts[position]);
+                        position++;
+                    }
+                }
+                return factory->create_timetable(parts[0], parts[1], parts[2], dates, members);
             }
-
-            pos = line.find("DELIM@MEMBER");
-            posEnd = line.find("DELIM@MEMBEREND");
-            datestr = line.substr(pos + 12, posEnd);
-            stringstream scan1(memberstr);
-            while (getline(scan1,checktoken,',')){
-                inmem.insert(checktoken);
-            }
-            table = new Timetable(inname,inaccess,inowner,inmem,indate);
-            file_input.close();
-            return table;
+            parts.clear(); // Clean up parts for next line
         }
-    }
-    file_input.close();
-    return NULL;
+        return NULL; // Not found
 }
 
 
@@ -114,10 +120,6 @@ int Timetable_Manager::create_timetable(string name, string access_t, string own
         return -1;
     }
     else{
-    /* Unused
-    Timetable_Factory* factory = new Timetable_Factory();
-    Timetable* table = factory->create_timetable(name, access_t, owner_id);
-    */
     string table_db_entry = name + "^@^" + access_t + "^@^" +  owner_id + "^@^" +"DELIM@DATE"+ "DELIM@DATEEND"+ "DELIM@MEMBER" + "DELIM@MEMBEREND";
     ofstream out(STORAGE_FILE_PATH, ios::app);
     out << table_db_entry << endl;
@@ -551,20 +553,20 @@ vector<Timetable> Timetable_Manager::get_public_tables(){
  */
 string Timetable_Manager::timetable_to_txt(Timetable timetable){
     string txt_rep = "";
-    txt_rep += timetable.get_name() + "," +
-        timetable.get_access_t() + "," +
-        timetable.get_owner_id() +",DELIM@DATE,";
+    txt_rep += timetable.get_name() + "&" +
+        timetable.get_access_t() + "&" +
+        timetable.get_owner_id() +"&DELIM@DATE&";
 
     // Add all dates to string rep
     set<string> dates = timetable.get_dates();
     for(set<string>::iterator it = dates.begin(); it != dates.end(); it++)
-        txt_rep += *it +",";
-    txt_rep += "DELIM@DATEEND,DELIM@MEMBER,";
+        txt_rep += *it +"&";
+    txt_rep += "DELIM@DATEEND&DELIM@MEMBER&";
 
     // Add all members to string rep
     set<string> members = timetable.get_members();
     for(set<string>::iterator it = members.begin(); it != members.end(); it++)
-        txt_rep += *it +",";
+        txt_rep += *it +"&";
     txt_rep += "DELIM@MEMBEREND";
 
     return txt_rep;
@@ -736,4 +738,3 @@ string Timetable_Manager::compare_timetables(string table1, string table2){
     return finaloutput;
 
 }
-
