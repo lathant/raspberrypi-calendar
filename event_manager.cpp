@@ -168,49 +168,34 @@ int Event_Manager::delete_event(string event_name){
 }
 
 /**
- * @brief       get all personal events for a user
+ * @brief       get all personal events
  *
+ * Reads through all stored Events in file and collects all that have matching owner_id
  * @author      Lathan Thangavadivel
- * @param       owner_id          The name of the user
- * @return      event object as a vector
+ * @author      Vladimit Zhurov
+ * @date        30/11/2019
+ * @param       owner_id                The username of the owner
+ * @return      output                  A vector of Event objects that have  matching owner_id
  */
 vector<Event> Event_Manager::get_personal_events(string owner_id){
-    // read file line by line and create event objects feed all event objects where owner matches into set
-
-    // File pointer
-    fstream fin;
     vector<Event> output;
-    // Open an existing file
-    fin.open(STORAGE_FILE_PATH, ios::in);
-
-    // Read the Data from the file
-    // as String Vector
-    vector<string> row;
-    string line, word, temp,token;
-    string delimiter = "^@^";
-    size_t pos;
-
-    while (fin >> temp) {
-
-        row.clear();
-
-        // read an entire row and
-        // store it in a string variable 'line'
-        getline(fin, line);
-
-        pos = 0;
-
-        while ((pos = line.find(delimiter)) != string::npos) {
-            token = line.substr(0, pos);
-            row.push_back(token);
-            line.erase(0, pos + delimiter.length());
-        }
-        if (row[5].compare(owner_id) == 0){
+    vector<string> parts;
+    string line;
+    ifstream event_file;
+    event_file.open(STORAGE_FILE_PATH);
+    while(getline(event_file, line)){
+        // Parse string into componants
+        stringstream ss (line);
+        while(getline(ss, line, "^@^"))
+            parts.push_back(line);
+        // if owner_id matches add to collection
+        if (parts[5].compare(owner_id) == 0){
             Event_Factory* factory = new Event_Factory();
-            Event* newEvent = factory->create_event(row[0], row[1], stoi(row[2]), stoi(row[3]),
-                                                    row[4], row[5], row[6]);
+            Event* newEvent = factory->create_event(parts[0], parts[1], stol(parts[2]), stol(parts[3]),
+                                                    parts[4], parts[5], parts[6]);
             output.push_back(*newEvent);
         }
+        parts.clear(); // clean up parts for next line
     }
     return output;
 }
@@ -218,44 +203,31 @@ vector<Event> Event_Manager::get_personal_events(string owner_id){
 /**
  * @brief       get all public events
  *
+ * Reads through all stored Events in file and collects all that are public
  * @author      Lathan Thangavadivel
- * @return      event object as a vector
+ * @author      Vladimit Zhurov
+ * @date        30/11/2019
+ * @return      output                  A vector of Event objects that have public access
  */
 vector<Event> Event_Manager::get_public_events(){
-    // File pointer
-    fstream fin;
     vector<Event> output;
-    // Open an existing file
-    fin.open(STORAGE_FILE_PATH, ios::in);
-
-    // Read the Data from the file
-    // as String Vector
-    vector<string> row;
-    string line, word, temp,token;
-    string delimiter = "^@^";
-    size_t pos;
-
-    while (fin >> temp) {
-
-        row.clear();
-
-        // read an entire row and
-        // store it in a string variable 'line'
-        getline(fin, line);
-
-        pos = 0;
-
-        while ((pos = line.find(delimiter)) != string::npos) {
-            token = line.substr(0, pos);
-            row.push_back(token);
-            line.erase(0, pos + delimiter.length());
-        }
-        if (row[6].compare("public") == 0){
+    vector<string> parts;
+    string line;
+    ifstream event_file;
+    event_file.open(STORAGE_FILE_PATH);
+    while(getline(event_file, line)){
+        // Parse string into componants
+        stringstream ss (line);
+        while(getline(ss, line, "^@^"))
+            parts.push_back(line);
+        // if access if public add to collection
+        if (parts[4].compare("public") == 0){
             Event_Factory* factory = new Event_Factory();
-            Event* newEvent = factory->create_event(row[0], row[1], stoi(row[2]), stoi(row[3]),
-                                                    row[4], row[5], row[6]);
+            Event* newEvent = factory->create_event(parts[0], parts[1], stol(parts[2]), stol(parts[3]),
+                                                    parts[4], parts[5], parts[6]);
             output.push_back(*newEvent);
         }
+        parts.clear(); // clean up parts for next line
     }
     return output;
 }
