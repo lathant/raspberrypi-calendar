@@ -19,6 +19,7 @@
 #include <set>
 #include <tuple>
 #include <time.h>
+#include <algorithm>
 //#include <QStandardPaths>
 
 using namespace std;
@@ -420,6 +421,18 @@ string Timetable_Manager::timetable_to_txt(Timetable timetable){
 }
 
 /**
+ * @brief comparison for tuple<string,time_t,time_t> sort function
+ * @author  Vladimir Zhurov
+ * @date    30/11/2019
+ * @param   a               first tuple<string,time_t,time_t>
+ * @param   b               second tuple<string,time_t,time_t>
+ * @return  bool            true if difftime(get<1>(a), get<1>(b)) < 0
+ */
+bool tuple_sort(tuple<string,time_t,time_t> a, tuple<string,time_t,time_t> b){
+    return (difftime(get<1>(a), get<1>(b)) < 0);
+}
+
+/**
  * @brief       takes two tables combines and returns the string output of the
  *              combined table while highlighting conflicts
  *
@@ -429,115 +442,48 @@ string Timetable_Manager::timetable_to_txt(Timetable timetable){
  * @param       table2              name of second table
  * @return      string              string output of the combined tables
  */
-string Timetable_Manager::compare_timetables(string table1, string table2){
-    Timetable* firstTable = get_timetable(table1);
-    Timetable* secondTable = get_timetable(table2);
+string Timetable_Manager::compare_timetables(string table_name1, string table_name2){
+    Timetable* table1 = get_timetable(table_name1);
+    Timetable* table2 = get_timetable(table_name2);
 
-    if (firstTable ==NULL || secondTable ==NULL){
-        string error = "ERROR";
-        return error;
-    }
+    if (table1 == NULL || table2 == NULL)
+        return "ERROR";
 
-    set<string> firstDates = firstTable->get_dates();
-    set<string> secondDates = secondTable->get_dates();
-    string times,timetoken;
-    time_t starttime,endtime;
-
-    set<string>::iterator firstitr;
-    set<string>::iterator seconditr;
-    vector<tuple<string,time_t,time_t>>::iterator finalitr;
-    vector<tuple<string,time_t,time_t>> final;
+    set<string> dates1 = table1->get_dates();
+    set<string> dates2 = table2->get_dates();
     tuple<string,time_t,time_t> temp;
-    size_t pos_start, pos_end;
-    int fIndex,fIndexPrev,fIndexNext;
-    bool inserted=false;
-
-    //first table
-    for (firstitr = firstDates.begin(); firstitr != firstDates.end();firstitr++){
-        pos_start = firstitr->find("DELIM@START");
-        pos_end = firstitr->find("DELIM@END");
-        times = firstitr->substr(pos_start + 11, pos_end);
-
-        stringstream s(times);
-
-        getline(s,timetoken,',');
-        starttime = stol(timetoken);
-
-        getline (s,timetoken,',');
-        endtime = stol(timetoken);
-
-        temp = make_tuple(*firstitr,starttime,endtime);
-
-        //insert into values from first table final vector in a ordered manner
-        if (final.empty()){
-            final.push_back(temp);
-        }
-
-        else{
-            fIndex = 0;
-            while (!inserted && (fIndex < final.size())){
-                if (difftime(get<1>(final[fIndex]),starttime) < 0){
-                    fIndex += 1;
-                }
-
-                else{
-                    finalitr = final.begin() + fIndex;
-                    final.insert(finalitr,temp);
-                    inserted = true;
-                }
-
-            }
-            if (!inserted){
-                final.push_back(temp);
-            }
-        }
-
+    vector<tuple<string,time_t,time_t>> final;
+    time_t start_time, end_time;
+    string temp_s;
+    // Get all event times for table1
+    int index = 0;
+    for(set<string>::iterator it = dates1.begin(); it != dates1.end(); it++){
+        stringstream ss (*it);
+        getline(ss, temp_s, '^');
+        getline(ss, temp_s, '^');
+        getline(ss, temp_s, '^');
+        start_time = stol(temp_s);
+        getline(ss, temp_s, '^');
+        end_time = stol(temp_s);
+        temp = make_tuple(index++, start_time, end_time);
+        final.push_back(temp);
     }
 
-    //second table
-    inserted = false;
-     for (seconditr = secondDates.begin(); seconditr != secondDates.end();seconditr++){
-        pos_start = seconditr->find("DELIM@START");
-        pos_end = seconditr->find("DELIM@END");
-        times = seconditr->substr(pos_start + 11, pos_end);
-
-        stringstream s(times);
-
-        getline(s,timetoken,',');
-        starttime = stol(timetoken);
-
-        getline (s,timetoken,',');
-        endtime = stol(timetoken);
-
-        temp = make_tuple(*firstitr,starttime,endtime);
-
-        //insert into final vector in a ordered manner
-        if (final.empty()){
-            final.push_back(temp);
-        }
-
-        else{
-            fIndex = 0;
-
-            while (!inserted && (fIndex < final.size())){
-                if (difftime(get<1>(final[fIndex]),starttime) < 0){
-                    fIndex += 1;
-                }
-
-                else{
-                    finalitr = final.begin() + fIndex;
-                    final.insert(finalitr,temp);
-                    inserted = true;
-                }
-
-            }
-            if (!inserted){
-                final.push_back(temp);
-            }
-        }
-
+    // Get all event times for table2
+    index = -1; // index for table2 events are negitive actual index = |+1|
+    for(set<string>::iterator it = dates2.begin(); it != dates2.end(); it++){
+        stringstream ss (*it);
+        getline(ss, temp_s, '^');
+        getline(ss, temp_s, '^');
+        getline(ss, temp_s, '^');
+        start_time = stol(temp_s);
+        getline(ss, temp_s, '^');
+        end_time = stol(temp_s);
+        temp = make_tuple(index--, start_time, end_time);
+        final.push_back(temp);
     }
-
+    sort(final.begin(), final.end(), tuple_sort);
+    // final contains all event tuples
 
     //search for conflicts
     finalitr = final.begin();
@@ -569,7 +515,7 @@ string Timetable_Manager::compare_timetables(string table1, string table2){
         endDetails = to_string(get<2>(*finalitr));
 
         if (eventDetail.compare("CONFLICT") == 0){
-            finaloutput+= eventDetail + "DELIM@START" + startDetails + "," + endDetails + "DELIM@END" + "\n";
+            finaloutput+= eventDetail + "DELIM@START" + startDetails + "^" + endDetails + "DELIM@END" + "\n";
         }
         else{
             pos_start = eventDetail.find("DELIM@START");
@@ -578,7 +524,7 @@ string Timetable_Manager::compare_timetables(string table1, string table2){
             prevDelim = eventDetail.substr(0,pos_start + 11);
             postDelim = eventDetail.substr(pos_end,eventDetail.length());
 
-            finaloutput += prevDelim + startDetails + "," + endDetails + postDelim +"\n";
+            finaloutput += prevDelim + startDetails + "^" + endDetails + postDelim +"\n";
         }
         finalitr+= 1;
     }

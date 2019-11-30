@@ -33,7 +33,7 @@ class Timetable_Manager {
         std::vector<Timetable> get_shared_tables(std::string owner_id);
         std::vector<Timetable> get_public_tables();
         std::string timetable_to_txt(Timetable timetable);
-        std::string compare_timetables(std::string table1name, std::string table2name);
+        std::string compare_timetables(std::string table_name1, std::string table_name2);
 
 };
 
