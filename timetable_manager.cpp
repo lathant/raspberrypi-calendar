@@ -20,16 +20,15 @@
 #include <tuple>
 #include <time.h>
 #include <algorithm>
-//#include <QStandardPaths>
+#include <QStandardPaths>
 
 using namespace std;
 /// Initialize begining of file on initial start
-//static string STORAGE_FILE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString() + "/timetable.csv";
+static string STORAGE_FILE_PATH = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString() + "/timetable.csv";
 Timetable_Manager* Timetable_Manager::instance = NULL;
 Timetable_Factory* factory;
 //Timetable* table = factory->create_timetable(name, access_t, owner_id);
 
-static string STORAGE_FILE_PATH = "";
 /**
  * @brief Function that retrieves an instance of a time table manager
  * If one does not exist already then create
