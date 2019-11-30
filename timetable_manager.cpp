@@ -133,7 +133,7 @@ int Timetable_Manager::create_timetable(string name, string access_t, string own
 
 
 /**
- * @breif Function that saves timetable to a file or overwrite if needed
+ * @brief Function that saves timetable to a file or overwrite if needed
  *
  * Saves a timetable object to the timetable file
  * @author  David T
@@ -157,7 +157,7 @@ int Timetable_Manager::save_timetable(Timetable table){
 
 
 /**
- * @breif Delete a timetable form the storage file
+ * @brief Delete a timetable form the storage file
  *
  * Searches the storage file for a matching timetable and removes it
  * @author  David T
@@ -195,51 +195,25 @@ int Timetable_Manager::delete_timetable(string table_name){
 }
 
 /**
- * @breif Function that checks to see if the event_info is not already part of the timetable
- * Append the event to the set inside table and update the file
- * If one does not exist already create
+ * @brief Add a event to a timetable
+ *
+ * Gets the timetable and then saves it after adding the event
  * @author  David T
  * @author  Lathan Thangavadivel
- * @date   27/11/2019
- * @param string of tablename, string of event info
- * @returns 0 on failure, 1 on success
+ * @author  Vladimir Zhurov
+ * @date    30/11/2019
+ * @param   table_name              The name of the timetable
+ * @param   event_info              Text rep of an event
+ * @returns int                     0 on failure, and 1 on success
  */
 int Timetable_Manager::append_date(string table_name, string event_info){
     Timetable* time_table = get_timetable(table_name);
-    if (time_table == NULL){return 0;}
-    ifstream file_input(STORAGE_FILE_PATH);
-    string line, current_timetable_name,newline;
-    string new_database_string = "";
-    string token = "";
-
-    size_t pos,posEnd;
-    while(getline(file_input, line)) {
-        pos = line.find("^@^");
-        current_timetable_name = line.substr(0,pos);
-
-        if (current_timetable_name.compare(table_name) != 0) {
-            line = line + "\n";
-            new_database_string += line;
-        }
-
-        else{
-            pos = line.find("DELIM@DATE");
-            posEnd = line.find ("DELIM@DATEEND");
-            token = line.substr(pos + 10, posEnd);
-            if (posEnd - (pos + 10) != 0){
-                token += ",";
-            }
-            token += "," + event_info;
-            newline = line.substr(0,pos + 10) + token + line.substr(pos + 10, line.length()) + "\n";
-            new_database_string += newline;
-        }
-    }
-    file_input.close();
-    ofstream out(STORAGE_FILE_PATH);
-    out << new_database_string;
-    out.close();
-
-    return 1;
+    if (time_table == NULL)
+        return 0;
+    if(time_table->add_date(event_info) == 1)
+        return save_timetable(*time_table);
+    else
+        return 0;
 }
 
 
