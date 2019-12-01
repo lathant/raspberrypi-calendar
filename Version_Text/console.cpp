@@ -61,7 +61,8 @@ int main(){
             // read in each line and output
             while(getline(in_stream, line))
                 cout << endl << line;
-            cout << "Input: ";
+            cout << endl;
+	    cout << "Input: ";
             cin >> command;
             out_stream.open(a_file.c_str());
             out_stream << command;

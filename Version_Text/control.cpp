@@ -300,7 +300,7 @@ string event_add(vector<string> parts){
  * Calls the remove_date method from timetable_manager and gives it an event's name that is to be removed from table
  * @author  Vladimir Zhurov
  * @date   25/11/2019
- * @param   parts           A vector of string containing <REMOVE EVENT,table_name,event_name>
+ * @param   parts           A vector of string containing <REMOVE EVENT,table_name,event_info>
  * @return  string          An output string that says if create event was success or failure
  */
 string event_remove(vector<string> parts){
@@ -338,6 +338,19 @@ string potato_output(){
    string potato_text = "POTATO|"+to_string(potatoNum);
    potatoNum++;
    return potato_text;
+}
+
+/**
+ * @brief HELP
+ *
+ * list all text commands
+ * @author  Vladimir Zhurov
+ * @date    30/11/2019
+ * @return  help_text       All the commands
+ */
+string help_output(){
+    string help_text = "EXIT\nLOGIN|username|password\nCREATEUSER|username|password\nDELETEUSER|username|password\nCREATETIMETABLE|tablename|access_type|owner\nGETTIMETABLE|get_type|username\nDELETETIMETABLE|tablename|username\nCOMPARETIMETABLE|tablename1|tablename2\nADDMEMBER|tablename|name\nCREATEEVENT|eventname|details|start_time|end_time|access_type|owner|repeatType\nGETEVENT|get_type|username\nADDEVENT|tablename|event_info\nREMOVEEVENT|table_name|event_info\nDELETEEVENT|table_name|event_name\nPOTATO";
+    return help_text;
 }
 
 /**
@@ -381,32 +394,34 @@ void console_control(string pid){
                    control = false;
                else if(parts.at(0).compare("LOGIN") == 0) // LOGIN|username|password
                    out_stream << user_login(parts);
-               else if(parts.at(0).compare("CREATE USER") == 0) // CREATE USER|username|password
+               else if(parts.at(0).compare("CREATEUSER") == 0) // CREATE USER|username|password
                    out_stream << user_create(parts);
-               else if(parts.at(0).compare("DELETE USER") == 0) // DELETE USER|username|password
+               else if(parts.at(0).compare("DELETEUSER") == 0) // DELETE USER|username|password
                    out_stream << user_delete(parts);
-               else if(parts.at(0).compare("CREATE TIMETABLE") == 0) // CREATE TIMETABLE|table_name|access_type|username
+               else if(parts.at(0).compare("CREATETIMETABLE") == 0) // CREATE TIMETABLE|table_name|access_type|username
                    out_stream << timeable_create(parts);
-               else if(parts.at(0).compare("GET TIMETABLE") == 0) // GET TIMETABLE|get_type|username
+               else if(parts.at(0).compare("GETTIMETABLE") == 0) // GET TIMETABLE|get_type|username
                    out_stream << timetable_get(parts);
-               else if(parts.at(0).compare("DELETE TIMETABLE") == 0) // DELETE TIMETABLE|table_name|username
+               else if(parts.at(0).compare("DELETETIMETABLE") == 0) // DELETE TIMETABLE|table_name|username
                    out_stream << timetable_delete(parts);
-               else if (parts.at(0).compare("COMPARE TIMETABLES") == 0) // COMPARE TIMETABLE|table_name1|table_name2
+               else if (parts.at(0).compare("COMPARETIMETABLES") == 0) // COMPARE TIMETABLE|table_name1|table_name2
                    out_stream << timetable_compare(parts);
-               else if (parts.at(0).compare("ADD MEMBER") == 0) // ADD MEMBER|table_name|member_name
+               else if (parts.at(0).compare("ADDMEMBER") == 0) // ADD MEMBER|table_name|member_name
                    out_stream << timetable_add(parts);
-               else if(parts.at(0).compare("CREATE EVENT") == 0) // CREATE EVENT|eventName|details|start_time_string|end_time_string|access_t|username|repeatType>
+               else if(parts.at(0).compare("CREATEEVENT") == 0) // CREATE EVENT|eventName|details|start_time_string|end_time_string|access_t|username|repeatType>
                    out_stream << event_create(parts);
-               else if(parts.at(0).compare("GET EVENT") == 0) // GET EVENT|get_type|username
+               else if(parts.at(0).compare("GETEVENT") == 0) // GET EVENT|get_type|username
                    out_stream << event_get(parts);
-               else if(parts.at(0).compare("ADD EVENT") == 0) // ADD EVENT|table_name|event_info
+               else if(parts.at(0).compare("ADDEVENT") == 0) // ADD EVENT|table_name|event_info
                    out_stream << event_add(parts);
-               else if(parts.at(0).compare("REMOVE EVENT") == 0) // REMOVE EVENT|table_name|event_name
+               else if(parts.at(0).compare("REMOVEEVENT") == 0) // REMOVE EVENT|table_name|event_name
                    out_stream << event_remove(parts);
-               else if(parts.at(0).compare("DELETE EVENT") == 0) // DELETE EVENT|event_name
+               else if(parts.at(0).compare("DELETEEVENT") == 0) // DELETE EVENT|event_name
                    out_stream << event_delete(parts);
                else if(parts.at(0).compare("POTATO") == 0) // POTATO
                    out_stream << potato_output();
+	       else if(parts.at(0).compare("HELP") == 0)
+		   out_stream << help_output();
                else
                    out_stream << "INVALID COMMAND TYPE";
                parts.clear();

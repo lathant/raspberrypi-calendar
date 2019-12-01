@@ -140,11 +140,11 @@ int Timetable_Manager::create_timetable(string name, string access_t, string own
  */
 int Timetable_Manager::save_timetable(Timetable table){
     string table_db_entry = timetable_to_txt(table);
+    if (get_timetable(table.get_name()) != NULL)
+        delete_timetable(table.get_name());
     ofstream timetable_file(STORAGE_FILE_PATH, ios::app);
     if(!timetable_file.is_open())
         return 0; // Error occoured
-    if (get_timetable(table.get_name()) != NULL)
-        delete_timetable(table.get_name());
     timetable_file << table_db_entry << endl;
     timetable_file.close();
     return 1;
@@ -302,7 +302,7 @@ vector<Timetable> Timetable_Manager::get_personal_tables(string owner_id){
         while(getline(ss, line, '&'))
             parts.push_back(line);
         // If owner_id matches add to collection
-        if (parts[1].compare(owner_id) == 0){
+        if (parts[2].compare(owner_id) == 0){
             Timetable* time_table = get_timetable(parts[0]);
             output.push_back(*time_table);
         }
@@ -374,12 +374,10 @@ vector<Timetable> Timetable_Manager::get_public_tables(){
         stringstream ss (line);
         while(getline(ss, line, '&'))
             parts.push_back(line);
-        for(unsigned int i = 0; i <parts.size(); i++)
-            cout << parts[i];
-        cout << endl;
+
         // If owner_id matches add to collection
-        if (parts[2].compare("public") == 0){
-            Timetable* time_table = get_timetable(parts[0]);
+        if (parts[1].compare("public") == 0){
+	    Timetable* time_table = get_timetable(parts[0]);
             output.push_back(*time_table);
         }
         parts.clear(); // Clean up parts for next line
