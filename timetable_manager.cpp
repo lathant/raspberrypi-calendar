@@ -141,11 +141,11 @@ int Timetable_Manager::create_timetable(string name, string access_t, string own
  */
 int Timetable_Manager::save_timetable(Timetable table){
     string table_db_entry = timetable_to_txt(table);
+    if (get_timetable(table.get_name()) != NULL)
+        delete_timetable(table.get_name());
     ofstream timetable_file(STORAGE_FILE_PATH, ios::app);
     if(!timetable_file.is_open())
         return 0; // Error occoured
-    if (get_timetable(table.get_name()) != NULL)
-        delete_timetable(table.get_name());
     timetable_file << table_db_entry << endl;
     timetable_file.close();
     return 1;
