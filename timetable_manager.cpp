@@ -375,6 +375,9 @@ vector<Timetable> Timetable_Manager::get_public_tables(){
         stringstream ss (line);
         while(getline(ss, line, '&'))
             parts.push_back(line);
+        for(unsigned int i = 0; i <parts.size(); i++)
+            cout << parts[i];
+        cout << endl;
         // If owner_id matches add to collection
         if (parts[2].compare("public") == 0){
             Timetable* time_table = get_timetable(parts[0]);
