@@ -1,0 +1,236 @@
+\hypertarget{class_timetable}{}\doxysection{Timetable Class Reference}
+\label{class_timetable}\index{Timetable@{Timetable}}
+
+
+Class representing timetable.  
+
+
+
+
+{\ttfamily \#include $<$timetable.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_timetable_afd48ad185d6e4720c490a56a79e6fed8}\label{class_timetable_afd48ad185d6e4720c490a56a79e6fed8}} 
+{\bfseries Timetable} (std\+::string name, std\+::string access\+\_\+t, std\+::string owner\+\_\+id)
+\item 
+\mbox{\Hypertarget{class_timetable_ab888fc7d4013ecb8b0e2d98163925dc3}\label{class_timetable_ab888fc7d4013ecb8b0e2d98163925dc3}} 
+{\bfseries Timetable} (std\+::string inname, std\+::string inaccess\+\_\+t, std\+::string inowner\+\_\+id, std\+::set$<$ std\+::string $>$ inmember\+\_\+id, std\+::set$<$ std\+::string $>$ indates)
+\item 
+\mbox{\Hypertarget{class_timetable_a37fe929c353539e648803fedeb5d099b}\label{class_timetable_a37fe929c353539e648803fedeb5d099b}} 
+std\+::string {\bfseries get\+\_\+name} () const
+\item 
+\mbox{\Hypertarget{class_timetable_a1b646bb60613cb0e077c515e4bf1136f}\label{class_timetable_a1b646bb60613cb0e077c515e4bf1136f}} 
+std\+::string {\bfseries get\+\_\+access\+\_\+t} ()
+\item 
+\mbox{\Hypertarget{class_timetable_a4cc35001864e9f4a568266347b61af01}\label{class_timetable_a4cc35001864e9f4a568266347b61af01}} 
+std\+::string {\bfseries get\+\_\+owner\+\_\+id} ()
+\item 
+\mbox{\Hypertarget{class_timetable_ad859c42020dd5000a9679703d4e1f6f7}\label{class_timetable_ad859c42020dd5000a9679703d4e1f6f7}} 
+std\+::set$<$ std\+::string $>$ {\bfseries get\+\_\+dates} ()
+\item 
+\mbox{\Hypertarget{class_timetable_a43a9ec185500d8553ecf2d6fa7bb2de1}\label{class_timetable_a43a9ec185500d8553ecf2d6fa7bb2de1}} 
+std\+::set$<$ std\+::string $>$ {\bfseries get\+\_\+members} ()
+\item 
+void \mbox{\hyperlink{class_timetable_a4affd363d192b871fd4d8f65ed12e105}{set\+\_\+name}} (std\+::string name)
+\begin{DoxyCompactList}\small\item\em Set name method. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_timetable_ae0d8239b6a5b4087bbe81af7d6b42c53}{set\+\_\+access\+\_\+t}} (std\+::string access\+\_\+t)
+\begin{DoxyCompactList}\small\item\em Set access type method. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_timetable_a0df8875c5adde5591e9e073ecc4ad6c7}{add\+\_\+member}} (std\+::string user\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Add member to \mbox{\hyperlink{class_timetable}{Timetable}}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_timetable_a7677b62bf7e247f2b6e700d764950245}{remove\+\_\+member}} (std\+::string user\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Remove a member from \mbox{\hyperlink{class_timetable}{Timetable}}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_timetable_ae110856c64bdea570a8fab8f388424ec}{add\+\_\+date}} (std\+::string date)
+\begin{DoxyCompactList}\small\item\em Add a date to \mbox{\hyperlink{class_timetable}{Timetable}}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_timetable_a4a47265def6500142eb48fe6be3fcc0e}{remove\+\_\+date}} (std\+::string date)
+\begin{DoxyCompactList}\small\item\em Remove a date from \mbox{\hyperlink{class_timetable}{Timetable}}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_timetable_a2b3c3ba9f2e40710c6f693025f0825d3}{is\+\_\+member}} (std\+::string user\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Check member in \mbox{\hyperlink{class_timetable}{Timetable}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_timetable_a57d46e5bde5c450447857948d2f23aac}\label{class_timetable_a57d46e5bde5c450447857948d2f23aac}} 
+std\+::string {\bfseries name}
+\item 
+\mbox{\Hypertarget{class_timetable_a600adcc8f5b44a24a92e38362381d090}\label{class_timetable_a600adcc8f5b44a24a92e38362381d090}} 
+std\+::string {\bfseries access\+\_\+t}
+\item 
+\mbox{\Hypertarget{class_timetable_a06455acfb54a93e00fefa71f1b50f76f}\label{class_timetable_a06455acfb54a93e00fefa71f1b50f76f}} 
+std\+::string {\bfseries owner\+\_\+id}
+\item 
+\mbox{\Hypertarget{class_timetable_a050283ed41ff91a691f7aedabb56b2c0}\label{class_timetable_a050283ed41ff91a691f7aedabb56b2c0}} 
+std\+::set$<$ std\+::string $>$ {\bfseries member\+\_\+id}
+\item 
+\mbox{\Hypertarget{class_timetable_a9c4ce78f7e7954a2c23002d9b4090741}\label{class_timetable_a9c4ce78f7e7954a2c23002d9b4090741}} 
+std\+::set$<$ std\+::string $>$ {\bfseries dates}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class representing timetable. 
+
+A representation of timetable \begin{DoxyAuthor}{Author}
+Vladimir Zhurov 
+
+Lathan Thangavadivel 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+28/11/2019 
+\end{DoxyDate}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_timetable_ae110856c64bdea570a8fab8f388424ec}\label{class_timetable_ae110856c64bdea570a8fab8f388424ec}} 
+\index{Timetable@{Timetable}!add\_date@{add\_date}}
+\index{add\_date@{add\_date}!Timetable@{Timetable}}
+\doxysubsubsection{\texorpdfstring{add\_date()}{add\_date()}}
+{\footnotesize\ttfamily int Timetable\+::add\+\_\+date (\begin{DoxyParamCaption}\item[{std\+::string}]{date }\end{DoxyParamCaption})}
+
+
+
+Add a date to \mbox{\hyperlink{class_timetable}{Timetable}}. 
+
+Add a date to the timetable\textquotesingle{}s member set, return 0 if already present and 1 on success \begin{DoxyAuthor}{Author}
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em date} & string rep of date \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_timetable_a0df8875c5adde5591e9e073ecc4ad6c7}\label{class_timetable_a0df8875c5adde5591e9e073ecc4ad6c7}} 
+\index{Timetable@{Timetable}!add\_member@{add\_member}}
+\index{add\_member@{add\_member}!Timetable@{Timetable}}
+\doxysubsubsection{\texorpdfstring{add\_member()}{add\_member()}}
+{\footnotesize\ttfamily int Timetable\+::add\+\_\+member (\begin{DoxyParamCaption}\item[{std\+::string}]{user\+\_\+id }\end{DoxyParamCaption})}
+
+
+
+Add member to \mbox{\hyperlink{class_timetable}{Timetable}}. 
+
+Add a member to the timeable\textquotesingle{}s member set, return 0 if already present and 1 on success \begin{DoxyAuthor}{Author}
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em user\+\_\+id} & The username of the new member \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_timetable_a2b3c3ba9f2e40710c6f693025f0825d3}\label{class_timetable_a2b3c3ba9f2e40710c6f693025f0825d3}} 
+\index{Timetable@{Timetable}!is\_member@{is\_member}}
+\index{is\_member@{is\_member}!Timetable@{Timetable}}
+\doxysubsubsection{\texorpdfstring{is\_member()}{is\_member()}}
+{\footnotesize\ttfamily int Timetable\+::is\+\_\+member (\begin{DoxyParamCaption}\item[{std\+::string}]{user\+\_\+id }\end{DoxyParamCaption})}
+
+
+
+Check member in \mbox{\hyperlink{class_timetable}{Timetable}}. 
+
+Check if a member is in the timeable\textquotesingle{}s member set, return 1 if already present and 0 if not \begin{DoxyAuthor}{Author}
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em user\+\_\+id} & The username of the member \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_timetable_a4a47265def6500142eb48fe6be3fcc0e}\label{class_timetable_a4a47265def6500142eb48fe6be3fcc0e}} 
+\index{Timetable@{Timetable}!remove\_date@{remove\_date}}
+\index{remove\_date@{remove\_date}!Timetable@{Timetable}}
+\doxysubsubsection{\texorpdfstring{remove\_date()}{remove\_date()}}
+{\footnotesize\ttfamily int Timetable\+::remove\+\_\+date (\begin{DoxyParamCaption}\item[{std\+::string}]{date }\end{DoxyParamCaption})}
+
+
+
+Remove a date from \mbox{\hyperlink{class_timetable}{Timetable}}. 
+
+Remove a date to the timetable\textquotesingle{}s member set, return 0 if already present and 1 on success \begin{DoxyAuthor}{Author}
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em date} & string rep of date \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_timetable_a7677b62bf7e247f2b6e700d764950245}\label{class_timetable_a7677b62bf7e247f2b6e700d764950245}} 
+\index{Timetable@{Timetable}!remove\_member@{remove\_member}}
+\index{remove\_member@{remove\_member}!Timetable@{Timetable}}
+\doxysubsubsection{\texorpdfstring{remove\_member()}{remove\_member()}}
+{\footnotesize\ttfamily int Timetable\+::remove\+\_\+member (\begin{DoxyParamCaption}\item[{std\+::string}]{user\+\_\+id }\end{DoxyParamCaption})}
+
+
+
+Remove a member from \mbox{\hyperlink{class_timetable}{Timetable}}. 
+
+Remove a member to the timeable\textquotesingle{}s member set, return 0 if already present and 1 on success \begin{DoxyAuthor}{Author}
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em user\+\_\+id} & The username of the member \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_timetable_ae0d8239b6a5b4087bbe81af7d6b42c53}\label{class_timetable_ae0d8239b6a5b4087bbe81af7d6b42c53}} 
+\index{Timetable@{Timetable}!set\_access\_t@{set\_access\_t}}
+\index{set\_access\_t@{set\_access\_t}!Timetable@{Timetable}}
+\doxysubsubsection{\texorpdfstring{set\_access\_t()}{set\_access\_t()}}
+{\footnotesize\ttfamily void Timetable\+::set\+\_\+access\+\_\+t (\begin{DoxyParamCaption}\item[{std\+::string}]{access\+\_\+t }\end{DoxyParamCaption})}
+
+
+
+Set access type method. 
+
+Update the \mbox{\hyperlink{class_timetable}{Timetable}}\textquotesingle{}s access type \begin{DoxyAuthor}{Author}
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em new\+\_\+access\+\_\+t} & The new timetable access type \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_timetable_a4affd363d192b871fd4d8f65ed12e105}\label{class_timetable_a4affd363d192b871fd4d8f65ed12e105}} 
+\index{Timetable@{Timetable}!set\_name@{set\_name}}
+\index{set\_name@{set\_name}!Timetable@{Timetable}}
+\doxysubsubsection{\texorpdfstring{set\_name()}{set\_name()}}
+{\footnotesize\ttfamily void Timetable\+::set\+\_\+name (\begin{DoxyParamCaption}\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+
+
+Set name method. 
+
+Update the \mbox{\hyperlink{class_timetable}{Timetable}}\textquotesingle{}s name \begin{DoxyAuthor}{Author}
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em new\+\_\+name} & The new timetable name \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+timetable.\+h\item 
+timetable.\+cpp\end{DoxyCompactItemize}

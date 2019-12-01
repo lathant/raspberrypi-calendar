@@ -1,0 +1,232 @@
+\hypertarget{class_event___manager}{}\doxysection{Event\+\_\+\+Manager Class Reference}
+\label{class_event___manager}\index{Event\_Manager@{Event\_Manager}}
+
+
+the file that contains all the prototype functions and variables for the event manager class  
+
+
+
+
+{\ttfamily \#include $<$event\+\_\+manager.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{class_event___manager_a6d97ff52b9c5e1b4463f7b653e4a0b45}{create\+\_\+event}} (std\+::string event\+Name, std\+::string details, time\+\_\+t start\+\_\+time, time\+\_\+t end\+\_\+time, std\+::string access\+\_\+t, std\+::string owner\+\_\+id, std\+::string repeat\+Type)
+\begin{DoxyCompactList}\small\item\em create a new event \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_event___manager_a857d4ce1848112fb25e4cf3f80d05dc0}{delete\+\_\+event}} (std\+::string event\+\_\+name)
+\begin{DoxyCompactList}\small\item\em delete a event \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{class_event}{Event}} $>$ \mbox{\hyperlink{class_event___manager_ac143c340b50257fefd525754a2ead32e}{get\+\_\+personal\+\_\+events}} (std\+::string owner\+\_\+id)
+\begin{DoxyCompactList}\small\item\em get all personal events \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{class_event}{Event}} $>$ \mbox{\hyperlink{class_event___manager_af73c83b339fa557c11f8b4a54e33e8b9}{get\+\_\+public\+\_\+events}} ()
+\begin{DoxyCompactList}\small\item\em get all public events \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_event___manager_a853ad79d1b35d76b2cd230738b93bd2e}{event\+\_\+to\+\_\+txt}} (\mbox{\hyperlink{class_event}{Event}} event)
+\begin{DoxyCompactList}\small\item\em get a text rep for a given event \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_event___manager}{Event\+\_\+\+Manager}} $\ast$ \mbox{\hyperlink{class_event___manager_ad888ddba8acb097b40f78a0ad8da0d2f}{get\+\_\+instance}} ()
+\begin{DoxyCompactList}\small\item\em returns an instance of \mbox{\hyperlink{class_event___manager}{Event\+\_\+\+Manager}} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_event}{Event}} $\ast$ \mbox{\hyperlink{class_event___manager_a4edde904b9e299dbd784d4f7a7a2f133}{get\+\_\+event}} (std\+::string event\+\_\+name)
+\begin{DoxyCompactList}\small\item\em gets the event attribute string \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_event___manager_aff68136986d7c3861bca603ce283b50e}\label{class_event___manager_aff68136986d7c3861bca603ce283b50e}} 
+static \mbox{\hyperlink{class_event___manager}{Event\+\_\+\+Manager}} $\ast$ {\bfseries instance} = N\+U\+LL
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+the file that contains all the prototype functions and variables for the event manager class 
+
+Header File for event manager entities C\+R\+E\+A\+T\+ED BY\+: Vladimir Zhurov L\+A\+ST E\+D\+I\+T\+ED BY\+: Lathan Thangavadivel L\+A\+ST E\+D\+I\+T\+ED\+: 25/11/2019 \begin{DoxyAuthor}{Author}
+Vladimir Zhurov 
+
+Lathan Thangavadivel 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+25/11/2019 
+\end{DoxyDate}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_event___manager_a6d97ff52b9c5e1b4463f7b653e4a0b45}\label{class_event___manager_a6d97ff52b9c5e1b4463f7b653e4a0b45}} 
+\index{Event\_Manager@{Event\_Manager}!create\_event@{create\_event}}
+\index{create\_event@{create\_event}!Event\_Manager@{Event\_Manager}}
+\doxysubsubsection{\texorpdfstring{create\_event()}{create\_event()}}
+{\footnotesize\ttfamily int Event\+\_\+\+Manager\+::create\+\_\+event (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+Name,  }\item[{std\+::string}]{details,  }\item[{time\+\_\+t}]{start\+\_\+time,  }\item[{time\+\_\+t}]{end\+\_\+time,  }\item[{std\+::string}]{access\+\_\+t,  }\item[{std\+::string}]{owner\+\_\+id,  }\item[{std\+::string}]{repeat\+Type }\end{DoxyParamCaption})}
+
+
+
+create a new event 
+
+\begin{DoxyAuthor}{Author}
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Name} & \\
+\hline
+{\em details} & \\
+\hline
+{\em start\+\_\+time} & \\
+\hline
+{\em end\+\_\+time} & \\
+\hline
+{\em access\+\_\+t} & \\
+\hline
+{\em owner\+\_\+id} & \\
+\hline
+{\em repeat\+Type} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int -\/1 duplicate, 0 on failure, and 1 on success 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_event___manager_a857d4ce1848112fb25e4cf3f80d05dc0}\label{class_event___manager_a857d4ce1848112fb25e4cf3f80d05dc0}} 
+\index{Event\_Manager@{Event\_Manager}!delete\_event@{delete\_event}}
+\index{delete\_event@{delete\_event}!Event\_Manager@{Event\_Manager}}
+\doxysubsubsection{\texorpdfstring{delete\_event()}{delete\_event()}}
+{\footnotesize\ttfamily int Event\+\_\+\+Manager\+::delete\+\_\+event (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+delete a event 
+
+removes the given event from the storage file \begin{DoxyAuthor}{Author}
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em event\+\_\+name} & The name of the event \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 0 on failure, 1 on success 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_event___manager_a853ad79d1b35d76b2cd230738b93bd2e}\label{class_event___manager_a853ad79d1b35d76b2cd230738b93bd2e}} 
+\index{Event\_Manager@{Event\_Manager}!event\_to\_txt@{event\_to\_txt}}
+\index{event\_to\_txt@{event\_to\_txt}!Event\_Manager@{Event\_Manager}}
+\doxysubsubsection{\texorpdfstring{event\_to\_txt()}{event\_to\_txt()}}
+{\footnotesize\ttfamily string Event\+\_\+\+Manager\+::event\+\_\+to\+\_\+txt (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_event}{Event}}}]{event }\end{DoxyParamCaption})}
+
+
+
+get a text rep for a given event 
+
+\begin{DoxyAuthor}{Author}
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em event} & The event \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+txt\+\_\+rep A text representation of a given event object 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_event___manager_a4edde904b9e299dbd784d4f7a7a2f133}\label{class_event___manager_a4edde904b9e299dbd784d4f7a7a2f133}} 
+\index{Event\_Manager@{Event\_Manager}!get\_event@{get\_event}}
+\index{get\_event@{get\_event}!Event\_Manager@{Event\_Manager}}
+\doxysubsubsection{\texorpdfstring{get\_event()}{get\_event()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_event}{Event}} $\ast$ Event\+\_\+\+Manager\+::get\+\_\+event (\begin{DoxyParamCaption}\item[{std\+::string}]{event\+\_\+name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+gets the event attribute string 
+
+\begin{DoxyAuthor}{Author}
+Lathan Thangavadivel 
+
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em event\+\_\+name} & event name as a string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+event event attribute 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_event___manager_ad888ddba8acb097b40f78a0ad8da0d2f}\label{class_event___manager_ad888ddba8acb097b40f78a0ad8da0d2f}} 
+\index{Event\_Manager@{Event\_Manager}!get\_instance@{get\_instance}}
+\index{get\_instance@{get\_instance}!Event\_Manager@{Event\_Manager}}
+\doxysubsubsection{\texorpdfstring{get\_instance()}{get\_instance()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_event___manager}{Event\+\_\+\+Manager}} $\ast$ Event\+\_\+\+Manager\+::get\+\_\+instance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+returns an instance of \mbox{\hyperlink{class_event___manager}{Event\+\_\+\+Manager}} 
+
+returns an instance of \mbox{\hyperlink{class_event___manager}{Event\+\_\+\+Manager}} and enforces singleton design @\+Author Vladimir Zhurov \begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+\mbox{\Hypertarget{class_event___manager_ac143c340b50257fefd525754a2ead32e}\label{class_event___manager_ac143c340b50257fefd525754a2ead32e}} 
+\index{Event\_Manager@{Event\_Manager}!get\_personal\_events@{get\_personal\_events}}
+\index{get\_personal\_events@{get\_personal\_events}!Event\_Manager@{Event\_Manager}}
+\doxysubsubsection{\texorpdfstring{get\_personal\_events()}{get\_personal\_events()}}
+{\footnotesize\ttfamily vector$<$ \mbox{\hyperlink{class_event}{Event}} $>$ Event\+\_\+\+Manager\+::get\+\_\+personal\+\_\+events (\begin{DoxyParamCaption}\item[{std\+::string}]{owner\+\_\+id }\end{DoxyParamCaption})}
+
+
+
+get all personal events 
+
+Reads through all stored Events in file and collects all that have matching owner\+\_\+id \begin{DoxyAuthor}{Author}
+Lathan Thangavadivel 
+
+Vladimit Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em owner\+\_\+id} & The username of the owner \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+output A vector of \mbox{\hyperlink{class_event}{Event}} objects that have matching owner\+\_\+id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_event___manager_af73c83b339fa557c11f8b4a54e33e8b9}\label{class_event___manager_af73c83b339fa557c11f8b4a54e33e8b9}} 
+\index{Event\_Manager@{Event\_Manager}!get\_public\_events@{get\_public\_events}}
+\index{get\_public\_events@{get\_public\_events}!Event\_Manager@{Event\_Manager}}
+\doxysubsubsection{\texorpdfstring{get\_public\_events()}{get\_public\_events()}}
+{\footnotesize\ttfamily vector$<$ \mbox{\hyperlink{class_event}{Event}} $>$ Event\+\_\+\+Manager\+::get\+\_\+public\+\_\+events (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+get all public events 
+
+Reads through all stored Events in file and collects all that are public \begin{DoxyAuthor}{Author}
+Lathan Thangavadivel 
+
+Vladimit Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+\begin{DoxyReturn}{Returns}
+output A vector of \mbox{\hyperlink{class_event}{Event}} objects that have public access 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+event\+\_\+manager.\+h\item 
+event\+\_\+manager.\+cpp\end{DoxyCompactItemize}

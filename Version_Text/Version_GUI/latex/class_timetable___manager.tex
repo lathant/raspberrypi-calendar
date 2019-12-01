@@ -1,0 +1,458 @@
+\hypertarget{class_timetable___manager}{}\doxysection{Timetable\+\_\+\+Manager Class Reference}
+\label{class_timetable___manager}\index{Timetable\_Manager@{Timetable\_Manager}}
+
+
+Header File for timetable manager.  
+
+
+
+
+{\ttfamily \#include $<$timetable\+\_\+manager.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_timetable}{Timetable}} $\ast$ \mbox{\hyperlink{class_timetable___manager_a370eb22b97620961046c163210cbaede}{get\+\_\+timetable}} (std\+::string table\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Get timetable from file based on name. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_timetable___manager_a0ae1fd8e63dc40918dfcd1971a46d088}{create\+\_\+timetable}} (std\+::string name, std\+::string access\+\_\+t, std\+::string owner\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Function that calls the factory method to create a new timetable and write to file. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_timetable___manager_af79de8cf4181569b36db3e21e03634a7}{save\+\_\+timetable}} (\mbox{\hyperlink{class_timetable}{Timetable}} table)
+\begin{DoxyCompactList}\small\item\em Function that saves timetable to a file or overwrite if needed. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_timetable___manager_a8def1f44e9a13255f82b70df2c700a1e}{delete\+\_\+timetable}} (std\+::string table\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Delete a timetable form the storage file. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_timetable___manager_a7cb9adf7046f36d22a169a49b221c477}{append\+\_\+date}} (std\+::string table\+\_\+name, std\+::string event\+\_\+info)
+\begin{DoxyCompactList}\small\item\em Add a event to a timetable. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_timetable___manager_acd5180cd76ad8960d64405ad184755a4}{remove\+\_\+date}} (std\+::string table\+\_\+name, std\+::string event\+\_\+info)
+\begin{DoxyCompactList}\small\item\em Remove a event to a timetable. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_timetable___manager_a48fa0f09dd13153ed77672ae43a6cfd0}{add\+\_\+member}} (std\+::string table\+\_\+name, std\+::string member\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Add a member to a timetable. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_timetable___manager_adcc04a7ae4294e31c23b3b1651076c33}{remove\+\_\+member}} (std\+::string table\+\_\+name, std\+::string member\+\_\+id)
+\begin{DoxyCompactList}\small\item\em Remove a member to a timetable. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{class_timetable}{Timetable}} $>$ \mbox{\hyperlink{class_timetable___manager_ad752b9d10c2cc40f97e7cd045ec2c489}{get\+\_\+personal\+\_\+tables}} (std\+::string owner\+\_\+id)
+\begin{DoxyCompactList}\small\item\em get a vector of all a user\textquotesingle{}s personal timetables \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{class_timetable}{Timetable}} $>$ \mbox{\hyperlink{class_timetable___manager_ab5f38410d337dc2d273d4cb908831dd5}{get\+\_\+shared\+\_\+tables}} (std\+::string owner\+\_\+id)
+\begin{DoxyCompactList}\small\item\em get a vector of all a user\textquotesingle{}s shared timetables \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{class_timetable}{Timetable}} $>$ \mbox{\hyperlink{class_timetable___manager_aa6f027a43bdd3d0fa5fe4751542b586e}{get\+\_\+public\+\_\+tables}} ()
+\begin{DoxyCompactList}\small\item\em get a vector of all public timetables \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_timetable___manager_a6e84ee82344343167e3e780db819c2c5}{timetable\+\_\+to\+\_\+txt}} (\mbox{\hyperlink{class_timetable}{Timetable}} timetable)
+\begin{DoxyCompactList}\small\item\em convert timetable to string \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_timetable___manager_abbfd0e209ad971db649694c1c70be70d}{compare\+\_\+timetables}} (std\+::string table\+\_\+name1, std\+::string table\+\_\+name2)
+\begin{DoxyCompactList}\small\item\em takes two tables combines and returns the string output of the combined table while highlighting conflicts \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_timetable___manager}{Timetable\+\_\+\+Manager}} $\ast$ \mbox{\hyperlink{class_timetable___manager_ac62b698af2034da73ba6bf572e2959e8}{get\+\_\+instance}} ()
+\begin{DoxyCompactList}\small\item\em Function that retrieves an instance of a time table manager If one does not exist already then create. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_timetable___manager_ad703b3c09e5d52d8f6c300bc6d38c71c}\label{class_timetable___manager_ad703b3c09e5d52d8f6c300bc6d38c71c}} 
+static \mbox{\hyperlink{class_timetable___manager}{Timetable\+\_\+\+Manager}} $\ast$ {\bfseries instance} = N\+U\+LL
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header File for timetable manager. 
+
+The header file that contains all the prototype functions and variables for the timetable manager class
+
+\begin{DoxyAuthor}{Author}
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05/11/2019 
+\end{DoxyDate}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_timetable___manager_a48fa0f09dd13153ed77672ae43a6cfd0}\label{class_timetable___manager_a48fa0f09dd13153ed77672ae43a6cfd0}} 
+\index{Timetable\_Manager@{Timetable\_Manager}!add\_member@{add\_member}}
+\index{add\_member@{add\_member}!Timetable\_Manager@{Timetable\_Manager}}
+\doxysubsubsection{\texorpdfstring{add\_member()}{add\_member()}}
+{\footnotesize\ttfamily int Timetable\+\_\+\+Manager\+::add\+\_\+member (\begin{DoxyParamCaption}\item[{std\+::string}]{table\+\_\+name,  }\item[{std\+::string}]{member\+\_\+id }\end{DoxyParamCaption})}
+
+
+
+Add a member to a timetable. 
+
+Gets the timetable and then saves it after adding the member \begin{DoxyAuthor}{Author}
+David T 
+
+Lathan Thangavadivel 
+
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em table\+\_\+name} & The name of the timetable \\
+\hline
+{\em member\+\_\+id} & The member\textquotesingle{}s username \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 0 on failure, and 1 on success 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timetable___manager_a7cb9adf7046f36d22a169a49b221c477}\label{class_timetable___manager_a7cb9adf7046f36d22a169a49b221c477}} 
+\index{Timetable\_Manager@{Timetable\_Manager}!append\_date@{append\_date}}
+\index{append\_date@{append\_date}!Timetable\_Manager@{Timetable\_Manager}}
+\doxysubsubsection{\texorpdfstring{append\_date()}{append\_date()}}
+{\footnotesize\ttfamily int Timetable\+\_\+\+Manager\+::append\+\_\+date (\begin{DoxyParamCaption}\item[{std\+::string}]{table\+\_\+name,  }\item[{std\+::string}]{event\+\_\+info }\end{DoxyParamCaption})}
+
+
+
+Add a event to a timetable. 
+
+Gets the timetable and then saves it after adding the event \begin{DoxyAuthor}{Author}
+David T 
+
+Lathan Thangavadivel 
+
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em table\+\_\+name} & The name of the timetable \\
+\hline
+{\em event\+\_\+info} & Text rep of an event \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 0 on failure, and 1 on success 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timetable___manager_abbfd0e209ad971db649694c1c70be70d}\label{class_timetable___manager_abbfd0e209ad971db649694c1c70be70d}} 
+\index{Timetable\_Manager@{Timetable\_Manager}!compare\_timetables@{compare\_timetables}}
+\index{compare\_timetables@{compare\_timetables}!Timetable\_Manager@{Timetable\_Manager}}
+\doxysubsubsection{\texorpdfstring{compare\_timetables()}{compare\_timetables()}}
+{\footnotesize\ttfamily string Timetable\+\_\+\+Manager\+::compare\+\_\+timetables (\begin{DoxyParamCaption}\item[{std\+::string}]{table\+\_\+name1,  }\item[{std\+::string}]{table\+\_\+name2 }\end{DoxyParamCaption})}
+
+
+
+takes two tables combines and returns the string output of the combined table while highlighting conflicts 
+
+\begin{DoxyAuthor}{Author}
+Lathan Thangavadivel 
+
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em table1} & name of the first table \\
+\hline
+{\em table2} & name of second table \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+string string output of the combined tables 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timetable___manager_a0ae1fd8e63dc40918dfcd1971a46d088}\label{class_timetable___manager_a0ae1fd8e63dc40918dfcd1971a46d088}} 
+\index{Timetable\_Manager@{Timetable\_Manager}!create\_timetable@{create\_timetable}}
+\index{create\_timetable@{create\_timetable}!Timetable\_Manager@{Timetable\_Manager}}
+\doxysubsubsection{\texorpdfstring{create\_timetable()}{create\_timetable()}}
+{\footnotesize\ttfamily int Timetable\+\_\+\+Manager\+::create\+\_\+timetable (\begin{DoxyParamCaption}\item[{std\+::string}]{name,  }\item[{std\+::string}]{access\+\_\+t,  }\item[{std\+::string}]{owner\+\_\+id }\end{DoxyParamCaption})}
+
+
+
+Function that calls the factory method to create a new timetable and write to file. 
+
+If one does exist already do nothing \begin{DoxyAuthor}{Author}
+David T 
+
+Lathan Thangavadivel 
+
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The timetable\textquotesingle{}s name \\
+\hline
+{\em access\+\_\+t} & The timetable\textquotesingle{}s access permissions \\
+\hline
+{\em owner\+\_\+id} & The timetable\textquotesingle{}s owner\textquotesingle{}s username \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int -\/1 on duplicate, 0 on failure, and 1 on success 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timetable___manager_a8def1f44e9a13255f82b70df2c700a1e}\label{class_timetable___manager_a8def1f44e9a13255f82b70df2c700a1e}} 
+\index{Timetable\_Manager@{Timetable\_Manager}!delete\_timetable@{delete\_timetable}}
+\index{delete\_timetable@{delete\_timetable}!Timetable\_Manager@{Timetable\_Manager}}
+\doxysubsubsection{\texorpdfstring{delete\_timetable()}{delete\_timetable()}}
+{\footnotesize\ttfamily int Timetable\+\_\+\+Manager\+::delete\+\_\+timetable (\begin{DoxyParamCaption}\item[{std\+::string}]{table\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Delete a timetable form the storage file. 
+
+Searches the storage file for a matching timetable and removes it \begin{DoxyAuthor}{Author}
+David T 
+
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em table\+\_\+name} & The name of the table \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 0 on failure, 1 on success 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timetable___manager_ac62b698af2034da73ba6bf572e2959e8}\label{class_timetable___manager_ac62b698af2034da73ba6bf572e2959e8}} 
+\index{Timetable\_Manager@{Timetable\_Manager}!get\_instance@{get\_instance}}
+\index{get\_instance@{get\_instance}!Timetable\_Manager@{Timetable\_Manager}}
+\doxysubsubsection{\texorpdfstring{get\_instance()}{get\_instance()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_timetable___manager}{Timetable\+\_\+\+Manager}} $\ast$ Timetable\+\_\+\+Manager\+::get\+\_\+instance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Function that retrieves an instance of a time table manager If one does not exist already then create. 
+
+\begin{DoxyAuthor}{Author}
+David T 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+27/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em No} & parameter needed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+instance of time table manager 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timetable___manager_ad752b9d10c2cc40f97e7cd045ec2c489}\label{class_timetable___manager_ad752b9d10c2cc40f97e7cd045ec2c489}} 
+\index{Timetable\_Manager@{Timetable\_Manager}!get\_personal\_tables@{get\_personal\_tables}}
+\index{get\_personal\_tables@{get\_personal\_tables}!Timetable\_Manager@{Timetable\_Manager}}
+\doxysubsubsection{\texorpdfstring{get\_personal\_tables()}{get\_personal\_tables()}}
+{\footnotesize\ttfamily vector$<$ \mbox{\hyperlink{class_timetable}{Timetable}} $>$ Timetable\+\_\+\+Manager\+::get\+\_\+personal\+\_\+tables (\begin{DoxyParamCaption}\item[{std\+::string}]{owner\+\_\+id }\end{DoxyParamCaption})}
+
+
+
+get a vector of all a user\textquotesingle{}s personal timetables 
+
+Scans the storage file for all timetable\textquotesingle{}s that have owner\+\_\+id\textquotesingle{}s that match \begin{DoxyAuthor}{Author}
+Lathan Thangavadivel 
+
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em owner\+\_\+id} & The owner\textquotesingle{}s username \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+output A vector$<$\+Timetable$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timetable___manager_aa6f027a43bdd3d0fa5fe4751542b586e}\label{class_timetable___manager_aa6f027a43bdd3d0fa5fe4751542b586e}} 
+\index{Timetable\_Manager@{Timetable\_Manager}!get\_public\_tables@{get\_public\_tables}}
+\index{get\_public\_tables@{get\_public\_tables}!Timetable\_Manager@{Timetable\_Manager}}
+\doxysubsubsection{\texorpdfstring{get\_public\_tables()}{get\_public\_tables()}}
+{\footnotesize\ttfamily vector$<$ \mbox{\hyperlink{class_timetable}{Timetable}} $>$ Timetable\+\_\+\+Manager\+::get\+\_\+public\+\_\+tables (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+get a vector of all public timetables 
+
+Scans the storage file for all timetable\textquotesingle{}s that are public \begin{DoxyAuthor}{Author}
+Lathan Thangavadivel 
+
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em owner\+\_\+id} & The user\textquotesingle{}s username \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+output A vector$<$\+Timetable$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timetable___manager_ab5f38410d337dc2d273d4cb908831dd5}\label{class_timetable___manager_ab5f38410d337dc2d273d4cb908831dd5}} 
+\index{Timetable\_Manager@{Timetable\_Manager}!get\_shared\_tables@{get\_shared\_tables}}
+\index{get\_shared\_tables@{get\_shared\_tables}!Timetable\_Manager@{Timetable\_Manager}}
+\doxysubsubsection{\texorpdfstring{get\_shared\_tables()}{get\_shared\_tables()}}
+{\footnotesize\ttfamily vector$<$ \mbox{\hyperlink{class_timetable}{Timetable}} $>$ Timetable\+\_\+\+Manager\+::get\+\_\+shared\+\_\+tables (\begin{DoxyParamCaption}\item[{std\+::string}]{owner\+\_\+id }\end{DoxyParamCaption})}
+
+
+
+get a vector of all a user\textquotesingle{}s shared timetables 
+
+Scans the storage file for all timetable\textquotesingle{}s that have user as a member \begin{DoxyAuthor}{Author}
+Lathan Thangavadivel 
+
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em owner\+\_\+id} & The user\textquotesingle{}s username \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+output A vector$<$\+Timetable$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timetable___manager_a370eb22b97620961046c163210cbaede}\label{class_timetable___manager_a370eb22b97620961046c163210cbaede}} 
+\index{Timetable\_Manager@{Timetable\_Manager}!get\_timetable@{get\_timetable}}
+\index{get\_timetable@{get\_timetable}!Timetable\_Manager@{Timetable\_Manager}}
+\doxysubsubsection{\texorpdfstring{get\_timetable()}{get\_timetable()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_timetable}{Timetable}} $\ast$ Timetable\+\_\+\+Manager\+::get\+\_\+timetable (\begin{DoxyParamCaption}\item[{std\+::string}]{table\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Get timetable from file based on name. 
+
+Search the storage file for the timetable with the matching name provided and return a \mbox{\hyperlink{class_timetable}{Timetable}} Object with it\textquotesingle{}s information \begin{DoxyAuthor}{Author}
+Lathan Thangavadivel 
+
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The name of the timetable \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+table The timetable object, Null if not found 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timetable___manager_acd5180cd76ad8960d64405ad184755a4}\label{class_timetable___manager_acd5180cd76ad8960d64405ad184755a4}} 
+\index{Timetable\_Manager@{Timetable\_Manager}!remove\_date@{remove\_date}}
+\index{remove\_date@{remove\_date}!Timetable\_Manager@{Timetable\_Manager}}
+\doxysubsubsection{\texorpdfstring{remove\_date()}{remove\_date()}}
+{\footnotesize\ttfamily int Timetable\+\_\+\+Manager\+::remove\+\_\+date (\begin{DoxyParamCaption}\item[{std\+::string}]{table\+\_\+name,  }\item[{std\+::string}]{event\+\_\+info }\end{DoxyParamCaption})}
+
+
+
+Remove a event to a timetable. 
+
+Gets the timetable and then saves it after removeing the event \begin{DoxyAuthor}{Author}
+David T 
+
+Lathan Thangavadivel 
+
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em table\+\_\+name} & The name of the timetable \\
+\hline
+{\em event\+\_\+info} & Text rep of an event \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 0 on failure, and 1 on success 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timetable___manager_adcc04a7ae4294e31c23b3b1651076c33}\label{class_timetable___manager_adcc04a7ae4294e31c23b3b1651076c33}} 
+\index{Timetable\_Manager@{Timetable\_Manager}!remove\_member@{remove\_member}}
+\index{remove\_member@{remove\_member}!Timetable\_Manager@{Timetable\_Manager}}
+\doxysubsubsection{\texorpdfstring{remove\_member()}{remove\_member()}}
+{\footnotesize\ttfamily int Timetable\+\_\+\+Manager\+::remove\+\_\+member (\begin{DoxyParamCaption}\item[{std\+::string}]{table\+\_\+name,  }\item[{std\+::string}]{member\+\_\+id }\end{DoxyParamCaption})}
+
+
+
+Remove a member to a timetable. 
+
+Gets the timetable and then saves it after removeing the member \begin{DoxyAuthor}{Author}
+David T 
+
+Lathan Thangavadivel 
+
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em table\+\_\+name} & The name of the timetable \\
+\hline
+{\em member\+\_\+id} & The member\textquotesingle{}s username \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 0 on failure, and 1 on success 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timetable___manager_af79de8cf4181569b36db3e21e03634a7}\label{class_timetable___manager_af79de8cf4181569b36db3e21e03634a7}} 
+\index{Timetable\_Manager@{Timetable\_Manager}!save\_timetable@{save\_timetable}}
+\index{save\_timetable@{save\_timetable}!Timetable\_Manager@{Timetable\_Manager}}
+\doxysubsubsection{\texorpdfstring{save\_timetable()}{save\_timetable()}}
+{\footnotesize\ttfamily int Timetable\+\_\+\+Manager\+::save\+\_\+timetable (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_timetable}{Timetable}}}]{table }\end{DoxyParamCaption})}
+
+
+
+Function that saves timetable to a file or overwrite if needed. 
+
+Saves a timetable object to the timetable file \begin{DoxyAuthor}{Author}
+David T 
+
+Lathan Thangavadivel 
+
+Vladimir Zhurov 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+30/11/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em \mbox{\hyperlink{class_timetable}{Timetable}}} & \mbox{\hyperlink{class_timetable}{Timetable}} to be saved \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int 0 on failure, 1 on success 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_timetable___manager_a6e84ee82344343167e3e780db819c2c5}\label{class_timetable___manager_a6e84ee82344343167e3e780db819c2c5}} 
+\index{Timetable\_Manager@{Timetable\_Manager}!timetable\_to\_txt@{timetable\_to\_txt}}
+\index{timetable\_to\_txt@{timetable\_to\_txt}!Timetable\_Manager@{Timetable\_Manager}}
+\doxysubsubsection{\texorpdfstring{timetable\_to\_txt()}{timetable\_to\_txt()}}
+{\footnotesize\ttfamily string Timetable\+\_\+\+Manager\+::timetable\+\_\+to\+\_\+txt (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_timetable}{Timetable}}}]{timetable }\end{DoxyParamCaption})}
+
+
+
+convert timetable to string 
+
+Create a string representation of a timetable object \begin{DoxyAuthor}{Author}
+Lathan Thangavadivel 
+
+Vladimir Zhurov 
+\end{DoxyAuthor}
+
+\begin{DoxyParams}{Parameters}
+{\em time\+\_\+table} & The timetable to be converted \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+txt\+\_\+rep A text representation of the timetable 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+timetable\+\_\+manager.\+h\item 
+timetable\+\_\+manager.\+cpp\end{DoxyCompactItemize}
