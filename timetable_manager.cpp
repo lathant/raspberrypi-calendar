@@ -303,7 +303,7 @@ vector<Timetable> Timetable_Manager::get_personal_tables(string owner_id){
         while(getline(ss, line, '&'))
             parts.push_back(line);
         // If owner_id matches add to collection
-        if (parts[1].compare(owner_id) == 0){
+        if (parts[2].compare(owner_id) == 0){
             Timetable* time_table = get_timetable(parts[0]);
             output.push_back(*time_table);
         }
@@ -375,11 +375,8 @@ vector<Timetable> Timetable_Manager::get_public_tables(){
         stringstream ss (line);
         while(getline(ss, line, '&'))
             parts.push_back(line);
-        for(unsigned int i = 0; i <parts.size(); i++)
-            cout << parts[i];
-        cout << endl;
         // If owner_id matches add to collection
-        if (parts[2].compare("public") == 0){
+        if (parts[1].compare("public") == 0){
             Timetable* time_table = get_timetable(parts[0]);
             output.push_back(*time_table);
         }
