@@ -1,0 +1,227 @@
+\hypertarget{class_user___manager}{}\doxysection{User\+\_\+\+Manager Class Reference}
+\label{class_user___manager}\index{User\_Manager@{User\_Manager}}
+
+
+Class representing \mbox{\hyperlink{class_user___manager}{User\+\_\+\+Manager}}.  
+
+
+
+
+{\ttfamily \#include $<$user\+\_\+manager.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_user}{User}} $\ast$ \mbox{\hyperlink{class_user___manager_a47361ee59488184679eca37490a5de7a}{create\+\_\+user}} (std\+::string username, std\+::string password)
+\begin{DoxyCompactList}\small\item\em create a new \mbox{\hyperlink{class_user}{User}} \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_user}{User}} $\ast$ \mbox{\hyperlink{class_user___manager_af1ee8d455629f6049782cfb18e7d5992}{get\+\_\+user}} (std\+::string username)
+\begin{DoxyCompactList}\small\item\em Get a \mbox{\hyperlink{class_user}{User}}. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_user___manager_a235d584e9d489e350e8908af6cb2f097}{check\+\_\+user}} (std\+::string username, std\+::string password)
+\begin{DoxyCompactList}\small\item\em Check a \mbox{\hyperlink{class_user}{User}}. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_user___manager_a64122ef455915c64bca0aa49e31eb29c}{delete\+\_\+user}} (std\+::string username)
+\begin{DoxyCompactList}\small\item\em Delete a \mbox{\hyperlink{class_user}{User}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_user___manager}{User\+\_\+\+Manager}} $\ast$ \mbox{\hyperlink{class_user___manager_a214a4df4152c2acedefef8fa324a595f}{get\+\_\+instance}} ()
+\begin{DoxyCompactList}\small\item\em get the instance of \mbox{\hyperlink{class_user___manager}{User\+\_\+\+Manager}} \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{class_user___manager_add84c5b3b3ae139ed10c9c24c74c8b9a}{line\+\_\+to\+\_\+username}} (std\+::string line)
+\begin{DoxyCompactList}\small\item\em get the username from a line \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_user___manager_ad0466a9925f77079df470ddac46f8122}{line\+\_\+to\+\_\+password}} (std\+::string line)
+\begin{DoxyCompactList}\small\item\em get the username from a line \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_user___manager_aae3b48978751caa0feed1e370c9758ad}\label{class_user___manager_aae3b48978751caa0feed1e370c9758ad}} 
+static \mbox{\hyperlink{class_user___manager}{User\+\_\+\+Manager}} $\ast$ {\bfseries instance} = N\+U\+LL
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class representing \mbox{\hyperlink{class_user___manager}{User\+\_\+\+Manager}}. 
+
+A representation of \mbox{\hyperlink{class_user___manager}{User\+\_\+\+Manager}} \begin{DoxyAuthor}{Author}
+John Jewell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+29/10/2019 
+\end{DoxyDate}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_user___manager_a235d584e9d489e350e8908af6cb2f097}\label{class_user___manager_a235d584e9d489e350e8908af6cb2f097}} 
+\index{User\_Manager@{User\_Manager}!check\_user@{check\_user}}
+\index{check\_user@{check\_user}!User\_Manager@{User\_Manager}}
+\doxysubsubsection{\texorpdfstring{check\_user()}{check\_user()}}
+{\footnotesize\ttfamily bool User\+\_\+\+Manager\+::check\+\_\+user (\begin{DoxyParamCaption}\item[{std\+::string}]{username,  }\item[{std\+::string}]{password }\end{DoxyParamCaption})}
+
+
+
+Check a \mbox{\hyperlink{class_user}{User}}. 
+
+Search the storage file for a matching user and check if the password matches \begin{DoxyAuthor}{Author}
+John Jewell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+29/10/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em username} & A password \\
+\hline
+{\em username} & A username \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool true if match, else false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_user___manager_a47361ee59488184679eca37490a5de7a}\label{class_user___manager_a47361ee59488184679eca37490a5de7a}} 
+\index{User\_Manager@{User\_Manager}!create\_user@{create\_user}}
+\index{create\_user@{create\_user}!User\_Manager@{User\_Manager}}
+\doxysubsubsection{\texorpdfstring{create\_user()}{create\_user()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_user}{User}} $\ast$ User\+\_\+\+Manager\+::create\+\_\+user (\begin{DoxyParamCaption}\item[{std\+::string}]{username,  }\item[{std\+::string}]{password }\end{DoxyParamCaption})}
+
+
+
+create a new \mbox{\hyperlink{class_user}{User}} 
+
+Create a new \mbox{\hyperlink{class_user}{User}} object and save the information to the storage file \begin{DoxyAuthor}{Author}
+John Jewell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+29/10/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em username} & A username \\
+\hline
+{\em password} & A password \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+new\+\_\+user A \mbox{\hyperlink{class_user}{User}} object containing the provided information 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_user___manager_a64122ef455915c64bca0aa49e31eb29c}\label{class_user___manager_a64122ef455915c64bca0aa49e31eb29c}} 
+\index{User\_Manager@{User\_Manager}!delete\_user@{delete\_user}}
+\index{delete\_user@{delete\_user}!User\_Manager@{User\_Manager}}
+\doxysubsubsection{\texorpdfstring{delete\_user()}{delete\_user()}}
+{\footnotesize\ttfamily bool User\+\_\+\+Manager\+::delete\+\_\+user (\begin{DoxyParamCaption}\item[{std\+::string}]{username }\end{DoxyParamCaption})}
+
+
+
+Delete a \mbox{\hyperlink{class_user}{User}}. 
+
+Search the storage file for a matching user and delete it \begin{DoxyAuthor}{Author}
+John Jewell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+29/10/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em username} & A username \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool true if success, else false 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_user___manager_a214a4df4152c2acedefef8fa324a595f}\label{class_user___manager_a214a4df4152c2acedefef8fa324a595f}} 
+\index{User\_Manager@{User\_Manager}!get\_instance@{get\_instance}}
+\index{get\_instance@{get\_instance}!User\_Manager@{User\_Manager}}
+\doxysubsubsection{\texorpdfstring{get\_instance()}{get\_instance()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_user___manager}{User\+\_\+\+Manager}} $\ast$ User\+\_\+\+Manager\+::get\+\_\+instance (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+get the instance of \mbox{\hyperlink{class_user___manager}{User\+\_\+\+Manager}} 
+
+Gets the singleton instance of the \mbox{\hyperlink{class_user___manager}{User\+\_\+\+Manager}} \begin{DoxyAuthor}{Author}
+John Jewell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+29/10/2019 
+\end{DoxyDate}
+\begin{DoxyReturn}{Returns}
+instance The instance of \mbox{\hyperlink{class_user___manager}{User\+\_\+\+Manager}} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_user___manager_af1ee8d455629f6049782cfb18e7d5992}\label{class_user___manager_af1ee8d455629f6049782cfb18e7d5992}} 
+\index{User\_Manager@{User\_Manager}!get\_user@{get\_user}}
+\index{get\_user@{get\_user}!User\_Manager@{User\_Manager}}
+\doxysubsubsection{\texorpdfstring{get\_user()}{get\_user()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_user}{User}} $\ast$ User\+\_\+\+Manager\+::get\+\_\+user (\begin{DoxyParamCaption}\item[{std\+::string}]{username }\end{DoxyParamCaption})}
+
+
+
+Get a \mbox{\hyperlink{class_user}{User}}. 
+
+Search the storage file for a matching user and return it \begin{DoxyAuthor}{Author}
+John Jewell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+29/10/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em username} & A username \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_user}{User}} A \mbox{\hyperlink{class_user}{User}} object containing the required information or N\+U\+LL if no \mbox{\hyperlink{class_user}{User}} found 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_user___manager_ad0466a9925f77079df470ddac46f8122}\label{class_user___manager_ad0466a9925f77079df470ddac46f8122}} 
+\index{User\_Manager@{User\_Manager}!line\_to\_password@{line\_to\_password}}
+\index{line\_to\_password@{line\_to\_password}!User\_Manager@{User\_Manager}}
+\doxysubsubsection{\texorpdfstring{line\_to\_password()}{line\_to\_password()}}
+{\footnotesize\ttfamily string User\+\_\+\+Manager\+::line\+\_\+to\+\_\+password (\begin{DoxyParamCaption}\item[{std\+::string}]{line }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+get the username from a line 
+
+read after the \textquotesingle{},\textquotesingle{} a password \begin{DoxyAuthor}{Author}
+John Jewell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+29/10/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em line} & A line of text \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+username A password 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_user___manager_add84c5b3b3ae139ed10c9c24c74c8b9a}\label{class_user___manager_add84c5b3b3ae139ed10c9c24c74c8b9a}} 
+\index{User\_Manager@{User\_Manager}!line\_to\_username@{line\_to\_username}}
+\index{line\_to\_username@{line\_to\_username}!User\_Manager@{User\_Manager}}
+\doxysubsubsection{\texorpdfstring{line\_to\_username()}{line\_to\_username()}}
+{\footnotesize\ttfamily string User\+\_\+\+Manager\+::line\+\_\+to\+\_\+username (\begin{DoxyParamCaption}\item[{std\+::string}]{line }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+get the username from a line 
+
+read untill the \textquotesingle{},\textquotesingle{} a username \begin{DoxyAuthor}{Author}
+John Jewell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+29/10/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em line} & A line of text \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+username A username 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+user\+\_\+manager.\+h\item 
+user\+\_\+manager.\+cpp\end{DoxyCompactItemize}

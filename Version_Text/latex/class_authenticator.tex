@@ -1,0 +1,92 @@
+\hypertarget{class_authenticator}{}\doxysection{Authenticator Class Reference}
+\label{class_authenticator}\index{Authenticator@{Authenticator}}
+
+
+Class representing \mbox{\hyperlink{class_authenticator}{Authenticator}}.  
+
+
+
+
+{\ttfamily \#include $<$authenticator.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{class_authenticator_a02f1673effb66cd37a0ae57cee94d71c}{encrypt}} (std\+::string encrypted\+\_\+password)
+\begin{DoxyCompactList}\small\item\em encrypt a password \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_authenticator_aa2b76576128ad9bf2a0527ca6bf2b706}{decrypt}} (std\+::string encrypted\+\_\+password)
+\begin{DoxyCompactList}\small\item\em decrypt a password \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_authenticator_a76d23adac1e06684b5fbad0f7047476f}\label{class_authenticator_a76d23adac1e06684b5fbad0f7047476f}} 
+std\+::string {\bfseries key}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class representing \mbox{\hyperlink{class_authenticator}{Authenticator}}. 
+
+The representing of \mbox{\hyperlink{class_authenticator}{Authenticator}}\textquotesingle{}s functions \begin{DoxyAuthor}{Author}
+John Jewell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+29/10/2019 
+\end{DoxyDate}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_authenticator_aa2b76576128ad9bf2a0527ca6bf2b706}\label{class_authenticator_aa2b76576128ad9bf2a0527ca6bf2b706}} 
+\index{Authenticator@{Authenticator}!decrypt@{decrypt}}
+\index{decrypt@{decrypt}!Authenticator@{Authenticator}}
+\doxysubsubsection{\texorpdfstring{decrypt()}{decrypt()}}
+{\footnotesize\ttfamily string Authenticator\+::decrypt (\begin{DoxyParamCaption}\item[{std\+::string}]{encrypted\+\_\+password }\end{DoxyParamCaption})}
+
+
+
+decrypt a password 
+
+Aplies a simple decryption to a given string \begin{DoxyAuthor}{Author}
+John Jewell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+29/10/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em encrypted\+\_\+password} & The string to be decrypted \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+encrypted\+\_\+password The decrypted string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_authenticator_a02f1673effb66cd37a0ae57cee94d71c}\label{class_authenticator_a02f1673effb66cd37a0ae57cee94d71c}} 
+\index{Authenticator@{Authenticator}!encrypt@{encrypt}}
+\index{encrypt@{encrypt}!Authenticator@{Authenticator}}
+\doxysubsubsection{\texorpdfstring{encrypt()}{encrypt()}}
+{\footnotesize\ttfamily string Authenticator\+::encrypt (\begin{DoxyParamCaption}\item[{std\+::string}]{encrypted\+\_\+password }\end{DoxyParamCaption})}
+
+
+
+encrypt a password 
+
+Aplies a simple encryption to a given string \begin{DoxyAuthor}{Author}
+John Jewell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+29/10/2019 
+\end{DoxyDate}
+
+\begin{DoxyParams}{Parameters}
+{\em password} & The string to be encrypted \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+encrypted\+\_\+password The encrypted string 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+authenticator.\+h\item 
+authenticator.\+cpp\end{DoxyCompactItemize}
