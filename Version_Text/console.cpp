@@ -1,8 +1,9 @@
-/* Source of instanced user inputs for calandar system
- * CREATED BY: Vladimir Zhurov
- * LAST EDITED BY: Vladimir Zhurov
- * LAST EDITED: 28/10/2019
- * TODO: Improve comments and add more robust error checking
+/**
+ * @brief   Allows user to access control's functionality
+ *
+ * Spawns an instance for tthe user and comunicates using sender and reciever files
+ * @author  Vladimir Zhurov
+ * @date    30/11/2019
  */
 
 #include <iostream>
@@ -18,17 +19,27 @@ using namespace std;
 
 static string GET_FILE = "getF.txt";
 
-//give control the console pid to create IO_File
+/**
+ * @brief   contacts control with pid info
+ *
+ * sends a message to control to spawn a thread instance for given pid
+ * @author  Vladimir Zhurov
+ * @date    28/10/2019
+ */
 void send_console_pid(pid_t pid){
-
     string send = to_string(pid) + '\n';
-
     ofstream out_stream(GET_FILE.c_str(), ios_base::app);
     out_stream << send;
-
     out_stream.close();
 }
 
+/**
+ * @brief   Main user input handler
+ *
+ * Send and recieve comunication between the user and their person comunication thread in control through use of comunication files
+ * @author  Vladimir Zhurov
+ * @date    30/11/2019
+ */
 int main(){
     pid_t pid = getpid();
 
